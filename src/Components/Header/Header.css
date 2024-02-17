@@ -1,0 +1,36 @@
+.header-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: Inter, sans-serif;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.header {
+  width: 200px;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+}
+
+.header-dark {
+  color: #171a26;
+}
+
+.header-link:hover {
+  text-decoration: underline;
+}
+
+.strava-power-btn {
+  height: 20px;
+  width: auto;
+}

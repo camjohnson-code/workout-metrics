@@ -1,0 +1,49 @@
+.hero-section {
+  flex-direction: column;
+  display: flex;
+}
+
+.hero-section {
+  height: 100vh;
+  background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.4) 80%,
+        rgba(0, 0, 0, 0) 100%
+      )
+      center/cover,
+    linear-gradient(to top, #171a26, rgba(255, 255, 255, 0) 20%) center/cover,
+    url('../../Images/viktor-bystrov-Gi0OMNguFaw-unsplash.jpg') center/cover;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.subtitle {
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.strava-connect-btn {
+  height: 60px;
+  width: auto;
+  margin-top: 50px;
+  cursor: pointer;
+}
+
+.down-icon {
+  color: #fff;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  cursor: pointer;
+  width: 20px;
+  height: auto;
+}
