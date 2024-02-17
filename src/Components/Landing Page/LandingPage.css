@@ -1,0 +1,232 @@
+.header-link {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: 'Inter', sans-serif;
+}
+
+.header {
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+}
+
+.header-link:hover {
+  text-decoration: underline;
+}
+
+.hero-section {
+  height: 100vh;
+  background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.4) 80%,
+        rgba(0, 0, 0, 0) 100%
+      )
+      center/cover,
+    linear-gradient(to top, #171a26, rgba(255, 255, 255, 0) 20%) center/cover,
+    url('../../Images/viktor-bystrov-Gi0OMNguFaw-unsplash.jpg') center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.down-icon {
+  color: #fff;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  cursor: pointer;
+  width: 20px;
+  height: auto;
+}
+
+.strava-connect-btn {
+  height: 60px;
+  width: auto;
+  margin-top: 50px;
+  cursor: pointer;
+}
+
+.features {
+  background-color: #171a26;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+}
+
+.features-images {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.img-1,
+.img-2,
+.img-3 {
+  border-radius: 20px;
+}
+
+.img-1 {
+  width: 200px;
+  height: 155px;
+  object-fit: cover;
+}
+
+.img-2 {
+  width: 150px;
+  height: 224px;
+  object-fit: cover;
+}
+
+.img-3 {
+  width: 265px;
+  height: 400px;
+  object-fit: cover;
+}
+
+.features-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 40px;
+}
+
+.feature-heading {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0;
+  width: 375px;
+}
+
+.feature-subtitle {
+  font-size: 16px;
+  font-weight: 100;
+  width: 400px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+li {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: -10px;
+}
+
+li p {
+  margin-left: 10px;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.check {
+  color: #4a9df8;
+  width: 20px;
+  height: auto;
+}
+
+.bold-text {
+  font-weight: 700;
+}
+
+.faq {
+  height: auto;
+  min-height: 100vh;
+  background-color: #d9d9d9;
+  color: #36395c;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-title {
+  margin: 0;
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.szh-accordion {
+  width: 100vw;
+  max-width: 500px;
+  margin-top: 10px;
+}
+
+.szh-accordion__item {
+  border-bottom: 2px solid #36395c;
+}
+
+.szh-accordion__item-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.szh-accordion__item-btn p {
+  font-weight: 700;
+  color: #36395c;
+  font-size: 18px;
+}
+
+.szh-accordion__item-panel {
+  padding: 0 25px 10px 25px;
+}
+
+.szh-accordion__item-content {
+  transition: height 0.25s cubic-bezier(0, 0, 0, 1);
+}
+
+.footer {
+  background-color: #0f1119;
+  color: white;
+  font-size: 12px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.strava-power-btn {
+  height: 20px;
+  width: auto;
+}
