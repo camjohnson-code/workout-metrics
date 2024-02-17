@@ -1,5 +1,5 @@
 import './LandingPage.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { FaChevronDown } from 'react-icons/fa6';
 import { FaCheckCircle, FaPlus } from 'react-icons/fa';
@@ -8,10 +8,36 @@ import { Accordion, AccordionItem } from '@szhsin/react-accordion';
 
 const LandingPage = () => {
   const year = new Date().getFullYear();
-
   const [openItem, setOpenItem] = useState(null);
+  const [faq, setFaq] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  // Function to toggle the open/closed state of an item
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 2 * window.innerHeight) setFaq(true);
+      else setFaq(false);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= window.innerHeight) setVisible(true);
+      else setVisible(false);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const toggleItem = (item) => {
     setOpenItem(openItem === item ? null : item);
   };
@@ -19,17 +45,38 @@ const LandingPage = () => {
   return (
     <main>
       <header className='header'>
-        <a href='#home' className='header-link'>
+        <Link
+          to='home'
+          smooth={true}
+          duration={1000}
+          className={`header-link ${faq ? 'header-dark' : ''} ${
+            !visible ? 'hidden' : ''
+          }`}
+        >
           Home
-        </a>
-        <a href='#features' className='header-link'>
+        </Link>
+        <Link
+          to='features'
+          smooth={true}
+          duration={1000}
+          className={`header-link ${faq ? 'header-dark' : ''} ${
+            !visible ? 'hidden' : ''
+          }`}
+        >
           Features
-        </a>
-        <a href='#faq' className='header-link'>
+        </Link>
+        <Link
+          to='faq'
+          smooth={true}
+          duration={1000}
+          className={`header-link ${faq ? 'header-dark' : ''} ${
+            !visible ? 'hidden' : ''
+          }`}
+        >
           FAQ
-        </a>
+        </Link>
       </header>
-      <section className='hero-section'>
+      <section className='hero-section' id='home'>
         <h1 className='title'>WorkoutMetrics.fit</h1>
         <p className='subtitle'>
           Empower your training with insightful metrics.
@@ -85,7 +132,7 @@ const LandingPage = () => {
           </ul>
         </section>
       </section>
-      <section className='faq'>
+      <section className='faq' id='faq'>
         <h3 className='faq-title'>Frequently Asked Questions</h3>
         <section className='questions-section'>
           <Accordion transition transitionTimeout={250}>
