@@ -1,16 +1,3 @@
-.header-link {
-  text-decoration: none;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 300;
-  font-family: Inter, sans-serif;
-  cursor: pointer;
-}
-
-.hidden {
-  display: none;
-}
-
 .header {
   width: 200px;
   height: auto;
@@ -20,10 +7,26 @@
   top: 20px;
   left: 20px;
   z-index: 2;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.header.visible {
+  opacity: 1;
+}
+
+.header-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: Inter, sans-serif;
+  cursor: pointer;
 }
 
 .header-dark {
   color: #171a26;
+  transition: 0.25s all ease;
 }
 
 .header-link:hover {

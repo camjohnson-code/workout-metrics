@@ -34,14 +34,12 @@ const Header = () => {
   }, []);
 
   return (
-    <header className='header'>
+    <header className={`header ${visible ? 'visible' : ''}`}>
       <Link
         to='home'
         smooth={true}
         duration={1000}
-        className={`header-link ${faq ? 'header-dark' : ''} ${
-          !visible ? 'hidden' : ''
-        }`}
+        className={`header-link ${faq ? 'header-dark' : ''}`}
       >
         Home
       </Link>
@@ -49,9 +47,7 @@ const Header = () => {
         to='features'
         smooth={true}
         duration={1000}
-        className={`header-link ${faq ? 'header-dark' : ''} ${
-          !visible ? 'hidden' : ''
-        }`}
+        className={`header-link ${faq ? 'header-dark' : ''}`}
       >
         Features
       </Link>
@@ -59,9 +55,7 @@ const Header = () => {
         to='faq'
         smooth={true}
         duration={1000}
-        className={`header-link ${faq ? 'header-dark' : ''} ${
-          !visible ? 'hidden' : ''
-        }`}
+        className={`header-link ${faq ? 'header-dark' : ''}`}
       >
         FAQ
       </Link>
