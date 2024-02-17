@@ -115,7 +115,7 @@ const FAQSection = () => {
                 </>
               }
             >
-              Sure! You can <Link to='/contact'>fill out this form</Link> and
+              Sure! You can <Link className='form-link' to='/contact'>fill out this form</Link> and
               let me know what you're thinking.
             </AccordionItem>
           </motion.div>
@@ -125,6 +125,14 @@ const FAQSection = () => {
         className='strava-connect-btn'
         src={require('../../Images/btn_strava_connectwith_orange@2x.png')}
         alt='Strava Connect Button'
+        tabIndex={0}
+        aria-label='Connect with Strava'
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            // start user auth
+          }
+        }}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 50 }}
         transition={{ duration: 1, ease: [0.17, 0.59, 0.24, 0.99], delay: 0.5 }}

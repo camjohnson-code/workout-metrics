@@ -18,6 +18,7 @@ const FeaturesSection = () => {
           initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -200 }}
           transition={{ duration: 1, ease: [0.17, 0.59, 0.24, 0.99], delay: 0.2 }}
+          alt='Data chart preview'
         />
         <motion.img
           className='img-2'
@@ -29,6 +30,7 @@ const FeaturesSection = () => {
             ease: [0.17, 0.59, 0.24, 0.99],
             delay: 0.1,
           }}
+          alt='Stock photo of computer code'
         />
         <motion.img
           className='img-3'
@@ -39,6 +41,7 @@ const FeaturesSection = () => {
             duration: 1,
             ease: [0.17, 0.59, 0.24, 0.99],
           }}
+          alt='Heatmaps preview'
         />
       </section>
       <section className='features-text'>

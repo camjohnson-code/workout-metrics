@@ -11,9 +11,28 @@ const HeroSection = () => {
         className='strava-connect-btn'
         src={require('../../Images/btn_strava_connectwith_orange@2x.png')}
         alt='Strava Connect Button'
+        tabIndex={0}
+        aria-label='Connect with Strava'
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            // start user auth
+          }
+        }}
       />
       <Link to='features' smooth={true} duration={1000}>
-        <FaChevronDown className='down-icon' />
+        <FaChevronDown
+          className='down-icon'
+          tabIndex={0}
+          aria-label='Scroll to Features section'
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              const featuresElement = document.getElementById('features');
+              featuresElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+        />
       </Link>
     </section>
   );
