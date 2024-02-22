@@ -110,6 +110,16 @@ const FAQSection = () => {
             <AccordionItem
               header={
                 <>
+                  <p>I don't have a Strava account. Can I see a demo?</p>
+                  <FaPlus />
+                </>
+              }
+            >
+              Sure! You can <Link className='form-link' to='https://www.youtube.com'>watch a demo</Link> here.
+            </AccordionItem>
+            <AccordionItem
+              header={
+                <>
                   <p>Can I request a feature?</p>
                   <FaPlus />
                 </>
