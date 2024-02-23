@@ -1,6 +1,7 @@
 import './HeroSection.css';
 import { FaChevronDown } from 'react-icons/fa6';
 import { Link } from 'react-scroll';
+import { redirectToStravaAuthorization } from '../../ApiCalls';
 
 const HeroSection = () => {
   return (
@@ -15,9 +16,11 @@ const HeroSection = () => {
         aria-label='Connect with Strava'
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            // start user auth
+            redirectToStravaAuthorization();
           }
+        }}
+        onClick={(event) => {
+          redirectToStravaAuthorization();
         }}
       />
       <Link to='features' smooth={true} duration={1000}>

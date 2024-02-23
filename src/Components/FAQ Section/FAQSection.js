@@ -6,6 +6,7 @@ import { Accordion, AccordionItem } from '@szhsin/react-accordion';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { redirectToStravaAuthorization } from '../../ApiCalls';
 
 const FAQSection = () => {
   const [ref, inView] = useInView({
@@ -43,7 +44,7 @@ const FAQSection = () => {
               header={
                 <>
                   <p>How exactly does this work?</p>
-                  <FaPlus />
+                  <FaPlus className='plus-icon' />
                 </>
               }
             >
@@ -67,7 +68,7 @@ const FAQSection = () => {
               header={
                 <>
                   <p>What does this cost?</p>
-                  <FaPlus />
+                  <FaPlus className='plus-icon' />
                 </>
               }
             >
@@ -88,7 +89,7 @@ const FAQSection = () => {
               header={
                 <>
                   <p>How long will this take?</p>
-                  <FaPlus />
+                  <FaPlus className='plus-icon' />
                 </>
               }
             >
@@ -111,7 +112,7 @@ const FAQSection = () => {
               header={
                 <>
                   <p>I don't have a Strava account. Can I see a demo?</p>
-                  <FaPlus />
+                  <FaPlus className='plus-icon' />
                 </>
               }
             >
@@ -121,7 +122,7 @@ const FAQSection = () => {
               header={
                 <>
                   <p>Can I request a feature?</p>
-                  <FaPlus />
+                  <FaPlus className='plus-icon' />
                 </>
               }
             >
@@ -137,10 +138,10 @@ const FAQSection = () => {
         alt='Strava Connect Button'
         tabIndex={0}
         aria-label='Connect with Strava'
+        onClick={() => redirectToStravaAuthorization()}
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault()
-            // start user auth
+            redirectToStravaAuthorization()
           }
         }}
         initial={{ opacity: 0, y: 50 }}
