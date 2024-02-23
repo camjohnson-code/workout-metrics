@@ -1,0 +1,69 @@
+.faq,
+.faq-title,
+.footer p {
+  margin: 0;
+}
+
+.faq,
+.form-link,
+.plus-icon {
+  color: #36395c;
+}
+
+.faq {
+  height: auto;
+  min-height: 100vh;
+  background-color: #d9d9d9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-title {
+  font-weight: 700;
+  font-size: 48px;
+}
+
+.szh-accordion__item-btn {
+  align-items: center;
+  display: flex;
+}
+
+.szh-accordion {
+  width: 100vw;
+  max-width: 500px;
+  margin-top: 10px;
+}
+
+.szh-accordion__item {
+  border-bottom: 2px solid #36395c;
+}
+
+.szh-accordion__item-btn {
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.szh-accordion__item-btn p {
+  font-weight: 700;
+  color: #36395c;
+  font-size: 18px;
+}
+
+.szh-accordion__item-panel {
+  padding: 0 25px 10px;
+}
+
+.szh-accordion__item-content {
+  transition: height 0.25s cubic-bezier(0, 0, 0, 1);
+}
+
+.strava-power-btn {
+  height: 20px;
+  width: auto;
+}

@@ -1,12 +1,20 @@
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from '../Landing Page/LandingPage';
+import LoadingPage from '../Loading Page/LoadingPage';
+import Dashboard from '../Dashboard/Dashboard';
 
-function App() {
+
+const App = () => {
   return (
-    <div>
-      <h1>App</h1>
-      <p>Hello</p>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/redirect' element={<LoadingPage />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
