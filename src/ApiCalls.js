@@ -68,7 +68,7 @@ export const getAthleteActivities = async () => {
   const accessToken = localStorage.getItem('stravaAccessToken');
   const refreshToken = localStorage.getItem('stravaRefreshToken');
   let page = 1;
-  let workouts = [];
+  let activities = [];
 
   while (true) {
     const requests = await fetch(
@@ -78,14 +78,16 @@ export const getAthleteActivities = async () => {
 
     if (!data.length) break;
 
-    workouts = workouts.concat(data);
+    activities = activities.concat(data);
     page++;
   }
 
   localStorage.removeItem('stravaAccessToken');
   localStorage.removeItem('stravaRefreshToken');
 
-  return workouts;
+  addActivitiesToAPI(activities);
+
+  return activities;
 };
 
 export const addAthleteToAPI = async (athlete) => {
@@ -100,4 +102,32 @@ export const addAthleteToAPI = async (athlete) => {
   const data = await response.json();
 
   return data;
+};
+
+export const addActivitiesToAPI = async (activities) => {
+  for (let activity of activities) {
+    const newActivity = {
+      userId: activity.athlete.id,
+      name: activity.name,
+      distance: activity.distance,
+      type: activity.type,
+      start_date: activity.start_date,
+      start_latlng: activity.start_latlng,
+      time: activity.moving_time,
+    };
+
+    const response = await fetch('http://localhost:3001/api/v1/activities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newActivity),
+    });
+
+    if (!response.ok) {
+      console.log('Response status:', response.status);
+    }
+
+    const data = await response.json();
+  }
 };
