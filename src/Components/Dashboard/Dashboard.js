@@ -1,10 +1,12 @@
 import './Dashboard.css';
+import React from 'react';
+import Sidebar from '../Sidebar/Sidebar';
 
-const Dashboard = () => {
+const Dashboard = ({ year }) => {
   return (
-    <div className='dashboard'>
-      <h1>Dashboard</h1>
-    </div>
+    <section className='dashboard'>
+      <Sidebar year={year}></Sidebar>
+    </section>
   );
 };
 

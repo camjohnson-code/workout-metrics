@@ -6,14 +6,14 @@ import FeaturesSection from '../Features Section/FeaturesSection';
 import FAQSection from '../FAQ Section/FAQSection';
 import Footer from '../Footer/Footer';
 
-const LandingPage = () => {
+const LandingPage = ({year}) => {
   return (
     <main>
       <Header />
       <HeroSection />
       <FeaturesSection />
       <FAQSection />
-      <Footer />
+      <Footer year={year} />
     </main>
   );
 };
