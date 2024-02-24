@@ -1,6 +1,7 @@
 import './Sidebar.css';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IoMdHome } from 'react-icons/io';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
 import { FaChartSimple, FaArrowTrendUp } from 'react-icons/fa6';
@@ -9,9 +10,13 @@ import { TbLogout2 } from 'react-icons/tb';
 const Sidebar = ({ year }) => {
   return (
     <section className='sidebar'>
-      <section className='sidebar-header'>
+      <Link target='#' to='https://www.strava.com/athletes/16967528' className='sidebar-header'>
+        <img
+          src='https://dgalywyr863hv.cloudfront.net/pictures/athletes/16967528/13010397/2/large.jpg'
+          className='profile-photo'
+        />
         <h1 className='user-name'>Cameron Johnson</h1>
-      </section>
+      </Link>
       <section className='sidebar-links'>
         <NavLink to='/dashboard' className='sidebar-link'>
           <IoMdHome className='sidebar-icon' /> Overview
