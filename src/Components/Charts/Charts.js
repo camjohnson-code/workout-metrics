@@ -1,10 +1,10 @@
 import './Charts.css';
 import Sidebar from '../Sidebar/Sidebar';
 
-const Charts = ({ year }) => {
+const Charts = ({ year, athlete }) => {
   return (
     <section className='charts'>
-      <Sidebar year={year}>
+      <Sidebar athlete={athlete} year={year}>
         <h1>Charts</h1>
       </Sidebar>
     </section>

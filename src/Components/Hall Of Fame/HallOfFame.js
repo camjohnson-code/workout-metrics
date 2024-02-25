@@ -1,10 +1,10 @@
 import './HallOfFame.css';
 import Sidebar from '../Sidebar/Sidebar';
 
-const HallOfFame = ({ year }) => {
+const HallOfFame = ({ year, athlete }) => {
   return (
     <section className='hall-of-fame'>
-        <Sidebar year={year}></Sidebar>
+        <Sidebar athlete={athlete} year={year}></Sidebar>
       <h1>Hall of Fame</h1>
     </section>
   );
