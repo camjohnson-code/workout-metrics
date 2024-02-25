@@ -68,7 +68,7 @@ export const getAthleteActivities = async () => {
   const accessToken = localStorage.getItem('stravaAccessToken');
   const refreshToken = localStorage.getItem('stravaRefreshToken');
   let page = 1;
-  let workouts = [];
+  let activities = [];
 
   while (true) {
     const requests = await fetch(
@@ -78,14 +78,16 @@ export const getAthleteActivities = async () => {
 
     if (!data.length) break;
 
-    workouts = workouts.concat(data);
+    activities = activities.concat(data);
     page++;
   }
 
   localStorage.removeItem('stravaAccessToken');
   localStorage.removeItem('stravaRefreshToken');
 
-  return workouts;
+  addActivitiesToAPI(activities);
+
+  return activities;
 };
 
 export const addAthleteToAPI = async (athlete) => {
@@ -100,4 +102,85 @@ export const addAthleteToAPI = async (athlete) => {
   const data = await response.json();
 
   return data;
+};
+
+export const addActivitiesToAPI = async (activities) => {
+  for (let activity of activities) {
+    const newActivity = {
+      userId: activity.athlete.id,
+      name: activity.name,
+      distance: activity.distance,
+      type: activity.type,
+      start_date: activity.start_date,
+      start_latlng: activity.start_latlng,
+      time: activity.moving_time,
+    };
+
+    const response = await fetch('http://localhost:3001/api/v1/activities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newActivity),
+    });
+
+    if (!response.ok) {
+      console.log('Response status:', response.status);
+    }
+
+    const data = await response.json();
+  }
+};
+
+export const getWeather = (coordinates) => {
+  const [longitude, latitude] = coordinates;
+  const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
+
+  if (coordinates.length) {
+    return fetch(
+      `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${latitude},${longitude}&days=1&aqi=no&alerts=no`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        return {
+          temp: data.current.temp_f,
+          condition: data.current.condition.text,
+        };
+      });
+  }
+};
+
+export const getQuote = async () => {
+  const response = await fetch('http://localhost:3001/api/v1/quote');
+  const data = await response.json();
+
+  return data;
+};
+
+export const fetchQuote = async (url) => {
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Api-Key': process.env.REACT_APP_QUOTE_API_KEY,
+    },
+  })
+    .then((response) => response.json())
+};
+
+export const addQuoteToAPI = async (quote) => {
+  console.log('posting quote:', quote);
+  const response = await fetch('http://localhost:3001/api/v1/quote', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(quote),
+  });
+
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  else {
+    const data = await response.json();
+    return data;
+  }
 };

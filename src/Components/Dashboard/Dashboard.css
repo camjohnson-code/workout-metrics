@@ -1,0 +1,151 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.dashboard {
+  width: 80vw;
+  background-color: #171a26;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  padding: 30px;
+}
+
+.cell-1 {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.cell-2 {
+  grid-area: 1 / 2 / 2 / 3;
+}
+.cell-3 {
+  grid-area: 1 / 3 / 2 / 4;
+}
+.cell-4 {
+  grid-area: 1 / 4 / 2 / 5;
+}
+.cell-5 {
+  grid-area: 2 / 1 / 3 / 3;
+}
+.cell-6 {
+  grid-area: 2 / 3 / 4 / 5;
+}
+.cell-7 {
+  grid-area: 3 / 1 / 4 / 3;
+}
+.cell-8 {
+  grid-area: 4 / 1 / 5 / 5;
+}
+
+.cell {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: white;
+  padding: 0 20px;
+  position: relative;
+}
+
+.cell-heading {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 20px 0;
+}
+
+.cell-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 20px;
+  height: auto;
+}
+
+.cell-main {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 20px 0;
+}
+
+.unit {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cell-subtitle {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+  width: 75%;
+}
+
+.no-gps {
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.long-subtitle {
+  bottom: 10px;
+}
+
+.view-link:hover {
+  text-decoration: underline;
+}
+
+.view-link {
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+}
+
+.view-icon {
+  margin-left: 10px;
+}
+
+.quote {
+  font-size: 20px;
+}
+
+.quote-subtitle {
+  width: 95%;
+  text-align: right;
+}
+
+.calendar,
+.weather,
+.relative-effort-same {
+  color: rgb(96, 155, 241);
+}
+
+.activity,
+.quote-icon,
+.relative-effort-up {
+  color: rgb(119, 186, 75);
+}
+
+.achievements,
+.streak {
+  color: rgb(223, 197, 114);
+}
+
+.longest-activity,
+.relative-effort-down {
+  color: rgb(219, 105, 117);
+}
+
+.deckgl-container {
+  width: 100%; 
+  height: 65%; 
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

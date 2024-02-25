@@ -1,0 +1,103 @@
+.sidebar,
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  align-items: center;
+}
+
+.sidebar {
+  height: 100vh;
+  background-color: #0f1119;
+  color: #fff;
+  position: relative;
+}
+
+.sidebar-links {
+  height: 50%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 200px;
+  height: 60px;
+  padding-left: 15px;
+  border-radius: 10px;
+}
+
+.sidebar-icon {
+  width: 20px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.profile-photo {
+  width: 35px;
+  height: auto;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.user-name,
+a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.user-name {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.active,
+.sidebar-link:hover {
+  background-color: #171a26;
+  color: #8aa9f9;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 10px;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.footer-link:hover {
+  background-color: transparent;
+}
+
+.sidebar-strava-power-btn {
+  height: 20px;
+  width: auto;
+  opacity: 0.5;
+}
+
+.sidebar-copyright {
+  font-size: 12px;
+  font-weight: 300;
+}
