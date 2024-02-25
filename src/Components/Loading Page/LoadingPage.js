@@ -1,23 +1,38 @@
-// import React from 'react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import './LoadingPage.css';
-import { handleAuthorizationCallback, getAthleteData, getAthleteActivities } from '../../ApiCalls';
+import {
+  handleAuthorizationCallback,
+  getAthleteData,
+  getAthleteActivities,
+} from '../../ApiCalls';
 import { useNavigate } from 'react-router-dom';
 
-const LoadingPage = () => {
-  console.log('loading page rendered');
+const LoadingPage = ({
+  setAthlete,
+  setRecentActivity,
+  setActivities,
+  getStreak,
+  getLongestYearActivity,
+}) => {
   const navigate = useNavigate();
-
-  const fetchData = async () => {
-    await handleAuthorizationCallback();
-    await getAthleteData();
-    await navigate('/dashboard');
-    await getAthleteActivities();
-  };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    await handleAuthorizationCallback();
+    await getAthleteData().then((data) => {
+      setAthlete(data);
+    });
+    await getAthleteActivities().then((activities) => {
+      setActivities(activities);
+      setRecentActivity(activities[0]);
+      getStreak(activities);
+      getLongestYearActivity(activities);
+    });
+    await navigate('/dashboard');
+  };
 
   return null;
 };
