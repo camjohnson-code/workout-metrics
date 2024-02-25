@@ -7,15 +7,15 @@ import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
 import { FaChartSimple, FaArrowTrendUp } from 'react-icons/fa6';
 import { TbLogout2 } from 'react-icons/tb';
 
-const Sidebar = ({ year }) => {
+const Sidebar = ({ year, athlete }) => {
   return (
     <section className='sidebar'>
-      <Link target='#' to='https://www.strava.com/athletes/16967528' className='sidebar-header'>
+      <Link target='#' to={`https://www.strava.com/athletes/${athlete.id}`} className='sidebar-header'>
         <img
-          src='https://dgalywyr863hv.cloudfront.net/pictures/athletes/16967528/13010397/2/large.jpg'
+          src={`${athlete.profile}`}
           className='profile-photo'
         />
-        <h1 className='user-name'>Cameron Johnson</h1>
+        <h1 className='user-name'>{athlete.firstname} {athlete.lastname}</h1>
       </Link>
       <section className='sidebar-links'>
         <NavLink to='/dashboard' className='sidebar-link'>
