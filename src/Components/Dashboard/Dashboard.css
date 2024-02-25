@@ -85,6 +85,13 @@
   width: 75%;
 }
 
+.no-gps {
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .long-subtitle {
   bottom: 10px;
 }
@@ -113,23 +120,32 @@
 }
 
 .calendar,
-.relative-effort {
+.weather,
+.relative-effort-same {
   color: rgb(96, 155, 241);
 }
 
-.activity {
+.activity,
+.quote-icon,
+.relative-effort-up {
   color: rgb(119, 186, 75);
 }
 
-.achievements {
+.achievements,
+.streak {
   color: rgb(223, 197, 114);
 }
 
-.longest-activity {
+.longest-activity,
+.relative-effort-down {
   color: rgb(219, 105, 117);
 }
 
-.map {
-  /* border: 1px solid red; */
-  height: 70%;
+.deckgl-container {
+  width: 100%; 
+  height: 65%; 
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
