@@ -12,7 +12,7 @@ import { CiShare1 } from 'react-icons/ci';
 import { TbAwardFilled } from 'react-icons/tb';
 import { IoMdStopwatch, IoMdQuote } from 'react-icons/io';
 import { MdTrendingFlat } from 'react-icons/md';
-import { CiTempHigh } from "react-icons/ci";
+import { CiTempHigh } from 'react-icons/ci';
 import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
@@ -43,13 +43,20 @@ const Dashboard = ({
     return <section className={className}>{children}</section>;
   };
 
-  const INITIAL_VIEW_STATE = {
-    longitude: lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[0],
-    latitude: lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[1],
-    zoom: 13,
-    pitch: 0,
-    bearing: 0,
-  };
+  const INITIAL_VIEW_STATE =
+    lineLayer &&
+    lineLayer.length > 0 &&
+    lineLayer[Math.round(lineLayer.length / 2)]
+      ? {
+          longitude:
+            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[0],
+          latitude:
+            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[1],
+          zoom: 13,
+          pitch: 0,
+          bearing: 0,
+        }
+      : {};
 
   const layers = [
     new LineLayer({
@@ -106,9 +113,9 @@ const Dashboard = ({
           {effortUp === 'up' ? (
             <FaArrowTrendUp className='cell-icon relative-effort-up' />
           ) : effortUp === 'down' ? (
-            <FaArrowTrendDown className='cell-icon relative-effort-same' />
+            <FaArrowTrendDown className='cell-icon relative-effort-down' />
           ) : (
-            <MdTrendingFlat className='cell-icon relative-effort-down' />
+            <MdTrendingFlat className='cell-icon relative-effort-same' />
           )}
           <p className='cell-main'>
             {effortUp === 'up'
