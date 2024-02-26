@@ -62,7 +62,7 @@ const Dashboard = ({
     new LineLayer({
       id: 'line-layer',
       data: lineLayer,
-      getColor: () => [252, 76, 2],
+      getColor: () => [138, 169, 249],
       opacity: 0.1,
     }),
   ];
