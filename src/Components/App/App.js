@@ -48,6 +48,9 @@ const App = () => {
 
   useEffect(() => {
     fetchCoordinates();
+  }, [athlete]);
+
+  useEffect(() => {
     checkQuote();
   }, []);
 
@@ -240,6 +243,7 @@ const App = () => {
           path='/heatmap'
           element={
             <Heatmap
+            activities={activities}
               athlete={athlete}
               homeCoordinates={homeCoordinates}
               year={year}
