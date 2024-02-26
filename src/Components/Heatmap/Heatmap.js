@@ -67,7 +67,7 @@ const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
     new LineLayer({
       id: 'line-layer',
       data: lineCoordinates,
-      getColor: () => [252, 160, 99],
+      getColor: () => [138, 169, 249],
       opacity: 0.05,
     }),
   ];
