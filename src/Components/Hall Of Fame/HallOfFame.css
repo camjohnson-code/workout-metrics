@@ -1,0 +1,118 @@
+.hall-of-fame {
+  display: flex;
+}
+
+.hall-of-fame-section {
+  background-color: #171a26;
+  width: 80%;
+  height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hall-of-fame-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  margin: 20px 0;
+}
+
+.hall-of-fame-form {
+  display: flex;
+  width: 80%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selector {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hall-of-fame-form label {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.hall-of-fame-form input,
+.hall-of-fame-form select {
+  width: 30%;
+  height: 40px;
+  margin: 10px 0;
+  padding: 0 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1e2333;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  margin-left: 10px;
+}
+
+.hall-of-fame-form input {
+  width: 250px;
+}
+
+.submit-button {
+  color: white;
+  background-color: #355be5;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  height: 40px;
+  width: 150px;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  background-color: #1e2333;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+}
+
+.no-saved-activities {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 90%;
+  margin: 20px 0;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #171a26;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #171a26 #171a26;
+}
+
