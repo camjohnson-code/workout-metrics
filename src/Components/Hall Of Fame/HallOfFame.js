@@ -34,18 +34,20 @@ const HallOfFame = ({
   }, [keywords]);
 
   const handleFormSubmit = (event) => {
-    event.preventDefault();
-    setHasSearched(true);
-    const fetchData = async () => {
-      const activities = await fetchUserActivities(
-        athlete,
-        keywords,
-        activityType
-      );
-      setActivities(activities);
-    };
-
-    fetchData();
+    if (event.type === 'submit' || (event.type === 'keydown' && event.key === 'Enter')) {
+      event.preventDefault();
+      setHasSearched(true);
+      const fetchData = async () => {
+        const activities = await fetchUserActivities(
+          athlete,
+          keywords,
+          activityType
+        );
+        setActivities(activities);
+      };
+  
+      fetchData();
+    }
   };
 
   const handleStarClick = async (activity) => {
@@ -119,6 +121,9 @@ const HallOfFame = ({
               name='keywords'
               placeholder='Search for activities'
               value={keywords}
+              onKeyDown={(e) => {
+                handleFormSubmit(e);
+              }}
               onChange={(e) => setKeywords(e.target.value)}
             />
           </section>
@@ -140,7 +145,7 @@ const HallOfFame = ({
           <button
             disabled={isValidForm}
             type='submit'
-            className='submit-button'
+            className='form-submit-button'
           >
             Search
           </button>
