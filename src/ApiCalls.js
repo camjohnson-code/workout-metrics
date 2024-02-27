@@ -185,19 +185,63 @@ export const addQuoteToAPI = async (quote) => {
 };
 
 export const fetchUserActivities = async (athlete, keywords, activityType) => {
-  const response = await fetch(`http://localhost:3001/api/v1/activities/${athlete.id}`);
+  const response = await fetch(
+    `http://localhost:3001/api/v1/activities/${athlete.id}`
+  );
   const data = await response.json();
-  
-const allActivities = data.data;
 
-const filteredActivities = allActivities.filter((activity) => {
-  const matchesKeyword = activity.name
-    .toLowerCase()
-    .includes(keywords.toLowerCase());
-  const matchesType =
-    activityType === 'all' || activity.type === activityType;
-  return matchesKeyword && matchesType;
-});
+  const allActivities = data.data;
 
-return filteredActivities;
+  const filteredActivities = allActivities.filter((activity) => {
+    const matchesKeyword = activity.name
+      .toLowerCase()
+      .includes(keywords.toLowerCase());
+    const matchesType =
+      activityType === 'all' ||
+      activity.type.toLowerCase() === activityType.toLowerCase();
+    return matchesKeyword && matchesType;
+  });
+
+  return filteredActivities;
+};
+
+export const getHallOfFameActivities = async (athlete) => {
+  const response = await fetch(
+    `http://localhost:3001/api/v1/hallOfFame/${athlete.id}`
+  );
+  const data = await response.json();
+
+  return data.activities;
+}
+
+export const addFavoriteToHallOfFame = async (favorite) => {
+  try {
+    const response = await fetch('http://localhost:3001/api/v1/hallOfFame', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(favorite),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error adding favorite to Hall of Fame');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error adding favorite to Hall of Fame:', error);
+    throw error;
+  }
+};
+
+export const removeFavoriteFromHallOfFame = async (activityId) => {
+  const response = await fetch(`http://localhost:3001/api/v1/hallOfFame/${activityId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Error removing favorite from Hall of Fame');
+  }
 };
