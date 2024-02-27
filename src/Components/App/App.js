@@ -162,12 +162,28 @@ const App = () => {
     setLongestYearActivity(longestActivity);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return formattedDate;
+  }
+
   const convertMtoYds = (meters) => {
     return Math.round((meters * 1.09361).toFixed(2));
   };
 
   const convertMtoMiles = (meters) => {
     return (meters * 0.000621371).toFixed(2);
+  };
+
+  const convertSecondsToHMS = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return hours
+      ? `${hours}h ${minutes}m ${remainingSeconds}s`
+      : `${minutes}m ${remainingSeconds}s`;
   };
 
   const getCoordinates = async (city, state) => {
@@ -243,7 +259,7 @@ const App = () => {
           path='/heatmap'
           element={
             <Heatmap
-            activities={activities}
+              activities={activities}
               athlete={athlete}
               homeCoordinates={homeCoordinates}
               year={year}
@@ -252,7 +268,15 @@ const App = () => {
         />
         <Route
           path='/hall-of-fame'
-          element={<HallOfFame athlete={athlete} year={year} />}
+          element={
+            <HallOfFame
+            formatDate={formatDate}
+              convertSecondsToHMS={convertSecondsToHMS}
+              convertMtoMiles={convertMtoMiles}
+              athlete={athlete}
+              year={year}
+            />
+          }
         />
         <Route
           path='/add-workout'
