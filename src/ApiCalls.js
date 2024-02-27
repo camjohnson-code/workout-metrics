@@ -114,6 +114,7 @@ export const addActivitiesToAPI = async (activities) => {
       start_date: activity.start_date,
       start_latlng: activity.start_latlng,
       time: activity.moving_time,
+      id: activity.id,
     };
 
     const response = await fetch('http://localhost:3001/api/v1/activities', {
@@ -127,7 +128,6 @@ export const addActivitiesToAPI = async (activities) => {
     if (!response.ok) {
       console.log('Response status:', response.status);
     }
-
     const data = await response.json();
   }
 };
@@ -164,8 +164,7 @@ export const fetchQuote = async (url) => {
       'Content-Type': 'application/json',
       'X-Api-Key': process.env.REACT_APP_QUOTE_API_KEY,
     },
-  })
-    .then((response) => response.json())
+  }).then((response) => response.json());
 };
 
 export const addQuoteToAPI = async (quote) => {
@@ -183,4 +182,22 @@ export const addQuoteToAPI = async (quote) => {
     const data = await response.json();
     return data;
   }
+};
+
+export const fetchUserActivities = async (athlete, keywords, activityType) => {
+  const response = await fetch(`http://localhost:3001/api/v1/activities/${athlete.id}`);
+  const data = await response.json();
+  
+const allActivities = data.data;
+
+const filteredActivities = allActivities.filter((activity) => {
+  const matchesKeyword = activity.name
+    .toLowerCase()
+    .includes(keywords.toLowerCase());
+  const matchesType =
+    activityType === 'all' || activity.type === activityType;
+  return matchesKeyword && matchesType;
+});
+
+return filteredActivities;
 };
