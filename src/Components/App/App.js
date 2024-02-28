@@ -10,6 +10,7 @@ import Stats from '../Stats/Stats';
 import Heatmap from '../Heatmap/Heatmap';
 import HallOfFame from '../Hall Of Fame/HallOfFame';
 import AddWorkout from '../Add Workout/AddWorkout';
+import NotFoundPage from '../Not Found Page/NotFoundPage';
 import {
   getWeather,
   getQuote,
@@ -282,6 +283,8 @@ const App = () => {
           path='/add-workout'
           element={<AddWorkout athlete={athlete} year={year} />}
         />
+
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
