@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import polyline from '@mapbox/polyline';
 import LandingPage from '../Landing Page/LandingPage';
+import RedirectPage from '../Redirect Page/RedirectPage';
 import LoadingPage from '../Loading Page/LoadingPage';
 import Dashboard from '../Dashboard/Dashboard';
 import Charts from '../Charts/Charts';
@@ -165,9 +166,13 @@ const App = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    const formattedDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
     return formattedDate;
-  }
+  };
 
   const convertMtoYds = (meters) => {
     return Math.round((meters * 1.09361).toFixed(2));
@@ -214,8 +219,9 @@ const App = () => {
     <Router>
       <Routes>
         <Route path='/' element={<LandingPage year={year} />} />
+        <Route path='/redirect' element={<RedirectPage />} />
         <Route
-          path='/redirect'
+          path='/loading'
           element={
             <LoadingPage
               getPolylines={getPolylines}
@@ -271,7 +277,7 @@ const App = () => {
           path='/hall-of-fame'
           element={
             <HallOfFame
-            formatDate={formatDate}
+              formatDate={formatDate}
               convertSecondsToHMS={convertSecondsToHMS}
               convertMtoMiles={convertMtoMiles}
               athlete={athlete}
