@@ -13,3 +13,11 @@
   position: relative;
   overflow: hidden;
 }
+
+
+/* media queries */
+@media (max-width: 768px) {
+  .heatmap-container {
+    width: 100vw;
+  }
+}
