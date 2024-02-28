@@ -1,9 +1,10 @@
 import './ManualForm.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserFromAPI } from '../../ApiCalls';
+import { getUserFromAPI, postActivity } from '../../ApiCalls';
 
 const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
+  const [error, setError] = useState(false);
   const today = new Date();
   const formattedDate = `${today.getFullYear()}-${String(
     today.getMonth() + 1
@@ -57,34 +58,28 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
           : parseFloat(elevation),
     };
 
-    const response = await fetch('https://www.strava.com/api/v3/activities', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(activityData),
-    });
+    const response = await postActivity(activityData, accessToken);
 
-    if (response.ok) {
-      setSubmitted(true);
-    } else {
-      console.log('Error submitting activity.');
-    }
+    if (response.ok) setSubmitted(true);
+    else setError(true);
   };
 
   return (
     <section className='form'>
-      <p className='upload-instruction'>
-        Have a file? You can add it{' '}
-        <Link
-          onClick={() => setManualForm(!manualForm)}
-          className='manual-link'
-        >
-          here
-        </Link>
-        .
-      </p>
+      {!error ? (
+        <p className='upload-instruction'>
+          Have a file? You can add it{' '}
+          <Link
+            onClick={() => setManualForm(!manualForm)}
+            className='manual-link'
+          >
+            here
+          </Link>
+          .
+        </p>
+      ) : (
+        <p>There was an error submitting your activity. Please try again.</p>
+      )}
       <form className='manual-form' onSubmit={handleSubmit}>
         <section>
           <label htmlFor='distance'>Distance</label>
