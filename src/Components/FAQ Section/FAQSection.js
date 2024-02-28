@@ -111,13 +111,24 @@ const FAQSection = () => {
             <AccordionItem
               header={
                 <>
-                  <p>I don't have a Strava account. Can I see a demo?</p>
+                  <p>Can I see a demo first?</p>
                   <FaPlus className='plus-icon' />
                 </>
               }
             >
-              Sure! You can <Link className='form-link' to='https://www.youtube.com'>watch a demo</Link> here.
+              Sure! You can <Link className='faq-link' to='https://www.youtube.com'>watch a demo</Link> here.
             </AccordionItem>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 50 }}
+            transition={{
+              duration: 1,
+              ease: [0.17, 0.59, 0.24, 0.99],
+              delay: 0.5,
+            }}
+          >
             <AccordionItem
               header={
                 <>
@@ -126,7 +137,7 @@ const FAQSection = () => {
                 </>
               }
             >
-              Sure! You can <Link className='form-link' to='/contact'>fill out this form</Link> and
+              Sure! You can <Link className='faq-link' to='/contact'>fill out this form</Link> and
               let me know what you're thinking.
             </AccordionItem>
           </motion.div>
