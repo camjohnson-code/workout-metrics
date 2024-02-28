@@ -1,0 +1,177 @@
+.file-types,
+.manual-form label,
+.manual-form-input,
+.submit-button,
+.upload-section,
+.upload-subtitle,
+.upload-title {
+  font-family: Inter, sans-serif;
+}
+
+.form,
+.upload-section {
+  flex-direction: column;
+  display: flex;
+}
+
+.add-workout,
+.dropzone,
+.form {
+  display: flex;
+}
+
+.file-types,
+.manual-link,
+.upload-instruction {
+  text-align: center;
+  font-family: Inter, sans-serif;
+}
+
+.upload-section {
+  background-color: #171a26;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.upload-title {
+  font-size: 48px;
+  margin: 0;
+}
+
+.upload-subtitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+}
+
+.form {
+  width: 60%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0f1119;
+  height: auto;
+  min-height: 350px;
+  border-radius: 20px;
+  margin-top: 20px;
+  padding: 40px 0;
+  box-shadow: 6px 7px 8px rgba(0, 0, 0, 0.25);
+}
+
+.manual-link,
+.upload-instruction {
+  font-size: 16px;
+  margin: 0;
+  width: 75%;
+}
+
+.manual-link {
+  text-decoration: underline;
+  color: #fff;
+  cursor: pointer;
+}
+
+.file-types,
+.submit-button:disabled,
+.upload-icon {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.upload-icon {
+  width: 25px;
+  height: auto;
+}
+
+.dropzone {
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 75%;
+  border-radius: 10px;
+  height: 60%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #171a26;
+}
+
+.file-types {
+  font-size: 14px;
+  width: 90%;
+  margin-top: 20px;
+}
+
+.manual-form label,
+.submit-button {
+  font-size: 16px;
+  color: #fff;
+}
+
+.submit-button {
+  background-color: #355be5;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  width: 75%;
+  height: 60px;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  cursor: not-allowed;
+  background-color: #171a26;
+}
+
+.manual-form {
+  display: flex;
+  flex-wrap: wrap;
+  width: 75%;
+  height: 80%;
+  justify-content: space-between;
+  padding: 0 20px;
+  gap: 15px;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.manual-form-input {
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: #171a26;
+  width: 75px;
+  height: 25px;
+  text-indent: 10px;
+  margin: 0 5px;
+}
+
+.description-section {
+  display: flex;
+  flex-direction: column;
+  justify-self: flex-start;
+  align-self: flex-start;
+  width: 100%;
+}
+
+.description-box {
+  padding-top: 10px;
+  width: 100%;
+  resize: none;
+  height: 125px;
+  margin: 10px 0 0;
+}
+
+input[id='date'] {
+  width: 125px;
+  text-indent: 3px;
+}
+
+input[id='time'] {
+  width: 100px;
+  text-indent: 3px;
+}
+
+input[id='title'] {
+  width: 110px;
+}
