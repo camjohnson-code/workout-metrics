@@ -8,7 +8,7 @@ import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
 import { TbLogout2 } from 'react-icons/tb';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const NavBar = ({ year, athlete }) => {
+const NavBar = () => {
   const [open, setOpen] = useState(false);
 
   return (

@@ -75,7 +75,7 @@ const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
 
   return (
     <section className='heatmap-page'>
-      <NavBar athlete={athlete} year={year}></NavBar>
+      <NavBar />
       <Sidebar athlete={athlete} year={year}></Sidebar>
       <section className='heatmap-container'>
         {loading && (
