@@ -53,7 +53,7 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
   ));
 
   return (
-    <section className='form'>
+    <form className='form'>
       {uploadError && <p>{uploadErrorMessage}</p>}
       {!fileTypeError && !uploadError ? (
         <p className='upload-instruction'>
@@ -95,7 +95,7 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
       >
         Submit
       </button>
-    </section>
+    </form>
   );
 };
 
