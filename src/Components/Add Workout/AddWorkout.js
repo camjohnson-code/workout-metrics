@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ManualForm from '../Manual Form/ManualForm';
 import FileUploader from '../File Uploader/FileUploader';
+import PropTypes from 'prop-types';
 
 const AddWorkout = ({ year, athlete }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -68,3 +69,14 @@ const AddWorkout = ({ year, athlete }) => {
 };
 
 export default AddWorkout;
+
+
+AddWorkout.propTypes = {
+  year: PropTypes.number.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    city: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired,
+    profile: PropTypes.string.isRequired,
+  }).isRequired,
+};

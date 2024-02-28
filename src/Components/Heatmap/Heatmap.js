@@ -9,6 +9,7 @@ import GL from '@luma.gl/constants';
 import polyline from '@mapbox/polyline';
 import Lottie from 'lottie-react';
 import LoadingAnimation from '../../Animations/loading.json';
+import PropTypes from 'prop-types';
 
 const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
   const [loading, setLoading] = useState(true);
@@ -110,3 +111,19 @@ const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
 };
 
 export default Heatmap;
+
+Heatmap.propTypes = {
+  year: PropTypes.number.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    city: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired,
+    country: PropTypes.string.isRequired,
+  }),
+  homeCoordinates: PropTypes.arrayOf(PropTypes.shape({
+    map: PropTypes.shape({
+      summary_plotline: PropTypes.string.isRequired,
+    }).isRequired,
+  })).isRequired,
+  activities: PropTypes.array.isRequired,
+};

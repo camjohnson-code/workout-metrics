@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { BsUpload } from 'react-icons/bs';
 import { getUserFromAPI, uploadFile } from '../../ApiCalls';
+import PropTypes from 'prop-types';
 
 const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
   const [uploadStatus, setUploadStatus] = useState('');
@@ -100,3 +101,15 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
 };
 
 export default FileUploader;
+
+FileUploader.propTypes = {
+  setManualForm: PropTypes.func.isRequired,
+  manualForm: PropTypes.bool.isRequired,
+  setSubmitted: PropTypes.func.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    city: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired,
+    profile: PropTypes.string.isRequired,
+  }).isRequired,
+};

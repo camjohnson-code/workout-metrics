@@ -4,6 +4,7 @@ import { CiStar } from 'react-icons/ci';
 import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { CiShare1 } from 'react-icons/ci';
+import PropTypes from 'prop-types';
 
 const Card = ({
   activity,
@@ -49,3 +50,19 @@ const Card = ({
 };
 
 export default Card;
+
+Card.propTypes = {
+  activity: PropTypes.shape({
+    distance: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    start_date: PropTypes.string.isRequired,
+    time: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+  }).isRequired,
+  convertMtoMiles: PropTypes.func.isRequired,
+  convertSecondsToHMS: PropTypes.func.isRequired,
+  formatDate: PropTypes.func.isRequired,
+  onStarClick: PropTypes.func.isRequired,
+  isFavorite: PropTypes.bool.isRequired,
+};

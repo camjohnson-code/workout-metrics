@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { IoMdHome } from 'react-icons/io';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
 import { TbLogout2 } from 'react-icons/tb';
+import PropTypes from 'prop-types';
 
 const Sidebar = ({ year, athlete }) => {
   return (
@@ -54,3 +55,13 @@ const Sidebar = ({ year, athlete }) => {
 };
 
 export default Sidebar;
+
+Sidebar.propTypes = {
+  year: PropTypes.number.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    profile: PropTypes.string.isRequired,
+    firstname: PropTypes.string.isRequired,
+    lastname: PropTypes.string.isRequired,
+  }).isRequired,
+};

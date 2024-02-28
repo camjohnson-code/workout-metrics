@@ -9,6 +9,7 @@ import {
   removeFavoriteFromHallOfFame,
   getHallOfFameActivities,
 } from '../../ApiCalls';
+import PropTypes from 'prop-types';
 
 const HallOfFame = ({
   year,
@@ -35,7 +36,10 @@ const HallOfFame = ({
   }, [keywords]);
 
   const handleFormSubmit = (event) => {
-    if (event.type === 'submit' || (event.type === 'keydown' && event.key === 'Enter')) {
+    if (
+      event.type === 'submit' ||
+      (event.type === 'keydown' && event.key === 'Enter')
+    ) {
       event.preventDefault();
       setHasSearched(true);
       const fetchData = async () => {
@@ -46,7 +50,7 @@ const HallOfFame = ({
         );
         setActivities(activities);
       };
-  
+
       fetchData();
     }
   };
@@ -160,12 +164,16 @@ const HallOfFame = ({
             Save memorable activities using the form above.
           </p>
         )}
-        {keywords && !hasSearched && <p className='search-text'>Press submit to see your results.</p>}
+        {keywords && !hasSearched && (
+          <p className='search-text'>Press submit to see your results.</p>
+        )}
         {activities.length > 0 && keywords && (
           <section className='card-container'>{cards}</section>
         )}
         {!activities.length && keywords && hasSearched && (
-          <p className='search-text'>No activities found. Try your search again.</p>
+          <p className='search-text'>
+            No activities found. Try your search again.
+          </p>
         )}
       </section>
     </section>
@@ -173,3 +181,14 @@ const HallOfFame = ({
 };
 
 export default HallOfFame;
+
+HallOfFame.propTypes = {
+  year: PropTypes.number.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    firstname: PropTypes.string.isRequired,
+  }).isRequired,
+  convertMtoMiles: PropTypes.func.isRequired,
+  convertSecondsToHMS: PropTypes.func.isRequired,
+  formatDate: PropTypes.func.isRequired,
+};
