@@ -18,6 +18,7 @@ import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
 import GL from '@luma.gl/constants';
+import PropTypes from 'prop-types';
 
 const Dashboard = ({
   year,
@@ -198,3 +199,40 @@ const Dashboard = ({
 };
 
 export default Dashboard;
+
+Dashboard.propTypes = {
+  year: PropTypes.number.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    city: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired,
+    profile: PropTypes.string.isRequired,
+  }).isRequired,
+  recentActivity: PropTypes.shape({
+    distance: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+  }).isRequired,
+  convertMtoYds: PropTypes.func.isRequired,
+  streak: PropTypes.number.isRequired,
+  achievements: PropTypes.number.isRequired,
+  weather: PropTypes.shape({
+    temp: PropTypes.number.isRequired,
+  }).isRequired,
+  quote: PropTypes.shape({
+    quote: PropTypes.string.isRequired,
+  }),
+  longestYearActivity: PropTypes.shape({
+    distance: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+    start_latlng: PropTypes.array.isRequired,
+  }).isRequired,
+  effortUp: PropTypes.string.isRequired,
+  lineLayer: PropTypes.arrayOf(
+    PropTypes.shape({
+      sourcePosition: PropTypes.arrayOf(PropTypes.number).isRequired,
+      targetPosition: PropTypes.arrayOf(PropTypes.number).isRequired,
+    })
+  ).isRequired,
+  convertMtoMiles: PropTypes.func.isRequired,
+};

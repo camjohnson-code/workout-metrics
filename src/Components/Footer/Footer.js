@@ -1,4 +1,5 @@
 import './Footer.css';
+import PropTypes from 'prop-types';
 
 const Footer = ({year}) => {
   return (
@@ -14,3 +15,7 @@ const Footer = ({year}) => {
 };
 
 export default Footer;
+
+Footer.propTypes = {
+  year: PropTypes.number.isRequired,
+};

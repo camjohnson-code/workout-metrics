@@ -2,6 +2,7 @@ import './ManualForm.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserFromAPI, postActivity } from '../../ApiCalls';
+import PropTypes from 'prop-types';
 
 const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
   const [error, setError] = useState(false);
@@ -267,3 +268,11 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
 };
 
 export default ManualForm;
+
+ManualForm.propTypes = {
+  setManualForm: PropTypes.func.isRequired,
+  setSubmitted: PropTypes.func.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+};
