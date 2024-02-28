@@ -1,13 +1,14 @@
 import './Heatmap.css';
 import Sidebar from '../Sidebar/Sidebar';
+import NavBar from '../Nav Bar/NavBar';
 import { useEffect, useState } from 'react';
 import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
 import GL from '@luma.gl/constants';
 import polyline from '@mapbox/polyline';
-import Lottie from "lottie-react";
-import LoadingAnimation from '../../Animations/loading.json'
+import Lottie from 'lottie-react';
+import LoadingAnimation from '../../Animations/loading.json';
 
 const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
   const [loading, setLoading] = useState(true);
@@ -74,9 +75,15 @@ const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
 
   return (
     <section className='heatmap-page'>
+      <NavBar athlete={athlete} year={year}></NavBar>
       <Sidebar athlete={athlete} year={year}></Sidebar>
       <section className='heatmap-container'>
-        {loading && <Lottie animationData={LoadingAnimation} style={{ width: 300, height: 300 }} />}
+        {loading && (
+          <Lottie
+            animationData={LoadingAnimation}
+            style={{ width: 300, height: 300 }}
+          />
+        )}
         {activities.length ? (
           <DeckGL
             initialViewState={INITIAL_VIEW_STATE}
