@@ -59,7 +59,7 @@ export const getAthleteData = async () => {
   }
 
   const data = await response.json();
-  addAthleteToAPI(data);
+  addAthleteToAPI(data, accessToken, refreshToken);
 
   return data;
 };
@@ -90,13 +90,17 @@ export const getAthleteActivities = async () => {
   return activities;
 };
 
-export const addAthleteToAPI = async (athlete) => {
+export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
   const response = await fetch('http://localhost:3001/api/v1/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(athlete),
+    body: JSON.stringify({
+      ...athlete,
+      stravaAccessToken: accessToken,
+      stravaRefreshToken: refreshToken,
+    }),
   });
 
   const data = await response.json();
@@ -212,7 +216,7 @@ export const getHallOfFameActivities = async (athlete) => {
   const data = await response.json();
 
   return data.activities;
-}
+};
 
 export const addFavoriteToHallOfFame = async (favorite) => {
   try {
@@ -237,11 +241,67 @@ export const addFavoriteToHallOfFame = async (favorite) => {
 };
 
 export const removeFavoriteFromHallOfFame = async (activityId) => {
-  const response = await fetch(`http://localhost:3001/api/v1/hallOfFame/${activityId}`, {
-    method: 'DELETE',
-  });
+  const response = await fetch(
+    `http://localhost:3001/api/v1/hallOfFame/${activityId}`,
+    {
+      method: 'DELETE',
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Error removing favorite from Hall of Fame');
+  }
+};
+
+export const getUserFromAPI = async (id) => {
+  const response = await fetch(`http://localhost:3001/api/v1/users/${id}`);
+  const data = await response.json();
+
+  return data;
+};
+
+export const uploadFile = async (file, accessToken) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const extension = file.name.split('.').pop().toLowerCase();
+  formData.append('data_type', extension);
+
+  try {
+    const response = await fetch('https://www.strava.com/api/v3/uploads', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    return { error: error.message };
+  }
+};
+
+export const postActivity = async (activityData, accessToken) => {
+  try {
+    const response = await fetch('https://www.strava.com/api/v3/activities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(activityData),
+    });
+
+    if (response.ok) {
+      return { ok: true };
+    } else {
+      console.log('Error submitting activity.');
+      return { ok: false };
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    return { ok: false, error: error.message };
   }
 };
