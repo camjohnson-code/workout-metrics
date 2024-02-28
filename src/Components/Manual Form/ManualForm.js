@@ -65,9 +65,9 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
   };
 
   return (
-    <section className='form'>
+    <form className='manual-form' onSubmit={handleSubmit}>
       {!error ? (
-        <p className='upload-instruction'>
+        <p className='manual-upload-instruction'>
           Have a file? You can add it{' '}
           <Link
             onClick={() => setManualForm(!manualForm)}
@@ -78,10 +78,12 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
           .
         </p>
       ) : (
-        <p>There was an error submitting your activity. Please try again.</p>
+        <p className='manual-upload-instruction'>
+          There was an error submitting your activity. Please try again.
+        </p>
       )}
-      <form className='manual-form' onSubmit={handleSubmit}>
-        <section>
+      <section className='manual-form-inputs'>
+        <section className='distance-input'>
           <label htmlFor='distance'>Distance</label>
           <input
             className='manual-form-input'
@@ -109,7 +111,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             </option>
           </select>
         </section>
-        <section>
+        <section className='elevation-input'>
           <label htmlFor='elevation'>Elevation</label>
           <input
             className='manual-form-input'
@@ -137,7 +139,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             </option>
           </select>
         </section>
-        <section>
+        <section className='duration-input'>
           <label htmlFor='hours'>Duration</label>
           <input
             className='manual-form-input'
@@ -178,7 +180,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             value={seconds}
           />
         </section>
-        <section>
+        <section className='type-input'>
           <label htmlFor='type'>Type</label>
           <select
             required
@@ -205,7 +207,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             </option>
           </select>
         </section>
-        <section>
+        <section className='title-input'>
           <label htmlFor='title'>Title</label>
           <input
             className='manual-form-input'
@@ -218,7 +220,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             value={title}
           />
         </section>
-        <section>
+        <section className='date-input'>
           <label htmlFor='date'>Date & Time</label>
           <input
             className='manual-form-input'
@@ -240,7 +242,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             value={time}
           />
         </section>
-        <section className='description-section'>
+        <section className='description-input'>
           <label htmlFor='description'>Description</label>
           <textarea
             className='manual-form-input description-box'
@@ -252,16 +254,15 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             placeholder='How’d it go? Share more about your activity.'
           />
         </section>
-        <button
-          type='submit'
-          disabled={!isFormValid()}
-          className='submit-button'
-          // onClick={setSubmitted(true)}
-        >
-          Submit
-        </button>
-      </form>
-    </section>
+      </section>
+      <button
+        type='submit'
+        disabled={!isFormValid()}
+        className='submit-button manual-form-submit'
+      >
+        Submit
+      </button>
+    </form>
   );
 };
 
