@@ -1,0 +1,110 @@
+.manual-form {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #0f1119;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 50vw;
+  height: auto;
+  padding: 40px 20px;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  box-shadow: 6px 7px 8px rgba(0, 0, 0, 0.25);
+}
+
+.manual-upload-instruction {
+  margin: 0;
+}
+
+.manual-form-inputs {
+  width: 75%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.description-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.manual-form-input {
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: #171a26;
+  width: 75px;
+  height: 25px;
+  padding-left: 10px;
+  margin: 0 5px;
+}
+
+.description-box {
+  resize: none;
+  padding-top: 10px;
+  width: 100%;
+  resize: none;
+  height: 125px;
+  margin: 10px 0 0;
+}
+
+.manual-form-inputs section {
+  margin: 10px 0;
+}
+
+input[id='date'] {
+  width: 125px;
+  text-indent: 3px;
+}
+
+input[id='time'] {
+  width: 100px;
+  text-indent: 3px;
+}
+
+input[id='title'] {
+  width: 110px;
+}
+
+/* media queries */
+@media (max-width: 986px) {
+  .date-input input,
+  .duration-input input {
+    width: 50px;
+  }
+}
+
+@media (max-width: 922px) {
+  .manual-form {
+    max-height: 90vh;
+    padding: 20px;
+  }
+  .manual-form-inputs {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .manual-form-submit {
+    height: 50px;
+  }
+  .manual-form {
+    width: 80vw;
+    min-height: 400px;
+    max-height: 90vh;
+    flex-wrap: nowrap;
+  }
+  .manual-form-inputs {
+    align-items: flex-start;
+  }
+  .manual-form-inputs label {
+    font-size: 14px;
+  }
+}
