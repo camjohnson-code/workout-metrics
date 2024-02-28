@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { IoMdHome } from 'react-icons/io';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
-import { FaChartSimple, FaArrowTrendUp } from 'react-icons/fa6';
 import { TbLogout2 } from 'react-icons/tb';
 
 const Sidebar = ({ year, athlete }) => {
@@ -17,17 +16,17 @@ const Sidebar = ({ year, athlete }) => {
         />
         <h1 className='user-name'>{athlete.firstname} {athlete.lastname}</h1>
       </Link>
-      <section className='sidebar-links'>
+      <nav className='sidebar-links'>
         <NavLink to='/dashboard' className='sidebar-link'>
           <IoMdHome className='sidebar-icon' /> Overview
         </NavLink>
-        <NavLink to='/charts' className='sidebar-link'>
+        {/* <NavLink to='/charts' className='sidebar-link'>
           <FaChartSimple className='sidebar-icon' />
           Charts
         </NavLink>
         <NavLink to='/stats' className='sidebar-link'>
           <FaArrowTrendUp className='sidebar-icon' /> Stats
-        </NavLink>
+        </NavLink> */}
         <NavLink to='/heatmap' className='sidebar-link'>
           <FaFire className='sidebar-icon' /> Heatmap
         </NavLink>
@@ -37,7 +36,7 @@ const Sidebar = ({ year, athlete }) => {
         <NavLink to='/add-workout' className='sidebar-link'>
           <FaPlus className='sidebar-icon' /> Add Workout
         </NavLink>
-      </section>
+      </nav>
       <footer className='sidebar-footer'>
         <NavLink to='/' className='sidebar-link footer-link'>
           <TbLogout2 className='sidebar-icon' />

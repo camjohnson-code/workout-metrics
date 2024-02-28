@@ -2,6 +2,7 @@ import './Dashboard.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
+import NavBar from '../Nav Bar/NavBar';
 import {
   FaCalendarDays,
   FaArrowTrendUp,
@@ -69,6 +70,7 @@ const Dashboard = ({
 
   return (
     <section className='dashboard-container'>
+      <NavBar />
       <Sidebar year={year} athlete={athlete}></Sidebar>
       <section className='dashboard'>
         <Cell className='cell cell-1'>

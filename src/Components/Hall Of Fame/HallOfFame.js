@@ -1,5 +1,6 @@
 import './HallOfFame.css';
 import Sidebar from '../Sidebar/Sidebar';
+import NavBar from '../Nav Bar/NavBar';
 import { useState, useEffect } from 'react';
 import { fetchUserActivities } from '../../ApiCalls';
 import Card from '../Card/Card';
@@ -107,6 +108,7 @@ const HallOfFame = ({
 
   return (
     <section className='hall-of-fame'>
+      <NavBar />
       <Sidebar athlete={athlete} year={year}></Sidebar>
       <section className='hall-of-fame-section'>
         <h1 className='hall-of-fame-title'>
@@ -154,16 +156,16 @@ const HallOfFame = ({
           <section className='card-container'>{favoriteCards}</section>
         )}
         {!favorites.length && !keywords && (
-          <p className='no-saved-activities'>
+          <p className='search-text'>
             Save memorable activities using the form above.
           </p>
         )}
-        {keywords && !hasSearched && <p>Press submit to see your results.</p>}
+        {keywords && !hasSearched && <p className='search-text'>Press submit to see your results.</p>}
         {activities.length > 0 && keywords && (
           <section className='card-container'>{cards}</section>
         )}
         {!activities.length && keywords && hasSearched && (
-          <p>No activities found. Try your search again.</p>
+          <p className='search-text'>No activities found. Try your search again.</p>
         )}
       </section>
     </section>

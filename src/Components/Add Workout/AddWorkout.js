@@ -1,13 +1,27 @@
 import './AddWorkout.css';
 import Sidebar from '../Sidebar/Sidebar';
+import NavBar from '../Nav Bar/NavBar';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ManualForm from '../Manual Form/ManualForm';
 import FileUploader from '../File Uploader/FileUploader';
 
 const AddWorkout = ({ year, athlete }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [manualForm, setManualForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleSubmit = () => {
     setSubmitted(true);
@@ -15,10 +29,11 @@ const AddWorkout = ({ year, athlete }) => {
 
   return (
     <section className='add-workout'>
+      <NavBar />
       <Sidebar athlete={athlete} year={year}></Sidebar>
       <section className='upload-section'>
-        {!submitted && <h1 className='upload-title'>Missing an activity?</h1>}
-        {!submitted && (
+        {!submitted && !isMobile && <h1 className='upload-title'>Missing an activity?</h1>}
+        {!submitted && !isMobile && (
           <p className='upload-subtitle'>
             Add your activity and we’ll add it to your Strava profile.
           </p>
