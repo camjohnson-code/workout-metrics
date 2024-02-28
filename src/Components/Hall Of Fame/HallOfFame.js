@@ -32,7 +32,8 @@ const HallOfFame = ({
   }, [athlete]);
 
   useEffect(() => {
-    if (!keywords) setActivities([]);
+    setActivities([]);
+    setHasSearched(false);
   }, [keywords]);
 
   const handleFormSubmit = (event) => {
