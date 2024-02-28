@@ -13,10 +13,6 @@ const AddWorkout = ({ year, athlete }) => {
     setSubmitted(true);
   };
 
-  // useEffect(() => {
-  //   handleSubmit();
-  // }, [submitted]);
-
   return (
     <section className='add-workout'>
       <Sidebar athlete={athlete} year={year}></Sidebar>
