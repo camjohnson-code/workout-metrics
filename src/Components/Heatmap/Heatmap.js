@@ -116,9 +116,9 @@ Heatmap.propTypes = {
   year: PropTypes.number.isRequired,
   athlete: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    city: PropTypes.string.isRequired,
-    state: PropTypes.string.isRequired,
-    country: PropTypes.string.isRequired,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    country: PropTypes.string,
   }),
   homeCoordinates: PropTypes.array.isRequired,
   activities: PropTypes.array.isRequired,
