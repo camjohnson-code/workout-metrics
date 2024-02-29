@@ -128,7 +128,7 @@ const Dashboard = ({
               : 'Holding steady'}
           </p>
           <p className='cell-subtitle long-subtitle'>
-            Based on your data, your training last week had{' '}
+            Based on your data, your training this week had{' '}
             {effortUp === 'up'
               ? 'more'
               : effortUp === 'down'

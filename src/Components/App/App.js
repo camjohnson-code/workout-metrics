@@ -76,16 +76,16 @@ const App = () => {
   }, []);
 
   const numAchievementsYTD = activities
-  .filter(
-    (activity) => activity?.start_date_local?.slice(0, 4) === year.toString()
-  )
-  .reduce((acc, activity) => acc + activity?.achievement_count, 0);
+    .filter(
+      (activity) => activity?.start_date_local?.slice(0, 4) === year.toString()
+    )
+    .reduce((acc, activity) => acc + activity?.achievement_count, 0);
 
   const getPolylines = () => {
     const encryptedPolyline = longestYearActivity?.map?.summary_polyline;
     const decryptedPolyline = polyline.decode(encryptedPolyline);
     const flippedLngLat = decryptedPolyline.map(([lat, lng]) => [lng, lat]);
-  
+
     setLineLayerCoordinates(flippedLngLat);
   };
 
@@ -147,21 +147,20 @@ const App = () => {
   };
 
   const getStreak = (data) => {
-    let date = new Date();
-    date.setHours(0, 0, 0, 0);
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
     let streak = 0;
-
+  
+    data.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
+  
     for (let i = 0; i < data.length; i++) {
       let startDate = new Date(data[i].start_date);
       startDate.setHours(0, 0, 0, 0);
-
-      if (+startDate === +date) {
-        streak++;
-        date.setDate(date.getDate() - 1);
-      } 
-      else if (+startDate < +date) break;
+  
+      if (+startDate === +today || +startDate === +new Date(today.setDate(today.getDate() - 1))) streak++;
+      else if (+startDate < +today) break;
     }
-
+  
     setStreak(streak);
   };
 
@@ -222,15 +221,14 @@ const App = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-  
+
       if (data?.features && data?.features?.length > 0) {
         const { center } = data?.features[0];
         return center;
-      } 
-      else return [0, 0];
+      } else return [0, 0];
     } catch (error) {
       console.error('Error fetching coordinates:', error);
-      return
+      return;
     }
   };
 
