@@ -8,7 +8,7 @@ import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
 import { TbLogout2 } from 'react-icons/tb';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const NavBar = () => {
+const NavBar = ({ logout }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -72,6 +72,7 @@ const NavBar = () => {
               </li>
               <li>
                 <NavLink
+                  onClick={() => logout()}
                   to='/'
                   className='mobile-nav-link'
                   activeClassName='active'

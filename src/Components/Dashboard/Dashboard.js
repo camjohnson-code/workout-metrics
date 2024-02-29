@@ -33,6 +33,7 @@ const Dashboard = ({
   effortUp,
   lineLayer,
   convertMtoMiles,
+  logout,
 }) => {
   const recentActivityType = recentActivity.type;
 
@@ -78,8 +79,8 @@ const Dashboard = ({
 
   return (
     <section className='dashboard-container'>
-      <NavBar />
-      <Sidebar year={year} athlete={athlete}></Sidebar>
+      <NavBar logout={logout} />
+      <Sidebar logout={logout} year={year} athlete={athlete}></Sidebar>
       <section className='dashboard'>
         <Cell className='cell cell-1'>
           <h1 className='cell-heading'>Date</h1>

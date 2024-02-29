@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { handleAuthorizationCallback } from '../../ApiCalls';
 import { useNavigate } from 'react-router-dom';
 
-const RedirectPage = () => {
+const RedirectPage = ({ login }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -11,6 +11,7 @@ const RedirectPage = () => {
 
   const fetchData = async () => {
     await handleAuthorizationCallback();
+    login();
     await navigate('/loading');
   };
 

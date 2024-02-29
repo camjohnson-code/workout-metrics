@@ -7,7 +7,7 @@ import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
 import { TbLogout2 } from 'react-icons/tb';
 import PropTypes from 'prop-types';
 
-const Sidebar = ({ year, athlete }) => {
+const Sidebar = ({ year, athlete, logout }) => {
   return (
     <section className='sidebar'>
       <Link target='#' to={`https://www.strava.com/athletes/${athlete?.id}`} className='sidebar-header'>
@@ -39,7 +39,7 @@ const Sidebar = ({ year, athlete }) => {
         </NavLink>
       </nav>
       <footer className='sidebar-footer'>
-        <NavLink to='/' className='sidebar-link footer-link'>
+        <NavLink onClick={() => logout()} to='/' className='sidebar-link footer-link'>
           <TbLogout2 className='sidebar-icon' />
           Sign Out
         </NavLink>

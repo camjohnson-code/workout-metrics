@@ -7,7 +7,7 @@ import ManualForm from '../Manual Form/ManualForm';
 import FileUploader from '../File Uploader/FileUploader';
 import PropTypes from 'prop-types';
 
-const AddWorkout = ({ year, athlete }) => {
+const AddWorkout = ({ year, athlete, logout }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [manualForm, setManualForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -30,8 +30,8 @@ const AddWorkout = ({ year, athlete }) => {
 
   return (
     <section className='add-workout'>
-      <NavBar />
-      <Sidebar athlete={athlete} year={year}></Sidebar>
+      <NavBar logout={logout} />
+      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
       <section className='upload-section'>
         {!submitted && !isMobile && <h1 className='upload-title'>Missing an activity?</h1>}
         {!submitted && !isMobile && (
