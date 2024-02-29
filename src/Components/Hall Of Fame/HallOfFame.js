@@ -86,7 +86,6 @@ const HallOfFame = ({
     return (
       <Card
         formatDate={formatDate}
-        key={index}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
         activity={activity}
@@ -101,7 +100,6 @@ const HallOfFame = ({
     return (
       <Card
         formatDate={formatDate}
-        key={index}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
         activity={activity}
