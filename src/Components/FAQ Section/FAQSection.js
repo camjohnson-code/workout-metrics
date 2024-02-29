@@ -94,8 +94,7 @@ const FAQSection = () => {
               }
             >
               Because this is Powered by Strava™, the speed is determined by the
-              state of their servers. Typically, it will take a couple of
-              minutes if this is your first time using this service.
+              state of their servers. Typically, it could take about a minute. If you've been on Strava for a while, it could take longer because we're pulling in more data. 
             </AccordionItem>
           </motion.div>
 

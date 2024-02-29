@@ -22,17 +22,36 @@ import {
 const App = () => {
   const year = new Date().getFullYear();
 
-  const [athlete, setAthlete] = useState({});
-  const [recentActivity, setRecentActivity] = useState({});
+  const [athlete, setAthlete] = useState({
+    id: 0,
+    firstname: '',
+    lastname: '',
+    city: '',
+    state: '',
+    country: '',
+    profile: '',
+  });
+  const [recentActivity, setRecentActivity] = useState({
+    distance: 0,
+    moving_time: 0,
+    type: '',
+    id: 0,
+  });
   const [activities, setActivities] = useState([]);
   const [achievementsYTD, setAchievementsYTD] = useState(0);
   const [homeCoordinates, setHomeCoordinates] = useState([]);
-  const [longestYearActivity, setLongestYearActivity] = useState({});
-  const [streak, setStreak] = useState(null);
-  const [weather, setWeather] = useState(null);
-  const [quote, setQuote] = useState({});
+  const [longestYearActivity, setLongestYearActivity] = useState({
+    distance: 0,
+    id: 0,
+    start_latlng: [],
+  });
+  const [streak, setStreak] = useState(0);
+  const [weather, setWeather] = useState({ temp: 0 });
+  const [quote, setQuote] = useState({ quote: '', author: '' });
   const [effortUp, setEffortUp] = useState('same');
-  const [lineLayer, setLineLayer] = useState(null);
+  const [lineLayer, setLineLayer] = useState([
+    { sourcePosition: [0, 0], targetPosition: [0, 0] },
+  ]);
 
   useEffect(() => {
     setAchievementsYTD(numAchievementsYTD);
@@ -57,16 +76,16 @@ const App = () => {
   }, []);
 
   const numAchievementsYTD = activities
-    .filter(
-      (activity) => activity.start_date_local.slice(0, 4) === year.toString()
-    )
-    .reduce((acc, activity) => acc + activity.achievement_count, 0);
+  .filter(
+    (activity) => activity?.start_date_local?.slice(0, 4) === year.toString()
+  )
+  .reduce((acc, activity) => acc + activity?.achievement_count, 0);
 
   const getPolylines = () => {
-    const encryptedPolyline = longestYearActivity.map.summary_polyline;
+    const encryptedPolyline = longestYearActivity?.map?.summary_polyline;
     const decryptedPolyline = polyline.decode(encryptedPolyline);
     const flippedLngLat = decryptedPolyline.map(([lat, lng]) => [lng, lat]);
-
+  
     setLineLayerCoordinates(flippedLngLat);
   };
 
@@ -114,8 +133,8 @@ const App = () => {
 
   const checkQuote = async () => {
     getQuote().then((quote) => {
-      if (!quote.quote) {
-        if (quote.date === new Date().toLocaleDateString()) setQuote(quote[0]);
+      if (!quote?.quote) {
+        if (quote?.date === new Date().toLocaleDateString()) setQuote(quote[0]);
         else
           fetchQuote(
             'https://api.api-ninjas.com/v1/quotes?category=fitness'
@@ -139,7 +158,8 @@ const App = () => {
       if (+startDate === +date) {
         streak++;
         date.setDate(date.getDate() - 1);
-      } else if (+startDate < +date) break;
+      } 
+      else if (+startDate < +date) break;
     }
 
     setStreak(streak);
@@ -147,8 +167,8 @@ const App = () => {
 
   const fetchCoordinates = async () => {
     const coordinates = await getCoordinates(
-      `${athlete.city}`,
-      `${athlete.state}`
+      `${athlete?.city}`,
+      `${athlete?.state}`
     );
 
     setHomeCoordinates(coordinates);
@@ -157,9 +177,9 @@ const App = () => {
   const getLongestYearActivity = async (allActivities) => {
     const longestActivity = allActivities
       .filter(
-        (activity) => activity.start_date_local.slice(0, 4) === year.toString()
+        (activity) => activity?.start_date_local.slice(0, 4) === year.toString()
       )
-      .sort((a, b) => b.moving_time - a.moving_time)[0];
+      .sort((a, b) => b?.moving_time - a?.moving_time)[0];
 
     setLongestYearActivity(longestActivity);
   };
@@ -202,16 +222,15 @@ const App = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-
-      if (data.features && data.features.length > 0) {
-        const { center } = data.features[0];
+  
+      if (data?.features && data?.features?.length > 0) {
+        const { center } = data?.features[0];
         return center;
-      } else {
-        return null;
-      }
+      } 
+      else return [0, 0];
     } catch (error) {
       console.error('Error fetching coordinates:', error);
-      return null;
+      return
     }
   };
 

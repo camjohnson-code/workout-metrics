@@ -58,7 +58,7 @@ const HallOfFame = ({
 
   const handleStarClick = async (activity) => {
     const isFavorite = favorites.some(
-      (favorite) => favorite.id === activity.id
+      (favorite) => favorite?.id === activity?.id
     );
     if (isFavorite) {
       setFavorites(favorites.filter((favorite) => favorite.id !== activity.id));
@@ -79,7 +79,7 @@ const HallOfFame = ({
 
   const cards = activities.map((activity, index) => {
     const isFavorite = favorites.some(
-      (favorite) => favorite.id === activity.id
+      (favorite) => favorite?.id === activity?.id
     );
 
     return (
@@ -89,7 +89,7 @@ const HallOfFame = ({
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
         activity={activity}
-        key={activity.id}
+        key={activity?.id}
         onStarClick={() => handleStarClick(activity)}
         isFavorite={isFavorite}
       />
@@ -104,7 +104,7 @@ const HallOfFame = ({
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
         activity={activity}
-        key={activity.id}
+        key={activity?.id}
         onStarClick={() => handleStarClick(activity)}
         isFavorite={true}
       />
@@ -117,7 +117,7 @@ const HallOfFame = ({
       <Sidebar athlete={athlete} year={year}></Sidebar>
       <section className='hall-of-fame-section'>
         <h1 className='hall-of-fame-title'>
-          {athlete.firstname}'s Hall of Fame
+          {athlete?.firstname}'s Hall of Fame
         </h1>
         <form className='hall-of-fame-form' onSubmit={handleFormSubmit}>
           <section className='selector'>
@@ -157,10 +157,10 @@ const HallOfFame = ({
             Search
           </button>
         </form>
-        {!!favorites.length && !keywords && (
+        {!!favorites?.length && !keywords && (
           <section className='card-container'>{favoriteCards}</section>
         )}
-        {!favorites.length && !keywords && (
+        {!favorites?.length && !keywords && (
           <p className='search-text'>
             Save memorable activities using the form above.
           </p>
@@ -171,7 +171,7 @@ const HallOfFame = ({
         {activities.length > 0 && keywords && (
           <section className='card-container'>{cards}</section>
         )}
-        {!activities.length && keywords && hasSearched && (
+        {!activities?.length && keywords && hasSearched && (
           <p className='search-text'>
             No activities found. Try your search again.
           </p>

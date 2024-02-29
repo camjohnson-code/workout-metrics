@@ -19,7 +19,7 @@ const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
   useEffect(() => {
     if (activities.length) {
       const polylines = activities.map(
-        (activity) => activity.map.summary_polyline
+        (activity) => activity?.map?.summary_polyline
       );
       setPolylines(polylines);
     }
@@ -120,10 +120,6 @@ Heatmap.propTypes = {
     state: PropTypes.string.isRequired,
     country: PropTypes.string.isRequired,
   }),
-  homeCoordinates: PropTypes.arrayOf(PropTypes.shape({
-    map: PropTypes.shape({
-      summary_plotline: PropTypes.string.isRequired,
-    }).isRequired,
-  })).isRequired,
+  homeCoordinates: PropTypes.array.isRequired,
   activities: PropTypes.array.isRequired,
 };

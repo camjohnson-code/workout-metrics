@@ -47,13 +47,13 @@ const Dashboard = ({
 
   const INITIAL_VIEW_STATE =
     lineLayer &&
-    lineLayer.length > 0 &&
+    lineLayer?.length > 0 &&
     lineLayer[Math.round(lineLayer.length / 2)]
       ? {
           longitude:
-            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[0],
+            lineLayer[Math.round(lineLayer?.length / 2)].sourcePosition[0],
           latitude:
-            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[1],
+            lineLayer[Math.round(lineLayer?.length / 2)].sourcePosition[1],
           zoom: 13,
           pitch: 0,
           bearing: 0,
@@ -85,15 +85,15 @@ const Dashboard = ({
           <LuActivity className='cell-icon activity' />
           <p className='cell-main'>
             {recentActivityType === 'Swim'
-              ? convertMtoYds(recentActivity.distance)
-              : convertMtoMiles(recentActivity.distance)}
+              ? convertMtoYds(recentActivity?.distance)
+              : convertMtoMiles(recentActivity?.distance)}
             <span className='unit'>
               {recentActivityType === 'Swim' ? 'yds' : 'mi'}
             </span>
           </p>
           <Link
             target='#'
-            to={`https://www.strava.com/activities/${recentActivity.id}`}
+            to={`https://www.strava.com/activities/${recentActivity?.id}`}
             className='cell-subtitle view-link'
           >
             View on Strava <CiShare1 className='view-icon' />
@@ -142,7 +142,7 @@ const Dashboard = ({
           <h1 className='cell-heading'>Longest Activity in {year}</h1>
           <IoMdStopwatch className='cell-icon longest-activity' />
           <div className='deckgl-container'>
-            {longestYearActivity && longestYearActivity.start_latlng.length ? (
+            {longestYearActivity && longestYearActivity?.start_latlng?.length ? (
               <DeckGL
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
@@ -190,8 +190,8 @@ const Dashboard = ({
         <Cell className='cell cell-8'>
           <h1 className='cell-heading'>Your Daily Kick in the Butt</h1>
           <IoMdQuote className='cell-icon quote-icon' />
-          <p className='cell-main quote'>{quote.quote}</p>
-          <p className='cell-subtitle quote-subtitle'>- {quote.author}</p>
+          <p className='cell-main quote'>{quote?.quote}</p>
+          <p className='cell-subtitle quote-subtitle'>- {quote?.author}</p>
         </Cell>
       </section>
     </section>
