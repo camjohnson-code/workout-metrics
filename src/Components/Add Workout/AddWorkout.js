@@ -8,13 +8,13 @@ import FileUploader from '../File Uploader/FileUploader';
 import PropTypes from 'prop-types';
 
 const AddWorkout = ({ year, athlete }) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(false);
   const [manualForm, setManualForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window?.innerWidth < 768);
     };
 
     window.addEventListener('resize', handleResize);
@@ -45,6 +45,7 @@ const AddWorkout = ({ year, athlete }) => {
               setSubmitted={setSubmitted}
               setManualForm={setManualForm}
               athlete={athlete}
+              manualForm={manualForm}
             />
           ) : (
             <ManualForm

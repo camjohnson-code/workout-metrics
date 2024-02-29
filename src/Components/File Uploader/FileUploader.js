@@ -7,14 +7,13 @@ import { getUserFromAPI, uploadFile } from '../../ApiCalls';
 import PropTypes from 'prop-types';
 
 const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
-  const [uploadStatus, setUploadStatus] = useState('');
   const [fileTypeError, setFileTypeError] = useState(false);
   const [uploadError, setUploadError] = useState(false);
   const [uploadErrorMessage, setUploadErrorMessage] = useState(false);
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
   const handleSubmit = async () => {
-    if (acceptedFiles.length === 0) return;
+    if (acceptedFiles?.length === 0) return;
 
     const supportedTypes = ['fit', 'tcx', 'gpx'];
 
@@ -22,7 +21,7 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const extension = file.name.split('.').pop().toLowerCase();
+      const extension = file?.name.split('.').pop().toLowerCase();
 
       if (!supportedTypes.includes(extension)) {
         setFileTypeError(true);
@@ -30,12 +29,12 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
       } else setFileTypeError(false);
       formData.append('data_type', extension);
 
-      const athleteInfo = await getUserFromAPI(athlete.id);
-      const accessToken = athleteInfo.data.stravaAccessToken;
+      const athleteInfo = await getUserFromAPI(athlete?.id);
+      const accessToken = athleteInfo?.data?.stravaAccessToken;
 
       const data = await uploadFile(file, accessToken);
 
-      if (data.error) {
+      if (data?.error) {
         setUploadError(true);
         if (data.error.includes('duplicate'))
           setUploadErrorMessage('This file has already been uploaded.');
@@ -48,8 +47,8 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
   };
 
   const files = acceptedFiles.map((file) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
+    <li key={file?.path}>
+      {file?.path} - {file?.size} bytes
     </li>
   ));
 
@@ -79,7 +78,7 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
         <BsUpload className='upload-icon' />
         <input {...getInputProps()} />
         <p className='file-types'>
-          {acceptedFiles.length
+          {acceptedFiles?.length
             ? `File(s) added: ${acceptedFiles
                 .map((file) => file.name)
                 .join(', ')}`
@@ -91,7 +90,7 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
           handleSubmit();
           setSubmitted(true);
         }}
-        disabled={!acceptedFiles.length || fileTypeError}
+        disabled={!acceptedFiles?.length || fileTypeError}
         className='submit-button'
       >
         Submit

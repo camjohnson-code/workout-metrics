@@ -10,12 +10,12 @@ import PropTypes from 'prop-types';
 const Sidebar = ({ year, athlete }) => {
   return (
     <section className='sidebar'>
-      <Link target='#' to={`https://www.strava.com/athletes/${athlete.id}`} className='sidebar-header'>
+      <Link target='#' to={`https://www.strava.com/athletes/${athlete?.id}`} className='sidebar-header'>
         <img
-          src={`${athlete.profile}`}
+          src={`${athlete?.profile}`}
           className='profile-photo'
         />
-        <h1 className='user-name'>{athlete.firstname} {athlete.lastname}</h1>
+        <h1 className='user-name'>{athlete?.firstname} {athlete?.lastname}</h1>
       </Link>
       <nav className='sidebar-links'>
         <NavLink to='/dashboard' className='sidebar-link'>

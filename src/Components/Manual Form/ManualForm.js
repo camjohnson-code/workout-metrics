@@ -39,8 +39,8 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const athleteInfo = await getUserFromAPI(athlete.id);
-    const accessToken = athleteInfo.data.stravaAccessToken;
+    const athleteInfo = await getUserFromAPI(athlete?.id);
+    const accessToken = athleteInfo?.data?.stravaAccessToken;
 
     const activityData = {
       name: title,
@@ -270,6 +270,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
 export default ManualForm;
 
 ManualForm.propTypes = {
+  manualForm: PropTypes.bool.isRequired,
   setManualForm: PropTypes.func.isRequired,
   setSubmitted: PropTypes.func.isRequired,
   athlete: PropTypes.shape({
