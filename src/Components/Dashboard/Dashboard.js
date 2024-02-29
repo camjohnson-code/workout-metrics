@@ -69,6 +69,13 @@ const Dashboard = ({
     }),
   ];
 
+  const generateWeatherSubtitle = () => {
+    if (weather.temp < 40) return 'Bundle up!';
+    if (weather.temp >= 40 && weather.temp < 60) return 'Slightly on the cooler side.';
+    if (weather.temp >= 60 && weather.temp < 80) return 'Perfect weather!';
+    if (weather.temp >= 80) return 'Stay hydrated!';
+  }
+
   return (
     <section className='dashboard-container'>
       <NavBar />
@@ -108,8 +115,8 @@ const Dashboard = ({
         <Cell className='cell cell-4'>
           <h1 className='cell-heading'>Today's high</h1>
           <CiTempHigh className='cell-icon weather' />
-          <p className='cell-main'>{Math.round(weather.temp)}°</p>
-          <p className='cell-subtitle'>Great day to go outside!</p>
+          {athlete?.city ? (<p className='cell-main'>{Math.round(weather.temp)}°</p>) : <p>You don't have your location set in your Strava profile!</p>}
+          {athlete?.city && <p className='cell-subtitle'>{generateWeatherSubtitle()}</p>}
         </Cell>
         <Cell className='cell cell-5'>
           <h1 className='cell-heading'>Relative Effort</h1>
