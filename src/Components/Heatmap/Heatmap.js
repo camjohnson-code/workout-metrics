@@ -1,6 +1,7 @@
 import './Heatmap.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
+import NoLocationModule from '../No Location Module/NoLocationModule';
 import { useEffect, useState } from 'react';
 import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
@@ -79,6 +80,7 @@ const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
       <NavBar />
       <Sidebar athlete={athlete} year={year}></Sidebar>
       <section className='heatmap-container'>
+      {!athlete?.city && <NoLocationModule />}
         {loading && (
           <Lottie
             animationData={LoadingAnimation}

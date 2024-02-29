@@ -107,8 +107,8 @@ FileUploader.propTypes = {
   setSubmitted: PropTypes.func.isRequired,
   athlete: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    city: PropTypes.string.isRequired,
-    state: PropTypes.string.isRequired,
+    city: PropTypes.string,
+    state: PropTypes.string,
     profile: PropTypes.string.isRequired,
   }).isRequired,
 };
