@@ -28,9 +28,15 @@ const LoadingPage = ({
     });
     await getAthleteActivities().then((activities) => {
       setActivities(activities);
-      setRecentActivity(activities[0]);
       getStreak(activities);
       getLongestYearActivity(activities);
+      if (activities.length) setRecentActivity(activities[0]);
+      else setRecentActivity({
+        distance: 0,
+        moving_time: 0,
+        type: '',
+        id: 0,
+      });
     });
 
     login();
