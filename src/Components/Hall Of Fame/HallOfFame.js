@@ -17,6 +17,7 @@ const HallOfFame = ({
   convertMtoMiles,
   convertSecondsToHMS,
   formatDate,
+  logout,
 }) => {
   const [favorites, setFavorites] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -85,7 +86,6 @@ const HallOfFame = ({
     return (
       <Card
         formatDate={formatDate}
-        key={index}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
         activity={activity}
@@ -100,7 +100,6 @@ const HallOfFame = ({
     return (
       <Card
         formatDate={formatDate}
-        key={index}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
         activity={activity}
@@ -113,8 +112,8 @@ const HallOfFame = ({
 
   return (
     <section className='hall-of-fame'>
-      <NavBar />
-      <Sidebar athlete={athlete} year={year}></Sidebar>
+      <NavBar logout={logout} />
+      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
       <section className='hall-of-fame-section'>
         <h1 className='hall-of-fame-title'>
           {athlete?.firstname}'s Hall of Fame

@@ -12,7 +12,7 @@ import Lottie from 'lottie-react';
 import LoadingAnimation from '../../Animations/loading.json';
 import PropTypes from 'prop-types';
 
-const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
+const Heatmap = ({ year, athlete, homeCoordinates, activities, logout }) => {
   const [loading, setLoading] = useState(true);
   const [polylines, setPolylines] = useState([]);
   const [lineCoordinates, setLineCoordinates] = useState([]);
@@ -77,8 +77,8 @@ const Heatmap = ({ year, athlete, homeCoordinates, activities }) => {
 
   return (
     <section className='heatmap-page'>
-      <NavBar />
-      <Sidebar athlete={athlete} year={year}></Sidebar>
+      <NavBar logout={logout} />
+      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
       <section className='heatmap-container'>
       {!athlete?.city && <NoLocationModule />}
         {loading && (

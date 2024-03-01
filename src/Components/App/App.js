@@ -18,47 +18,88 @@ import {
   fetchQuote,
   addQuoteToAPI,
 } from '../../ApiCalls';
+import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
 
 const App = () => {
   const year = new Date().getFullYear();
 
-  const [athlete, setAthlete] = useState({
-    id: 0,
-    firstname: '',
-    lastname: '',
-    city: '',
-    state: '',
-    country: '',
-    profile: '',
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [athlete, setAthlete] = useState(() => {
+    const savedAthlete = localStorage.getItem('athlete');
+    return savedAthlete ? JSON.parse(savedAthlete) : {
+      id: 0,
+      firstname: '',
+      lastname: '',
+      city: '',
+      state: '',
+      country: '',
+      profile: '',
+    };
   });
-  const [recentActivity, setRecentActivity] = useState({
-    distance: 0,
-    moving_time: 0,
-    type: '',
-    id: 0,
+  const [recentActivity, setRecentActivity] = useState(() => {
+    const savedRecentActivity = localStorage.getItem('recentActivity');
+    return savedRecentActivity ? JSON.parse(savedRecentActivity) : {
+      distance: 0,
+      moving_time: 0,
+      type: '',
+      id: 0,
+    };
   });
-  const [activities, setActivities] = useState([]);
-  const [achievementsYTD, setAchievementsYTD] = useState(0);
-  const [homeCoordinates, setHomeCoordinates] = useState([]);
-  const [longestYearActivity, setLongestYearActivity] = useState({
-    distance: 0,
-    id: 0,
-    start_latlng: [],
+  const [activities, setActivities] = useState(() => {
+    const savedActivities = localStorage.getItem('activities');
+    return savedActivities ? JSON.parse(savedActivities) : [];
   });
-  const [streak, setStreak] = useState(0);
-  const [weather, setWeather] = useState({ temp: 0 });
-  const [quote, setQuote] = useState({ quote: '', author: '' });
-  const [effortUp, setEffortUp] = useState('same');
-  const [lineLayer, setLineLayer] = useState([
-    { sourcePosition: [0, 0], targetPosition: [0, 0] },
-  ]);
+  const [achievementsYTD, setAchievementsYTD] = useState(() => {
+    const savedAchievementsYTD = localStorage.getItem('achievementsYTD');
+    return savedAchievementsYTD ? JSON.parse(savedAchievementsYTD) : 0;
+  });
+  const [homeCoordinates, setHomeCoordinates] = useState(() => {
+    const savedHomeCoordinates = localStorage.getItem('homeCoordinates');
+    return savedHomeCoordinates ? JSON.parse(savedHomeCoordinates) : [];
+  });
+  const [longestYearActivity, setLongestYearActivity] = useState(() => {
+    const savedLongestYearActivity = localStorage.getItem('longestYearActivity');
+    return savedLongestYearActivity ? JSON.parse(savedLongestYearActivity) : {
+      distance: 0,
+      id: 0,
+      start_latlng: [],
+    };
+  });
+  const [streak, setStreak] = useState(() => {
+    const savedStreak = localStorage.getItem('streak');
+    return savedStreak ? JSON.parse(savedStreak) : 0;
+  });
+  const [weather, setWeather] = useState(() => {
+    const savedWeather = localStorage.getItem('weather');
+    return savedWeather ? JSON.parse(savedWeather) : { temp: 0 };
+  });
+  const [quote, setQuote] = useState(() => {
+    const savedQuote = localStorage.getItem('quote');
+    return savedQuote ? JSON.parse(savedQuote) : { quote: '', author: '' };
+  });
+  const [effortUp, setEffortUp] = useState(() => {
+    const savedEffortUp = localStorage.getItem('effortUp');
+    return savedEffortUp ? savedEffortUp : 'same';
+  });
+  const [lineLayer, setLineLayer] = useState(() => {
+    const savedLineLayer = localStorage.getItem('lineLayer');
+    return savedLineLayer ? JSON.parse(savedLineLayer) : [
+      { sourcePosition: [0, 0], targetPosition: [0, 0] },
+    ];
+  });
 
   useEffect(() => {
+    localStorage.setItem('activities', JSON.stringify(activities));
     setAchievementsYTD(numAchievementsYTD);
     analyzeRelativeEffort(activities);
   }, [activities]);
 
   useEffect(() => {
+    localStorage.setItem('recentActivity', JSON.stringify(recentActivity));
+  }, [recentActivity]);
+
+  useEffect(() => {
+    localStorage.setItem('longestYearActivity', JSON.stringify(longestYearActivity));
     if (longestYearActivity.map) getPolylines();
   }, [longestYearActivity]);
 
@@ -68,12 +109,53 @@ const App = () => {
   }, [homeCoordinates]);
 
   useEffect(() => {
+    localStorage.setItem('athlete', JSON.stringify(athlete));
     fetchCoordinates();
   }, [athlete]);
 
   useEffect(() => {
+    localStorage.setItem('achievementsYTD', JSON.stringify(achievementsYTD));
+  }, [achievementsYTD]);
+
+  useEffect(() => {
+    localStorage.setItem('homeCoordinates', JSON.stringify(homeCoordinates));
+  }, [homeCoordinates]);
+
+  useEffect(() => {
+    localStorage.setItem('streak', JSON.stringify(streak));
+  }, [streak]);
+
+  useEffect(() => {
+    localStorage.setItem('weather', JSON.stringify(weather));
+  }, [weather]);
+
+  useEffect(() => {
+    localStorage.setItem('quote', JSON.stringify(quote));
+  }, [quote]);
+
+  useEffect(() => {
+    localStorage.setItem('effortUp', effortUp);
+  }, [effortUp]);
+
+  useEffect(() => {
+    const persistedLoginState = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(persistedLoginState === 'true');
     checkQuote();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('lineLayer', JSON.stringify(lineLayer));
+  }, [lineLayer]);
+
+  const login = () => {
+    setIsLoggedIn(true);
+    localStorage.setItem('isLoggedIn', 'true');
+  };
+
+  const logout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn');
+  };
 
   const numAchievementsYTD = activities
     .filter(
@@ -150,17 +232,21 @@ const App = () => {
     let today = new Date();
     today.setHours(0, 0, 0, 0);
     let streak = 0;
-  
+
     data.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
-  
+
     for (let i = 0; i < data.length; i++) {
       let startDate = new Date(data[i].start_date);
       startDate.setHours(0, 0, 0, 0);
-  
-      if (+startDate === +today || +startDate === +new Date(today.setDate(today.getDate() - 1))) streak++;
+
+      if (
+        +startDate === +today ||
+        +startDate === +new Date(today.setDate(today.getDate() - 1))
+      )
+        streak++;
       else if (+startDate < +today) break;
     }
-  
+
     setStreak(streak);
   };
 
@@ -236,78 +322,107 @@ const App = () => {
     <Router>
       <Routes>
         <Route path='/' element={<LandingPage year={year} />} />
-        <Route path='/redirect' element={<RedirectPage />} />
+        <Route path='/redirect' element={<RedirectPage login={login} />} />
         <Route
           path='/loading'
           element={
-            <LoadingPage
-              getPolylines={getPolylines}
-              getStreak={getStreak}
-              setActivities={setActivities}
-              setAthlete={setAthlete}
-              setRecentActivity={setRecentActivity}
-              getLongestYearActivity={getLongestYearActivity}
-            />
+            isLoggedIn ? (
+              <LoadingPage
+                getPolylines={getPolylines}
+                getStreak={getStreak}
+                setActivities={setActivities}
+                setAthlete={setAthlete}
+                setRecentActivity={setRecentActivity}
+                getLongestYearActivity={getLongestYearActivity}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/dashboard'
           element={
-            <Dashboard
-              convertMtoMiles={convertMtoMiles}
-              lineLayer={lineLayer}
-              effortUp={effortUp}
-              quote={quote}
-              weather={weather}
-              streak={streak}
-              longestYearActivity={longestYearActivity}
-              achievements={achievementsYTD}
-              getCoordinates={getCoordinates}
-              activities={activities}
-              convertMtoYds={convertMtoYds}
-              recentActivity={recentActivity}
-              athlete={athlete}
-              year={year}
-            />
+            isLoggedIn ? (
+              <Dashboard
+                convertMtoMiles={convertMtoMiles}
+                lineLayer={lineLayer}
+                effortUp={effortUp}
+                quote={quote}
+                weather={weather}
+                streak={streak}
+                longestYearActivity={longestYearActivity}
+                achievements={achievementsYTD}
+                getCoordinates={getCoordinates}
+                activities={activities}
+                convertMtoYds={convertMtoYds}
+                recentActivity={recentActivity}
+                athlete={athlete}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
-        <Route
+        {/* <Route
           path='/charts'
           element={<Charts athlete={athlete} year={year} />}
         />
         <Route
           path='/stats'
           element={<Stats athlete={athlete} year={year} />}
-        />
+        /> */}
         <Route
           path='/heatmap'
           element={
-            <Heatmap
-              activities={activities}
-              athlete={athlete}
-              homeCoordinates={homeCoordinates}
-              year={year}
-            />
+            isLoggedIn ? (
+              <Heatmap
+                activities={activities}
+                athlete={athlete}
+                homeCoordinates={homeCoordinates}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/hall-of-fame'
           element={
-            <HallOfFame
-              formatDate={formatDate}
-              convertSecondsToHMS={convertSecondsToHMS}
-              convertMtoMiles={convertMtoMiles}
-              athlete={athlete}
-              year={year}
-            />
+            isLoggedIn ? (
+              <HallOfFame
+                formatDate={formatDate}
+                convertSecondsToHMS={convertSecondsToHMS}
+                convertMtoMiles={convertMtoMiles}
+                athlete={athlete}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/add-workout'
-          element={<AddWorkout athlete={athlete} year={year} />}
+          element={
+            isLoggedIn ? (
+              <AddWorkout athlete={athlete} year={year} logout={logout} />
+            ) : (
+              <NotLoggedInPage />
+            )
+          }
         />
 
-        <Route path='*' element={<NotFoundPage />} />
+        <Route
+          path='*'
+          element={isLoggedIn ? <NotFoundPage /> : <NotLoggedInPage />}
+        />
       </Routes>
     </Router>
   );

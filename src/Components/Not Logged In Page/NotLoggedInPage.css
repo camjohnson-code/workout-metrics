@@ -1,0 +1,32 @@
+.not-logged-in-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: #171a26;
+    color: white;
+}
+
+.must-sign-in-link {
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.must-sign-in-link,
+.not-logged-in-page {
+    font-family: 'Inter', sans-serif;
+}
+
+.not-logged-in-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.not-logged-in-text {
+    font-size: 16px;
+    font-weight: 300;
+}
