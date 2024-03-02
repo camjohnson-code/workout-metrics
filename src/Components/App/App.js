@@ -24,51 +24,67 @@ const App = () => {
   const year = new Date().getFullYear();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [athlete, setAthlete] = useState(() => {
     const savedAthlete = localStorage.getItem('athlete');
-    return savedAthlete ? JSON.parse(savedAthlete) : {
-      id: 0,
-      firstname: '',
-      lastname: '',
-      city: '',
-      state: '',
-      country: '',
-      profile: '',
-    };
+    return savedAthlete
+      ? JSON.parse(savedAthlete)
+      : {
+          id: 0,
+          firstname: '',
+          lastname: '',
+          city: '',
+          state: '',
+          country: '',
+          profile: '',
+        };
   });
+
   const [recentActivity, setRecentActivity] = useState(() => {
     const savedRecentActivity = localStorage.getItem('recentActivity');
-    return savedRecentActivity ? JSON.parse(savedRecentActivity) : {
-      distance: 0,
-      moving_time: 0,
-      type: '',
-      id: 0,
-    };
+    return savedRecentActivity
+      ? JSON.parse(savedRecentActivity)
+      : {
+          distance: 0,
+          moving_time: 0,
+          type: '',
+          id: 0,
+        };
   });
+
   const [activities, setActivities] = useState(() => {
     const savedActivities = localStorage.getItem('activities');
     return savedActivities ? JSON.parse(savedActivities) : [];
   });
+
   const [achievementsYTD, setAchievementsYTD] = useState(() => {
     const savedAchievementsYTD = localStorage.getItem('achievementsYTD');
     return savedAchievementsYTD ? JSON.parse(savedAchievementsYTD) : 0;
   });
+
   const [homeCoordinates, setHomeCoordinates] = useState(() => {
     const savedHomeCoordinates = localStorage.getItem('homeCoordinates');
     return savedHomeCoordinates ? JSON.parse(savedHomeCoordinates) : [];
   });
+
   const [longestYearActivity, setLongestYearActivity] = useState(() => {
-    const savedLongestYearActivity = localStorage.getItem('longestYearActivity');
-    return savedLongestYearActivity ? JSON.parse(savedLongestYearActivity) : {
-      distance: 0,
-      id: 0,
-      start_latlng: [],
-    };
+    const savedLongestYearActivity = localStorage.getItem(
+      'longestYearActivity'
+    );
+    return savedLongestYearActivity
+      ? JSON.parse(savedLongestYearActivity)
+      : {
+          distance: 0,
+          id: 0,
+          start_latlng: [],
+        };
   });
+
   const [streak, setStreak] = useState(() => {
     const savedStreak = localStorage.getItem('streak');
     return savedStreak ? JSON.parse(savedStreak) : 0;
   });
+
   const [weather, setWeather] = useState(() => {
     const savedWeather = localStorage.getItem('weather');
     return savedWeather ? JSON.parse(savedWeather) : { temp: 0 };
@@ -77,15 +93,17 @@ const App = () => {
     const savedQuote = localStorage.getItem('quote');
     return savedQuote ? JSON.parse(savedQuote) : { quote: '', author: '' };
   });
+
   const [effortUp, setEffortUp] = useState(() => {
     const savedEffortUp = localStorage.getItem('effortUp');
     return savedEffortUp ? savedEffortUp : 'same';
   });
+
   const [lineLayer, setLineLayer] = useState(() => {
     const savedLineLayer = localStorage.getItem('lineLayer');
-    return savedLineLayer ? JSON.parse(savedLineLayer) : [
-      { sourcePosition: [0, 0], targetPosition: [0, 0] },
-    ];
+    return savedLineLayer
+      ? JSON.parse(savedLineLayer)
+      : [{ sourcePosition: [0, 0], targetPosition: [0, 0] }];
   });
 
   useEffect(() => {
@@ -99,7 +117,10 @@ const App = () => {
   }, [recentActivity]);
 
   useEffect(() => {
-    localStorage.setItem('longestYearActivity', JSON.stringify(longestYearActivity));
+    localStorage.setItem(
+      'longestYearActivity',
+      JSON.stringify(longestYearActivity)
+    );
     if (longestYearActivity.map) getPolylines();
   }, [longestYearActivity]);
 
@@ -154,7 +175,14 @@ const App = () => {
 
   const logout = () => {
     setIsLoggedIn(false);
+    setIsAuthorized(false);
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('isAuthorized');
+  };
+
+  const authenticate = () => {
+    setIsAuthorized(true);
+    localStorage.setItem('isAuthorized', 'true');
   };
 
   const numAchievementsYTD = activities
@@ -322,23 +350,23 @@ const App = () => {
     <Router>
       <Routes>
         <Route path='/' element={<LandingPage year={year} />} />
-        <Route path='/redirect' element={<RedirectPage login={login} />} />
+        <Route
+          path='/redirect'
+          element={<RedirectPage setIsAuthorized={setIsAuthorized} isLoggedIn={isLoggedIn} />}
+        />
         <Route
           path='/loading'
           element={
-            isLoggedIn ? (
-              <LoadingPage
-                getPolylines={getPolylines}
-                getStreak={getStreak}
-                setActivities={setActivities}
-                setAthlete={setAthlete}
-                setRecentActivity={setRecentActivity}
-                getLongestYearActivity={getLongestYearActivity}
-                logout={logout}
-              />
-            ) : (
-              <NotLoggedInPage />
-            )
+            <LoadingPage
+              setAthlete={setAthlete}
+              setRecentActivity={setRecentActivity}
+              setActivities={setActivities}
+              getStreak={getStreak}
+              getLongestYearActivity={getLongestYearActivity}
+              isLoggedIn={isLoggedIn}
+              isAuthorized={isAuthorized}
+              login={login}
+            />
           }
         />
         <Route
