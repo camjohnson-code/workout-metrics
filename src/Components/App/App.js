@@ -243,18 +243,18 @@ const App = () => {
   };
 
   const checkQuote = async () => {
-    getQuote().then((quote) => {
-      if (!quote?.quote) {
-        if (quote?.date === new Date().toLocaleDateString()) setQuote(quote[0]);
-        else
-          fetchQuote(
-            'https://api.api-ninjas.com/v1/quotes?category=fitness'
-          ).then((quote) => {
-            addQuoteToAPI(quote[0]);
-            checkQuote();
-          });
-      } else setQuote(quote);
-    });
+    const quote = await getQuote();
+    const today = new Date().toISOString().split('T')[0];
+    const quoteDate = new Date(quote?.date);
+
+    if (quoteDate.toISOString().split('T')[0] === today) setQuote(quote);
+    else {
+      const newQuote = await fetchQuote(
+        'https://api.api-ninjas.com/v1/quotes?category=fitness'
+      );
+      await addQuoteToAPI(newQuote[0]);
+      setQuote(newQuote[0]);
+    }
   };
 
   const getStreak = (data) => {
@@ -353,7 +353,12 @@ const App = () => {
         <Route path='/' element={<LandingPage year={year} />} />
         <Route
           path='/redirect'
-          element={<RedirectPage setIsAuthorized={setIsAuthorized} isLoggedIn={isLoggedIn} />}
+          element={
+            <RedirectPage
+              setIsAuthorized={setIsAuthorized}
+              isLoggedIn={isLoggedIn}
+            />
+          }
         />
         <Route
           path='/loading'
