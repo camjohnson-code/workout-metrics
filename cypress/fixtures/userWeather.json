@@ -1,0 +1,280 @@
+{
+  "type": "FeatureCollection",
+  "query": ["highlands", "ranch", "colorado"],
+  "features": [
+    {
+      "id": "place.148818156",
+      "type": "Feature",
+      "place_type": ["place"],
+      "relevance": 1,
+      "properties": {
+        "mapbox_id": "dXJuOm1ieHBsYzpDTjdJN0E",
+        "wikidata": "Q750935"
+      },
+      "text": "Highlands Ranch",
+      "place_name": "Highlands Ranch, Colorado, United States",
+      "bbox": [-105.036511, 39.490387, -104.904227, 39.568535],
+      "center": [-104.969566, 39.549724],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-104.969566, 39.549724]
+      },
+      "context": [
+        {
+          "id": "district.6661868",
+          "mapbox_id": "dXJuOm1ieHBsYzpaYWJz",
+          "wikidata": "Q115556",
+          "text": "Douglas County"
+        },
+        {
+          "id": "region.83180",
+          "mapbox_id": "dXJuOm1ieHBsYzpBVVRz",
+          "wikidata": "Q1261",
+          "short_code": "US-CO",
+          "text": "Colorado"
+        },
+        {
+          "id": "country.8940",
+          "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+          "wikidata": "Q30",
+          "short_code": "us",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "poi.103079313788",
+      "type": "Feature",
+      "place_type": ["poi"],
+      "relevance": 1,
+      "properties": {
+        "foursquare": "507478a5e4b0fe15225cf00e",
+        "landmark": true,
+        "address": "1811 Plaza Dr",
+        "category": "doctor, physician"
+      },
+      "text": "Children's Hospital Colorado South Campus",
+      "place_name": "Children's Hospital Colorado South Campus, 1811 Plaza Dr, Highlands Ranch, Colorado 80129, United States",
+      "matching_text": "Highlands Ranch",
+      "matching_place_name": "Highlands Ranch, 1811 Plaza Dr, Highlands Ranch, Colorado 80129, United States",
+      "center": [-105.010117, 39.557155],
+      "geometry": {
+        "coordinates": [-105.010117, 39.557155],
+        "type": "Point"
+      },
+      "context": [
+        {
+          "id": "neighborhood.708979948",
+          "mapbox_id": "dXJuOm1ieHBsYzpLa0lzN0E",
+          "text": "Westridge"
+        },
+        {
+          "id": "postcode.277802732",
+          "mapbox_id": "dXJuOm1ieHBsYzpFSTd1N0E",
+          "text": "80129"
+        },
+        {
+          "id": "place.148818156",
+          "mapbox_id": "dXJuOm1ieHBsYzpDTjdJN0E",
+          "wikidata": "Q750935",
+          "text": "Highlands Ranch"
+        },
+        {
+          "id": "district.6661868",
+          "mapbox_id": "dXJuOm1ieHBsYzpaYWJz",
+          "wikidata": "Q115556",
+          "text": "Douglas County"
+        },
+        {
+          "id": "region.83180",
+          "mapbox_id": "dXJuOm1ieHBsYzpBVVRz",
+          "wikidata": "Q1261",
+          "short_code": "US-CO",
+          "text": "Colorado"
+        },
+        {
+          "id": "country.8940",
+          "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+          "wikidata": "Q30",
+          "short_code": "us",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "poi.335007468123",
+      "type": "Feature",
+      "place_type": ["poi"],
+      "relevance": 1,
+      "properties": {
+        "foursquare": "57698badcd10f5c2b6af4696",
+        "landmark": true,
+        "address": "9139 Ridgeline Blvd",
+        "category": "physical therapist, office"
+      },
+      "text": "Children's Hospital Colorado Therapy Care",
+      "place_name": "Children's Hospital Colorado Therapy Care, 9139 Ridgeline Blvd, Highlands Ranch, Colorado 80129, United States",
+      "matching_text": "Highlands Ranch",
+      "matching_place_name": "Highlands Ranch, 9139 Ridgeline Blvd, Highlands Ranch, Colorado 80129, United States",
+      "center": [-104.997221, 39.549981],
+      "geometry": {
+        "coordinates": [-104.997221, 39.549981],
+        "type": "Point"
+      },
+      "context": [
+        {
+          "id": "neighborhood.708979948",
+          "mapbox_id": "dXJuOm1ieHBsYzpLa0lzN0E",
+          "text": "Westridge"
+        },
+        {
+          "id": "postcode.277802732",
+          "mapbox_id": "dXJuOm1ieHBsYzpFSTd1N0E",
+          "text": "80129"
+        },
+        {
+          "id": "place.148818156",
+          "mapbox_id": "dXJuOm1ieHBsYzpDTjdJN0E",
+          "wikidata": "Q750935",
+          "text": "Highlands Ranch"
+        },
+        {
+          "id": "district.6661868",
+          "mapbox_id": "dXJuOm1ieHBsYzpaYWJz",
+          "wikidata": "Q115556",
+          "text": "Douglas County"
+        },
+        {
+          "id": "region.83180",
+          "mapbox_id": "dXJuOm1ieHBsYzpBVVRz",
+          "wikidata": "Q1261",
+          "short_code": "US-CO",
+          "text": "Colorado"
+        },
+        {
+          "id": "country.8940",
+          "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+          "wikidata": "Q30",
+          "short_code": "us",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "poi.841813660907",
+      "type": "Feature",
+      "place_type": ["poi"],
+      "relevance": 0.99,
+      "properties": {
+        "foursquare": "545b918e498e7016307d9e59",
+        "landmark": true,
+        "address": "66 Springer Dr #204",
+        "category": "dentist, dentistry, dental hygienist",
+        "maki": "dentist"
+      },
+      "text": "Colorado Precision Dentistry & Orthodontics",
+      "place_name": "Colorado Precision Dentistry & Orthodontics, 66 Springer Dr #204, Highlands Ranch, Colorado 80129, United States",
+      "center": [-104.989109, 39.559614],
+      "geometry": {
+        "coordinates": [-104.989109, 39.559614],
+        "type": "Point"
+      },
+      "context": [
+        {
+          "id": "neighborhood.708979948",
+          "mapbox_id": "dXJuOm1ieHBsYzpLa0lzN0E",
+          "text": "Westridge"
+        },
+        {
+          "id": "postcode.277802732",
+          "mapbox_id": "dXJuOm1ieHBsYzpFSTd1N0E",
+          "text": "80129"
+        },
+        {
+          "id": "place.148818156",
+          "mapbox_id": "dXJuOm1ieHBsYzpDTjdJN0E",
+          "wikidata": "Q750935",
+          "text": "Highlands Ranch"
+        },
+        {
+          "id": "district.6661868",
+          "mapbox_id": "dXJuOm1ieHBsYzpaYWJz",
+          "wikidata": "Q115556",
+          "text": "Douglas County"
+        },
+        {
+          "id": "region.83180",
+          "mapbox_id": "dXJuOm1ieHBsYzpBVVRz",
+          "wikidata": "Q1261",
+          "short_code": "US-CO",
+          "text": "Colorado"
+        },
+        {
+          "id": "country.8940",
+          "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+          "wikidata": "Q30",
+          "short_code": "us",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "poi.51539669766",
+      "type": "Feature",
+      "place_type": ["poi"],
+      "relevance": 0.99,
+      "properties": {
+        "foursquare": "4c10232ace57c928516b81d2",
+        "landmark": true,
+        "address": "9331 S Colorado Blvd",
+        "category": "doctor, physician"
+      },
+      "text": "Colorado Allergy & Asthma Centers - Highlands Ranch",
+      "place_name": "Colorado Allergy & Asthma Centers - Highlands Ranch, 9331 S Colorado Blvd, Highlands Ranch, Colorado 80126, United States",
+      "center": [-104.944082, 39.546761],
+      "geometry": {
+        "coordinates": [-104.944082, 39.546761],
+        "type": "Point"
+      },
+      "context": [
+        {
+          "id": "neighborhood.448875756",
+          "mapbox_id": "dXJuOm1ieHBsYzpHc0ZNN0E",
+          "text": "Northridge"
+        },
+        {
+          "id": "postcode.277778156",
+          "mapbox_id": "dXJuOm1ieHBsYzpFSTZPN0E",
+          "text": "80126"
+        },
+        {
+          "id": "place.148818156",
+          "mapbox_id": "dXJuOm1ieHBsYzpDTjdJN0E",
+          "wikidata": "Q750935",
+          "text": "Highlands Ranch"
+        },
+        {
+          "id": "district.6661868",
+          "mapbox_id": "dXJuOm1ieHBsYzpaYWJz",
+          "wikidata": "Q115556",
+          "text": "Douglas County"
+        },
+        {
+          "id": "region.83180",
+          "mapbox_id": "dXJuOm1ieHBsYzpBVVRz",
+          "wikidata": "Q1261",
+          "short_code": "US-CO",
+          "text": "Colorado"
+        },
+        {
+          "id": "country.8940",
+          "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+          "wikidata": "Q30",
+          "short_code": "us",
+          "text": "United States"
+        }
+      ]
+    }
+  ],
+  "attribution": "NOTICE: © 2024 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
+}

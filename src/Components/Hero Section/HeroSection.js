@@ -8,9 +8,8 @@ const HeroSection = () => {
     <section className='hero-section' id='home'>
       <h1 className='title'>WorkoutMetrics.fit</h1>
       <p className='subtitle'>Empower your training with insightful metrics.</p>
-      <img
-        className='strava-connect-btn'
-        src={require('../../Images/btn_strava_connectwith_orange@2x.png')}
+      <button
+        className='button-holder'
         alt='Strava Connect Button'
         tabIndex={0}
         aria-label='Connect with Strava'
@@ -22,7 +21,12 @@ const HeroSection = () => {
         onClick={(event) => {
           redirectToStravaAuthorization();
         }}
-      />
+      >
+        <img
+          className='strava-connect-btn'
+          src={require('../../Images/btn_strava_connectwith_orange@2x.png')}
+        />
+      </button>
       <Link to='features' smooth={true} duration={1000}>
         <FaChevronDown
           className='down-icon'

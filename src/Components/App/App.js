@@ -122,7 +122,7 @@ const App = () => {
       'longestYearActivity',
       JSON.stringify(longestYearActivity)
     );
-    if (longestYearActivity.map) getPolylines();
+    if (longestYearActivity?.map) getPolylines();
   }, [longestYearActivity]);
 
   useEffect(() => {
