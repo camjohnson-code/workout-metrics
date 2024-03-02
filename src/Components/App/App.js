@@ -245,13 +245,18 @@ const App = () => {
   const checkQuote = async () => {
     const quote = await getQuote();
     const today = new Date().toISOString().split('T')[0];
-    const quoteDate = new Date(quote?.date);
-
-    if (quoteDate.toISOString().split('T')[0] === today) setQuote(quote);
-    else {
-      const newQuote = await fetchQuote(
-        'https://api.api-ninjas.com/v1/quotes?category=fitness'
-      );
+    
+    if (quote?.date) {
+      const quoteDate = new Date(quote.date);
+      
+      if (!isNaN(quoteDate.getTime()) && quoteDate.toISOString().split('T')[0] === today) setQuote(quote);
+      else {
+        const newQuote = await fetchQuote('https://api.api-ninjas.com/v1/quotes?category=fitness');
+        await addQuoteToAPI(newQuote[0]);
+        setQuote(newQuote[0]);
+      }
+    } else {
+      const newQuote = await fetchQuote('https://api.api-ninjas.com/v1/quotes?category=fitness');
       await addQuoteToAPI(newQuote[0]);
       setQuote(newQuote[0]);
     }
@@ -289,13 +294,18 @@ const App = () => {
   };
 
   const getLongestYearActivity = async (allActivities) => {
+    const defaultActivity = {
+      distance: 0,
+      id: 0,
+      start_latlng: [],
+    };
     const longestActivity = allActivities
       .filter(
         (activity) => activity?.start_date_local.slice(0, 4) === year.toString()
       )
       .sort((a, b) => b?.moving_time - a?.moving_time)[0];
 
-    setLongestYearActivity(longestActivity);
+    allActivities.length ? setLongestYearActivity(longestActivity) : setLongestYearActivity(defaultActivity);
   };
 
   const formatDate = (dateString) => {
