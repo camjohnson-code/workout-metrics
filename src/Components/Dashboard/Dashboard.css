@@ -44,14 +44,17 @@
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   color: white;
-  padding: 0 20px;
+  padding: 20px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .cell-heading {
   font-size: 16px;
   font-weight: 500;
-  margin: 20px 0;
+  margin: 0;
 }
 
 .cell-icon {
@@ -65,7 +68,7 @@
 .cell-main {
   font-size: 48px;
   font-weight: 700;
-  margin: 20px 0;
+  margin: 0;
 }
 
 .unit {
@@ -75,21 +78,11 @@
 }
 
 .cell-subtitle {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
   margin: 0;
   font-size: 14px;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.5);
   width: 75%;
-}
-
-.no-gps {
-  height: 70%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .long-subtitle {
@@ -150,10 +143,17 @@
   align-items: center;
 }
 
-.no-activities {
+.no-activities,
+.no-gps {
   font-size: 16px;
   font-weight: 500;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
   text-align: center;
+  margin: 0;
 }
 
 /* media queries */
