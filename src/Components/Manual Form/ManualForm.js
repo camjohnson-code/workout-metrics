@@ -103,6 +103,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             onChange={(e) => setDistanceUnit(e.target.value)}
             className='manual-form-input'
             value={distanceUnit}
+            id='distance-unit'
           >
             <option className='manual-form-input' value='miles'>
               Miles
@@ -131,6 +132,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
             onChange={(e) => setElevationUnit(e.target.value)}
             className='manual-form-input'
             value={elevationUnit}
+            id='elevation-unit'
           >
             <option className='manual-form-input' value='feet'>
               Feet
