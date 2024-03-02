@@ -6,6 +6,7 @@ import LandingPage from '../Landing Page/LandingPage';
 import RedirectPage from '../Redirect Page/RedirectPage';
 import LoadingPage from '../Loading Page/LoadingPage';
 import Dashboard from '../Dashboard/Dashboard';
+import ContactForm from '../Contact Form/ContactForm';
 import Charts from '../Charts/Charts';
 import Stats from '../Stats/Stats';
 import Heatmap from '../Heatmap/Heatmap';
@@ -446,7 +447,7 @@ const App = () => {
             )
           }
         />
-
+        <Route path='/contact' element={<ContactForm year={year} />} />
         <Route
           path='*'
           element={isLoggedIn ? <NotFoundPage /> : <NotLoggedInPage />}
