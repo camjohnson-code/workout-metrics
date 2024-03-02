@@ -124,7 +124,9 @@ const Dashboard = ({
           <h1 className='cell-heading'>Achievements YTD</h1>
           <TbAwardFilled className='cell-icon achievements' />
           <p className='cell-main'>{achievements}</p>
-          <p className='cell-subtitle'>{!achievements ? '' : 'Look at you go!'}</p>
+          <p className='cell-subtitle'>
+            {!achievements ? '' : 'Look at you go!'}
+          </p>
         </Cell>
         <Cell className='cell cell-4'>
           <h1 className='cell-heading'>Today's high</h1>
@@ -168,9 +170,9 @@ const Dashboard = ({
         <Cell className='cell cell-6'>
           <h1 className='cell-heading'>Longest Activity in {year}</h1>
           <IoMdStopwatch className='cell-icon longest-activity' />
-          <div className='deckgl-container'>
-            {longestYearActivity &&
-            longestYearActivity?.start_latlng?.length ? (
+          {longestYearActivity &&
+          longestYearActivity?.start_latlng?.length > 0 ? (
+            <div className='deckgl-container'>
               <DeckGL
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
@@ -192,17 +194,23 @@ const Dashboard = ({
                   attributionControl={false}
                 />
               </DeckGL>
-            ) : (
-              <p className='no-gps'>Your longest activity had no GPS data!</p>
-            )}
-          </div>
-          <Link
-            target='#'
-            to={`https://www.strava.com/activities/${longestYearActivity.id}`}
-            className='cell-subtitle view-link'
-          >
-            View on Strava <CiShare1 className='view-icon' />
-          </Link>
+            </div>
+          ) : null}
+
+          {longestYearActivity && !longestYearActivity?.start_latlng?.length ? (
+            <p className='no-gps'>Your longest activity had no GPS data!</p>
+          ) : null}
+
+          {longestYearActivity &&
+          longestYearActivity?.start_latlng?.length > 0 ? (
+            <Link
+              target='#'
+              to={`https://www.strava.com/activities/${longestYearActivity.id}`}
+              className='cell-subtitle view-link'
+            >
+              View on Strava <CiShare1 className='view-icon' />
+            </Link>
+          ) : null}
         </Cell>
         <Cell className='cell cell-7'>
           <h1 className='cell-heading'>Activity Streak</h1>
