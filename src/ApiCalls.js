@@ -91,7 +91,9 @@ export const getAthleteActivities = async () => {
 };
 
 export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
-  let response = await fetch(`http://localhost:3001/api/v1/users/${athlete.id}`);
+  let response = await fetch(
+    `http://localhost:3001/api/v1/users/${athlete.id}`
+  );
 
   if (response.ok) {
     response = await fetch(`http://localhost:3001/api/v1/users/${athlete.id}`, {
@@ -223,12 +225,21 @@ export const fetchUserActivities = async (athlete, keywords, activityType) => {
 };
 
 export const getHallOfFameActivities = async (athlete) => {
-  const response = await fetch(
-    `http://localhost:3001/api/v1/hallOfFame/${athlete.id}`
-  );
-  const data = await response.json();
+  try {
+    const response = await fetch(
+      `http://localhost:3001/api/v1/hallOfFame/${athlete.id}`
+    );
 
-  return data.activities;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data.activities;
+  } catch (error) {
+    return [];
+  }
 };
 
 export const addFavoriteToHallOfFame = async (favorite) => {
