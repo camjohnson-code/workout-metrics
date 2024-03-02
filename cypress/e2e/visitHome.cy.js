@@ -6,7 +6,7 @@ describe('Landing Page', () => {
         response: 200,
         fixture: 'quote',
       }
-    );
+    ).as('mapbox');
     cy.intercept(
       'https://api.weatherapi.com/v1/forecast.json?key=3b20c29161a847a880110041242502&q=0,0&days=1&aqi=no&alerts=no',
       {
