@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import './LoadingPage.css';
 import { useNavigate } from 'react-router-dom';
 import {
-  handleAuthorizationCallback,
   getAthleteData,
   getAthleteActivities,
 } from '../../ApiCalls';

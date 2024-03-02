@@ -76,7 +76,7 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
         {...getRootProps({ className: 'dropzone' })}
       >
         <BsUpload className='upload-icon' />
-        <input {...getInputProps()} />
+        <input id="fileUpload" name="fileUpload" {...getInputProps()} />
         <p className='file-types'>
           {acceptedFiles?.length
             ? `File(s) added: ${acceptedFiles

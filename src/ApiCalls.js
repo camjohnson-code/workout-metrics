@@ -91,17 +91,33 @@ export const getAthleteActivities = async () => {
 };
 
 export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
-  const response = await fetch('http://localhost:3001/api/v1/users', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      ...athlete,
-      stravaAccessToken: accessToken,
-      stravaRefreshToken: refreshToken,
-    }),
-  });
+  let response = await fetch(`http://localhost:3001/api/v1/users/${athlete.id}`);
+
+  if (response.ok) {
+    response = await fetch(`http://localhost:3001/api/v1/users/${athlete.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...athlete,
+        stravaAccessToken: accessToken,
+        stravaRefreshToken: refreshToken,
+      }),
+    });
+  } else {
+    response = await fetch('http://localhost:3001/api/v1/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...athlete,
+        stravaAccessToken: accessToken,
+        stravaRefreshToken: refreshToken,
+      }),
+    });
+  }
 
   const data = await response.json();
 
@@ -136,21 +152,19 @@ export const addActivitiesToAPI = async (activities) => {
   }
 };
 
-export const getWeather = (coordinates) => {
+export const getWeather = async (coordinates) => {
   const [longitude, latitude] = coordinates;
   const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
 
   if (coordinates.length) {
-    return fetch(
+    const response = await fetch(
       `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${latitude},${longitude}&days=1&aqi=no&alerts=no`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        return {
-          temp: data.current.temp_f,
-          condition: data.current.condition.text,
-        };
-      });
+    );
+    const data = await response.json();
+    return {
+      temp: data.forecast.forecastday[0].day.maxtemp_f,
+      condition: data.current.condition.text,
+    };
   }
 };
 
