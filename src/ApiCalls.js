@@ -172,7 +172,6 @@ export const fetchQuote = async (url) => {
 };
 
 export const addQuoteToAPI = async (quote) => {
-  console.log('posting quote:', quote);
   const response = await fetch('http://localhost:3001/api/v1/quote', {
     method: 'POST',
     headers: {
