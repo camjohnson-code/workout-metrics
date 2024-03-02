@@ -15,27 +15,38 @@ const LoadingPage = ({
   setActivities,
   getStreak,
   getLongestYearActivity,
+  isLoggedIn,
+  login,
+  isAuthorized,
 }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const fetchData = async () => {
+    await getAthleteData().then((data) => {
+      setAthlete(data);
+    });
+    await getAthleteActivities().then((activities) => {
+      setActivities(activities);
+      getStreak(activities);
+      getLongestYearActivity(activities);
+      if (activities.length) setRecentActivity(activities[0]);
+      else setRecentActivity({
+        distance: 0,
+        moving_time: 0,
+        type: '',
+        id: 0,
+      });
+    });
+
+    login();
+    setLoading(false);
+    navigate('/dashboard');
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      await getAthleteData().then((data) => {
-        setAthlete(data);
-      });
-      await getAthleteActivities().then((activities) => {
-        setActivities(activities);
-        setRecentActivity(activities[0]);
-        getStreak(activities);
-        getLongestYearActivity(activities);
-      });
-
-      setLoading(false);
-      navigate('/dashboard');
-    };
-
-    fetchData();
+    if (!isLoggedIn && isAuthorized) fetchData();
+    else navigate('/dashboard');
   }, []);
 
   return (
