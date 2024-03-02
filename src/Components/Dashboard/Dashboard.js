@@ -72,10 +72,11 @@ const Dashboard = ({
 
   const generateWeatherSubtitle = () => {
     if (weather.temp < 40) return 'Bundle up!';
-    if (weather.temp >= 40 && weather.temp < 60) return 'Slightly on the cooler side.';
+    if (weather.temp >= 40 && weather.temp < 60)
+      return 'Slightly on the cooler side.';
     if (weather.temp >= 60 && weather.temp < 80) return 'Perfect weather!';
     if (weather.temp >= 80) return 'Stay hydrated!';
-  }
+  };
 
   return (
     <section className='dashboard-container'>
@@ -91,33 +92,51 @@ const Dashboard = ({
         <Cell className='cell cell-2'>
           <h1 className='cell-heading'>Last Activity</h1>
           <LuActivity className='cell-icon activity' />
-          <p className='cell-main'>
-            {recentActivityType === 'Swim'
-              ? convertMtoYds(recentActivity?.distance)
-              : convertMtoMiles(recentActivity?.distance)}
-            <span className='unit'>
-              {recentActivityType === 'Swim' ? 'yds' : 'mi'}
-            </span>
-          </p>
-          <Link
-            target='#'
-            to={`https://www.strava.com/activities/${recentActivity?.id}`}
-            className='cell-subtitle view-link'
-          >
-            View on Strava <CiShare1 className='view-icon' />
-          </Link>
+          {JSON.stringify(recentActivity) ===
+          JSON.stringify({ distance: 0, moving_time: 0, type: '', id: 0 }) ? (
+            <p className='cell-main no-activities'>
+              You have no activities on Strava!
+            </p>
+          ) : (
+            <p className='cell-main'>
+              {recentActivityType === 'Swim'
+                ? convertMtoYds(recentActivity?.distance)
+                : convertMtoMiles(recentActivity?.distance)}
+              <span className='unit'>
+                {recentActivityType === 'Swim' ? 'yds' : 'mi'}
+              </span>
+            </p>
+          )}
+          {JSON.stringify(recentActivity) ===
+          JSON.stringify({ distance: 0, moving_time: 0, type: '', id: 0 }) ? (
+            ''
+          ) : (
+            <Link
+              target='#'
+              to={`https://www.strava.com/activities/${recentActivity?.id}`}
+              className='cell-subtitle view-link'
+            >
+              View on Strava <CiShare1 className='view-icon' />
+            </Link>
+          )}
         </Cell>
         <Cell className='cell cell-3'>
           <h1 className='cell-heading'>Achievements YTD</h1>
           <TbAwardFilled className='cell-icon achievements' />
           <p className='cell-main'>{achievements}</p>
-          <p className='cell-subtitle'>Look at you go!</p>
+          <p className='cell-subtitle'>{!achievements ? '' : 'Look at you go!'}</p>
         </Cell>
         <Cell className='cell cell-4'>
           <h1 className='cell-heading'>Today's high</h1>
           <CiTempHigh className='cell-icon weather' />
-          {athlete?.city ? (<p className='cell-main'>{Math.round(weather.temp)}°</p>) : <p>You don't have your location set in your Strava profile!</p>}
-          {athlete?.city && <p className='cell-subtitle'>{generateWeatherSubtitle()}</p>}
+          {athlete?.city ? (
+            <p className='cell-main'>{Math.round(weather.temp)}°</p>
+          ) : (
+            <p>You don't have your location set in your Strava profile!</p>
+          )}
+          {athlete?.city && (
+            <p className='cell-subtitle'>{generateWeatherSubtitle()}</p>
+          )}
         </Cell>
         <Cell className='cell cell-5'>
           <h1 className='cell-heading'>Relative Effort</h1>
@@ -142,7 +161,7 @@ const Dashboard = ({
               : effortUp === 'down'
               ? 'less'
               : 'about the same amount of'}{' '}
-            volume than the week prior.{' '}
+            volume {effortUp === 'same' ? 'as' : 'than'} the week prior.{' '}
             {effortUp === 'up' ? 'Way to get after it.' : null}
           </p>
         </Cell>
@@ -150,7 +169,8 @@ const Dashboard = ({
           <h1 className='cell-heading'>Longest Activity in {year}</h1>
           <IoMdStopwatch className='cell-icon longest-activity' />
           <div className='deckgl-container'>
-            {longestYearActivity && longestYearActivity?.start_latlng?.length ? (
+            {longestYearActivity &&
+            longestYearActivity?.start_latlng?.length ? (
               <DeckGL
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
