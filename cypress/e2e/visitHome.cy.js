@@ -1,4 +1,4 @@
-describe('Random Cocktail Generator', () => {
+describe('Landing Page', () => {
   beforeEach(() => {
     cy.intercept(
       'https://api.mapbox.com/geocoding/v5/mapbox.places/%2C%20.json?access_token=pk.eyJ1IjoiY2Ftam9obnNvbi1jb2RlIiwiYSI6ImNsczVoZmQ5cTFoNzEyaWxkMHExZGxocnkifQ.HbZsLy0fXhbkSKTmVAIS0w',
