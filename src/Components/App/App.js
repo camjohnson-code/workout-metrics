@@ -6,6 +6,7 @@ import LandingPage from '../Landing Page/LandingPage';
 import RedirectPage from '../Redirect Page/RedirectPage';
 import LoadingPage from '../Loading Page/LoadingPage';
 import Dashboard from '../Dashboard/Dashboard';
+import ContactForm from '../Contact Form/ContactForm';
 import Charts from '../Charts/Charts';
 import Stats from '../Stats/Stats';
 import Heatmap from '../Heatmap/Heatmap';
@@ -26,24 +27,28 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [athlete, setAthlete] = useState(() => {
     const savedAthlete = localStorage.getItem('athlete');
-    return savedAthlete ? JSON.parse(savedAthlete) : {
-      id: 0,
-      firstname: '',
-      lastname: '',
-      city: '',
-      state: '',
-      country: '',
-      profile: '',
-    };
+    return savedAthlete
+      ? JSON.parse(savedAthlete)
+      : {
+          id: 0,
+          firstname: '',
+          lastname: '',
+          city: '',
+          state: '',
+          country: '',
+          profile: '',
+        };
   });
   const [recentActivity, setRecentActivity] = useState(() => {
     const savedRecentActivity = localStorage.getItem('recentActivity');
-    return savedRecentActivity ? JSON.parse(savedRecentActivity) : {
-      distance: 0,
-      moving_time: 0,
-      type: '',
-      id: 0,
-    };
+    return savedRecentActivity
+      ? JSON.parse(savedRecentActivity)
+      : {
+          distance: 0,
+          moving_time: 0,
+          type: '',
+          id: 0,
+        };
   });
   const [activities, setActivities] = useState(() => {
     const savedActivities = localStorage.getItem('activities');
@@ -58,12 +63,16 @@ const App = () => {
     return savedHomeCoordinates ? JSON.parse(savedHomeCoordinates) : [];
   });
   const [longestYearActivity, setLongestYearActivity] = useState(() => {
-    const savedLongestYearActivity = localStorage.getItem('longestYearActivity');
-    return savedLongestYearActivity ? JSON.parse(savedLongestYearActivity) : {
-      distance: 0,
-      id: 0,
-      start_latlng: [],
-    };
+    const savedLongestYearActivity = localStorage.getItem(
+      'longestYearActivity'
+    );
+    return savedLongestYearActivity
+      ? JSON.parse(savedLongestYearActivity)
+      : {
+          distance: 0,
+          id: 0,
+          start_latlng: [],
+        };
   });
   const [streak, setStreak] = useState(() => {
     const savedStreak = localStorage.getItem('streak');
@@ -83,9 +92,9 @@ const App = () => {
   });
   const [lineLayer, setLineLayer] = useState(() => {
     const savedLineLayer = localStorage.getItem('lineLayer');
-    return savedLineLayer ? JSON.parse(savedLineLayer) : [
-      { sourcePosition: [0, 0], targetPosition: [0, 0] },
-    ];
+    return savedLineLayer
+      ? JSON.parse(savedLineLayer)
+      : [{ sourcePosition: [0, 0], targetPosition: [0, 0] }];
   });
 
   useEffect(() => {
@@ -99,7 +108,10 @@ const App = () => {
   }, [recentActivity]);
 
   useEffect(() => {
-    localStorage.setItem('longestYearActivity', JSON.stringify(longestYearActivity));
+    localStorage.setItem(
+      'longestYearActivity',
+      JSON.stringify(longestYearActivity)
+    );
     if (longestYearActivity.map) getPolylines();
   }, [longestYearActivity]);
 
@@ -418,7 +430,7 @@ const App = () => {
             )
           }
         />
-
+        <Route path='/contact' element={<ContactForm year={year} />} />
         <Route
           path='*'
           element={isLoggedIn ? <NotFoundPage /> : <NotLoggedInPage />}
