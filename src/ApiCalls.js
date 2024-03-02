@@ -92,11 +92,11 @@ export const getAthleteActivities = async () => {
 
 export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
   let response = await fetch(
-    `http://localhost:3001/api/v1/users/${athlete.id}`
+    `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`
   );
 
   if (response.ok) {
-    response = await fetch(`http://localhost:3001/api/v1/users/${athlete.id}`, {
+    response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
       }),
     });
   } else {
-    response = await fetch('http://localhost:3001/api/v1/users', {
+    response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ export const addActivitiesToAPI = async (activities) => {
       id: activity.id,
     };
 
-    const response = await fetch('http://localhost:3001/api/v1/activities', {
+    const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ export const getWeather = async (coordinates) => {
 };
 
 export const getQuote = async () => {
-  const response = await fetch('http://localhost:3001/api/v1/quote');
+  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote');
   const data = await response.json();
 
   return data;
@@ -188,7 +188,7 @@ export const fetchQuote = async (url) => {
 };
 
 export const addQuoteToAPI = async (quote) => {
-  const response = await fetch('http://localhost:3001/api/v1/quote', {
+  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ export const addQuoteToAPI = async (quote) => {
 
 export const fetchUserActivities = async (athlete, keywords, activityType) => {
   const response = await fetch(
-    `http://localhost:3001/api/v1/activities/${athlete.id}`
+    `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${athlete.id}`
   );
   const data = await response.json();
 
@@ -227,7 +227,7 @@ export const fetchUserActivities = async (athlete, keywords, activityType) => {
 export const getHallOfFameActivities = async (athlete) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/v1/hallOfFame/${athlete.id}`
+      `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame/${athlete.id}`
     );
 
     if (!response.ok) {
@@ -244,7 +244,7 @@ export const getHallOfFameActivities = async (athlete) => {
 
 export const addFavoriteToHallOfFame = async (favorite) => {
   try {
-    const response = await fetch('http://localhost:3001/api/v1/hallOfFame', {
+    const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -265,7 +265,7 @@ export const addFavoriteToHallOfFame = async (favorite) => {
 
 export const removeFavoriteFromHallOfFame = async (activityId) => {
   const response = await fetch(
-    `http://localhost:3001/api/v1/hallOfFame/${activityId}`,
+    `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame/${activityId}`,
     {
       method: 'DELETE',
     }
@@ -277,7 +277,7 @@ export const removeFavoriteFromHallOfFame = async (activityId) => {
 };
 
 export const getUserFromAPI = async (id) => {
-  const response = await fetch(`http://localhost:3001/api/v1/users/${id}`);
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`);
   const data = await response.json();
 
   return data;
