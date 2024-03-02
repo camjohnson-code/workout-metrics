@@ -34,7 +34,6 @@
 .strava-connect-btn {
   height: 60px;
   width: auto;
-  margin-top: 50px;
   cursor: pointer;
 }
 
@@ -46,6 +45,12 @@
   cursor: pointer;
   width: 20px;
   height: auto;
+}
+
+.button-holder {
+  margin-top: 50px;
+  background-color: transparent;
+  border: none;
 }
 
 
