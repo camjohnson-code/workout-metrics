@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+# WorkoutMetrics.fit
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![App demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2M5bXptZjUxZHZrMWMwaXZzbWZ4cjAyZWU0YjM3d2Iwa3Z6MTNmdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SpEfEUsc764OndqcD2/giphy.gif)
 
-## Available Scripts
+WorkoutMetrics.fit is an app that allows users to get a deeper look into their Strava data without needing to be a Strava Premium user. It gives users the ability to see their personal heatmaps, save and favorite workouts to their hall of fame, and upload activities to their Strava account.
 
-In the project directory, you can run:
+## Live Link
 
-### `npm start`
+[Click here](https://workout-metrics.vercel.app/) to visit the application.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Challenges
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Testing user auth with Cypress is still a challenge
+- The documentation for DeckGL, while in depth, was a massive rabbit hole to dive into. It took some time to get up and running with using it for the Heatmap component.
 
-### `npm test`
+## Testing
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In order to run the Cypress tests for this repo, follow these instructions: 
 
-### `npm run build`
+### Clone the repository:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`git clone git@github.com:camjohnson-code/workout-metrics.git`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Navigate to the project directory:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`cd workout-metrics`
 
-### `npm run eject`
+### Checkout to the testing branch:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+`git checkout feature/cypress-testing`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Install dependencies:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+`npm install`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Usage
 
-## Learn More
+Start Cypress:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+`npm run cy`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Installation
 
-### Code Splitting
+Clone the repository:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+`git clone git@github.com:camjohnson-code/workout-metrics.git`
 
-### Analyzing the Bundle Size
+### Navigate to the project directory:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+`cd workout-metrics`
 
-### Making a Progressive Web App
+### Checkout to the local branch:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+`git checkout run-local`
 
-### Advanced Configuration
+### Install dependencies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+`npm install`
 
-### Deployment
+### Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Start the development server:
 
-### `npm run build` fails to minify
+`npm start`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Open your web browser and visit http://localhost:3000 to access the application.
+
+## Future Improvements
+
+In the future, we'd like to improve the site by adding these features:
+
+- Currently, some of the data is stored in local storage. I'd like to migrate the storage of this data to Mongo DB.
+- Add a Charts and Stats component that allows users to dive deeper into their training data.
+- Add a share feature that gives users the ability to share an image to their socials. 
+
+## Acknowledgements
+
+This project was an [assignment](https://frontend.turing.edu/projects/module-3/stretch.html) during my time as a Front End student at the [Turing School of Software and Design](https://turing.edu/).
