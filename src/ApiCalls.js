@@ -1,6 +1,6 @@
 export const redirectToStravaAuthorization = () => {
   const clientId = process.env.REACT_APP_STRAVA_ID;
-  const redirectUri = 'http://localhost:3000/redirect/';
+  const redirectUri = 'https://workout-metrics.vercel.app/redirect/';
   const responseType = 'code';
   const approvalPrompt = 'auto';
   const scope = 'activity:write,read,activity:read_all';
@@ -17,7 +17,7 @@ export const handleAuthorizationCallback = async () => {
   if (code) {
     const clientId = process.env.REACT_APP_STRAVA_ID;
     const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
-    const redirectUri = 'http://localhost:3000/redirect';
+    const redirectUri = 'https://workout-metrics.vercel.app/redirect';
     const grantType = 'authorization_code';
 
     const tokenUrl = `https://www.strava.com/oauth/token`;
