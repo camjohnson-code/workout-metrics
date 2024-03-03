@@ -29,7 +29,7 @@ describe('Landing Page', () => {
         response: 200,
         fixture: 'quote',
       }
-    ).as('quote');
+    ).as('apiQuote');
 
     cy.visit('https://workout-metrics.vercel.app/');
   });
