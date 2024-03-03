@@ -10,7 +10,7 @@ WorkoutMetrics.fit is an app that allows users to get a deeper look into their S
 
 ## Challenges
 
-- Testing user auth with Cypress is still a challenge
+- Testing a user auth with Cypress is still a challenge. Because this app redirects to different domains, it was especially tricky. For this app, I didn't test the user auth workflow and instead focused testing on my application features. 
 - The documentation for DeckGL, while in depth, was a massive rabbit hole to dive into. It took some time to get up and running with using it for the Heatmap component.
 
 ## Testing
@@ -43,31 +43,7 @@ Start Cypress:
 
 ## Installation
 
-Running this repo locally will require some environment variables. If you'd like to run this locally, reach out to me and we can find a solution. 
-
-Clone the repository:
-
-`git clone git@github.com:camjohnson-code/workout-metrics.git`
-
-### Navigate to the project directory:
-
-`cd workout-metrics`
-
-### Checkout to the local branch:
-
-`git checkout run-local`
-
-### Install dependencies:
-
-`npm install`
-
-### Usage
-
-Start the development server:
-
-`npm start`
-
-Open your web browser and visit http://localhost:3000 to access the application.
+Unfortunately, Strava only allows for one callback domain. They also limit the number of apps I can make to one. Because of that, I'm unable to make a second app for development. I also cannot change the callback uri to run locally. Due to these factors, I can't make a branch that allows you to run this app locally. If you'd like a demo from a user perspective, you can watch the demo video above. For a further look into it, feel free to reach out to me and we can do a deep dive together.
 
 ## Future Improvements
 
@@ -79,4 +55,4 @@ In the future, we'd like to improve the site by adding these features:
 
 ## Acknowledgements
 
-This project was an [assignment](https://frontend.turing.edu/projects/module-3/stretch.html) during my time as a Front End student at the [Turing School of Software and Design](https://turing.edu/).
+This project was an [assignment](https://frontend.turing.edu/projects/module-3/showcase.html) during my time as a Front End student at the [Turing School of Software and Design](https://turing.edu/).
