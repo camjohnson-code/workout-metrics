@@ -15,6 +15,8 @@ WorkoutMetrics.fit is an app that allows users to get a deeper look into their S
 
 ## Testing
 
+Testing this repo will require some environment variables. If you'd like to run these tests, reach out to me and we can find a solution. 
+
 In order to run the Cypress tests for this repo, follow these instructions: 
 
 ### Clone the repository:
@@ -40,6 +42,8 @@ Start Cypress:
 `npm run cy`
 
 ## Installation
+
+Running this repo locally will require some environment variables. If you'd like to run this locally, reach out to me and we can find a solution. 
 
 Clone the repository:
 
