@@ -465,7 +465,7 @@ const App = () => {
         <Route path='/contact' element={<ContactForm year={year} />} />
         <Route
           path='*'
-          element={isLoggedIn ? <NotFoundPage /> : <NotLoggedInPage />}
+          element={<NotFoundPage />}
         />
       </Routes>
     </Router>
