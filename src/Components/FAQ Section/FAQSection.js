@@ -118,7 +118,10 @@ const FAQSection = () => {
               }
             >
               Sure! You can{' '}
-              <Link className='faq-link' to='https://www.youtube.com'>
+              <Link
+                className='faq-link'
+                to='https://www.loom.com/share/4399934eda3e46ce822dead377eaa3ad?sid=28380009-10da-4f02-8978-c622c806b497'
+              >
                 watch a demo
               </Link>{' '}
               here.
@@ -166,7 +169,7 @@ const FAQSection = () => {
         transition={{ duration: 1, ease: [0.17, 0.59, 0.24, 0.99], delay: 0.5 }}
       >
         <img
-        className='strava-connect-btn'
+          className='strava-connect-btn'
           src={require('../../Images/btn_strava_connectwith_orange@2x.png')}
           alt='Strava Connect Button'
         />
