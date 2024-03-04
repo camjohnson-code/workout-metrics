@@ -1,6 +1,6 @@
 # WorkoutMetrics.fit
 
-![App demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2M5bXptZjUxZHZrMWMwaXZzbWZ4cjAyZWU0YjM3d2Iwa3Z6MTNmdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SpEfEUsc764OndqcD2/giphy.gif)
+[![App Demo](https://cdn.loom.com/sessions/thumbnails/4399934eda3e46ce822dead377eaa3ad-with-play.gif)](https://www.loom.com/share/4399934eda3e46ce822dead377eaa3ad?sid=28380009-10da-4f02-8978-c622c806b497)
 
 WorkoutMetrics.fit is an app that allows users to get a deeper look into their Strava data without needing to be a Strava Premium user. It gives users the ability to see their personal heatmaps, save and favorite workouts to their hall of fame, and upload activities to their Strava account.
 
@@ -10,6 +10,7 @@ WorkoutMetrics.fit is an app that allows users to get a deeper look into their S
 
 ## Challenges
 
+- This project utilizes a backend created in Express. This was my first time building a backend API, and thus came the challenges of learning a new technology. [Click here](https://github.com/camjohnson-code/workout-metrics-api) to view the backend repository.
 - Testing a user auth with Cypress is still a challenge. Because this app redirects to different domains, it was especially tricky. For this app, I didn't test the user auth workflow and instead focused testing on my application features. 
 - The documentation for DeckGL, while in depth, was a massive rabbit hole to dive into. It took some time to get up and running with using it for the Heatmap component.
 
