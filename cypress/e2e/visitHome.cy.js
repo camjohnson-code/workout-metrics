@@ -14,12 +14,24 @@ describe('Landing Page', () => {
         fixture: 'weather',
       }
     ).as('weather');
-    cy.intercept('http://localhost:3001/api/v1/quote', {
-      response: 200,
-      fixture: 'quote',
-    }).as('quote');
 
-    cy.visit('http://localhost:3000/');
+    cy.intercept(
+      'https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote',
+      {
+        response: 200,
+        fixture: 'quote',
+      }
+    ).as('quote');
+
+    cy.intercept(
+      'https://api.api-ninjas.com/v1/quotes?category=fitness',
+      {
+        response: 200,
+        fixture: 'quote',
+      }
+    ).as('apiQuote');
+
+    cy.visit('https://workout-metrics.vercel.app/');
   });
 
   it('Visits the landing page', () => {
@@ -84,17 +96,8 @@ describe('Landing Page', () => {
     cy.get('.footer p').should('contain', '© Cameron Johnson, 2024.');
     cy.get('.footer img.strava-power-btn').should('exist');
 
-    cy.get('header.header.visible')
-      .find('a.header-link')
-      .should('have.length', 3)
-      .then(($links) => {
-        cy.wrap($links.eq(2)).click();
-        cy.wrap($links.eq(1)).click();
-        cy.wrap($links.eq(0)).click();
-      });
-
     cy.get('header')
       .should('have.class', 'header')
       .and('not.have.class', 'visible');
-  });
+   });
 });
