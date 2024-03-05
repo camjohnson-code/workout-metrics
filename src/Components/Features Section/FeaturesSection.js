@@ -44,7 +44,7 @@ const FeaturesSection = () => {
           alt='Heatmaps preview'
         />
       </section>
-      <section className='features-text'>
+      <section ref={ref} className='features-text'>
         <motion.h2
           className='feature-heading'
           initial={{ opacity: 0, y: 200 }}
