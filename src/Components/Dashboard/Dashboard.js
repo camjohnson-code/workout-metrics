@@ -75,7 +75,7 @@ const Dashboard = ({
     if (weather.temp >= 40 && weather.temp < 60)
       return 'Slightly on the cooler side.';
     if (weather.temp >= 60 && weather.temp < 80) return 'Perfect weather!';
-    if (weather.temp >= 80) return 'Stay hydrated!';
+    if (weather.temp >= 80) return 'Stay cool. It\'s a hot one out there!';
   };
 
   return (
