@@ -201,16 +201,17 @@ const App = () => {
   };
 
   const setLineLayerCoordinates = (coordinatesArray) => {
-    const output = coordinatesArray.map((coordinates, index) => {
+    const output = coordinatesArray.reduce((acc, coordinates, index) => {
       if (coordinatesArray[index + 1]) {
-        return {
+        acc.push({
           sourcePosition: coordinates,
           targetPosition: coordinatesArray[index + 1],
-        };
+        });
       }
-    });
-
-    setLineLayer(output.slice(0, -1));
+      return acc;
+    }, []);
+  
+    setLineLayer(output);
   };
 
   const analyzeRelativeEffort = (activities) => {
@@ -245,18 +246,26 @@ const App = () => {
   const checkQuote = async () => {
     const quote = await getQuote();
     const today = new Date().toISOString().split('T')[0];
-    
+
     if (quote?.date) {
       const quoteDate = new Date(quote.date);
-      
-      if (!isNaN(quoteDate.getTime()) && quoteDate.toISOString().split('T')[0] === today) setQuote(quote);
+
+      if (
+        !isNaN(quoteDate.getTime()) &&
+        quoteDate.toISOString().split('T')[0] === today
+      )
+        setQuote(quote);
       else {
-        const newQuote = await fetchQuote('https://api.api-ninjas.com/v1/quotes?category=fitness');
+        const newQuote = await fetchQuote(
+          'https://api.api-ninjas.com/v1/quotes?category=fitness'
+        );
         await addQuoteToAPI(newQuote[0]);
         setQuote(newQuote[0]);
       }
     } else {
-      const newQuote = await fetchQuote('https://api.api-ninjas.com/v1/quotes?category=fitness');
+      const newQuote = await fetchQuote(
+        'https://api.api-ninjas.com/v1/quotes?category=fitness'
+      );
       await addQuoteToAPI(newQuote[0]);
       setQuote(newQuote[0]);
     }
@@ -305,7 +314,9 @@ const App = () => {
       )
       .sort((a, b) => b?.moving_time - a?.moving_time)[0];
 
-    allActivities.length ? setLongestYearActivity(longestActivity) : setLongestYearActivity(defaultActivity);
+    allActivities.length
+      ? setLongestYearActivity(longestActivity)
+      : setLongestYearActivity(defaultActivity);
   };
 
   const formatDate = (dateString) => {
@@ -356,6 +367,16 @@ const App = () => {
       return;
     }
   };
+
+  let years = [
+    ...new Set(activities.map((activity) => activity?.start_date.slice(0, 4))),
+  ].sort((a, b) => b - a);
+
+  const options = years.map((year) => (
+    <option value={year} key={year}>
+      {year}
+    </option>
+  ));
 
   return (
     <Router>
@@ -414,11 +435,19 @@ const App = () => {
         {/* <Route
           path='/charts'
           element={<Charts athlete={athlete} year={year} />}
-        />
+        /> */}
         <Route
           path='/stats'
-          element={<Stats athlete={athlete} year={year} />}
-        /> */}
+          element={
+            <Stats
+            options={options}
+              activities={activities}
+              logout={logout}
+              athlete={athlete}
+              year={year}
+            />
+          }
+        />
         <Route
           path='/heatmap'
           element={
@@ -463,10 +492,7 @@ const App = () => {
           }
         />
         <Route path='/contact' element={<ContactForm year={year} />} />
-        <Route
-          path='*'
-          element={<NotFoundPage isLoggedIn={isLoggedIn} />}
-        />
+        <Route path='*' element={<NotFoundPage isLoggedIn={isLoggedIn} />} />
       </Routes>
     </Router>
   );
