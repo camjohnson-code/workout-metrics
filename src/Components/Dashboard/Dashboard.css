@@ -82,7 +82,7 @@
   font-size: 14px;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.5);
-  width: 75%;
+  width: 90%;
 }
 
 .long-subtitle {
@@ -97,6 +97,7 @@
   color: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
+  z-index: 9;
 }
 
 .view-icon {
