@@ -66,7 +66,7 @@ const Dashboard = ({
       id: 'line-layer',
       data: lineLayer,
       getColor: () => [138, 169, 249],
-      opacity: 0.1,
+      opacity: 1,
     }),
   ];
 
@@ -177,16 +177,6 @@ const Dashboard = ({
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
                 layers={layers}
-                parameters={{
-                  blend: true,
-                  blendFunc: [
-                    GL.SRC_ALPHA,
-                    GL.ONE,
-                    GL.ONE_MINUS_DST_ALPHA,
-                    GL.ONE,
-                  ],
-                  blendEquation: GL.FUNC_ADD,
-                }}
               >
                 <Map
                   mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
