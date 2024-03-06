@@ -66,7 +66,7 @@ const Dashboard = ({
       id: 'line-layer',
       data: lineLayer,
       getColor: () => [138, 169, 249],
-      opacity: 0.1,
+      opacity: 1,
     }),
   ];
 
@@ -75,7 +75,7 @@ const Dashboard = ({
     if (weather.temp >= 40 && weather.temp < 60)
       return 'Slightly on the cooler side.';
     if (weather.temp >= 60 && weather.temp < 80) return 'Perfect weather!';
-    if (weather.temp >= 80) return 'Stay hydrated!';
+    if (weather.temp >= 80) return 'Stay cool. It\'s a hot one out there!';
   };
 
   return (
@@ -177,16 +177,6 @@ const Dashboard = ({
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
                 layers={layers}
-                parameters={{
-                  blend: true,
-                  blendFunc: [
-                    GL.SRC_ALPHA,
-                    GL.ONE,
-                    GL.ONE_MINUS_DST_ALPHA,
-                    GL.ONE,
-                  ],
-                  blendEquation: GL.FUNC_ADD,
-                }}
               >
                 <Map
                   mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
