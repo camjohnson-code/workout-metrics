@@ -210,7 +210,7 @@ const App = () => {
       }
       return acc;
     }, []);
-  
+
     setLineLayer(output);
   };
 
@@ -439,13 +439,17 @@ const App = () => {
         <Route
           path='/stats'
           element={
-            <Stats
-            options={options}
-              activities={activities}
-              logout={logout}
-              athlete={athlete}
-              year={year}
-            />
+            isLoggedIn ? (
+              <Stats
+                options={options}
+                activities={activities}
+                logout={logout}
+                athlete={athlete}
+                year={year}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
