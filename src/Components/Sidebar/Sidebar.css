@@ -12,11 +12,12 @@
   height: 100vh;
   background-color: #0f1119;
   color: #fff;
-  position: relative;
+  position: fixed;
+  left: 0;
 }
 
 .sidebar-links {
-  height: 35%;
+  height: 50%;
   justify-content: space-around;
   align-items: center;
 }
