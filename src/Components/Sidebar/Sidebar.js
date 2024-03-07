@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { IoMdHome } from 'react-icons/io';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
-import { FaArrowTrendUp } from "react-icons/fa6";
+import { FaArrowTrendUp, FaChartSimple } from "react-icons/fa6";
 import { TbLogout2 } from 'react-icons/tb';
 import PropTypes from 'prop-types';
 
@@ -22,10 +22,10 @@ const Sidebar = ({ year, athlete, logout }) => {
         <NavLink to='/dashboard' className='sidebar-link'>
           <IoMdHome className='sidebar-icon' /> Overview
         </NavLink>
-        {/* <NavLink to='/charts' className='sidebar-link'>
+        <NavLink to='/charts' className='sidebar-link'>
           <FaChartSimple className='sidebar-icon' />
           Charts
-        </NavLink> */}
+        </NavLink>
         <NavLink to='/stats' className='sidebar-link'>
           <FaArrowTrendUp className='sidebar-icon' /> Stats
         </NavLink> 
