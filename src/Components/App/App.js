@@ -432,10 +432,22 @@ const App = () => {
             )
           }
         />
-        {/* <Route
+        <Route
           path='/charts'
-          element={<Charts athlete={athlete} year={year} />}
-        /> */}
+          element={
+            isLoggedIn ? (
+              <Charts
+                activities={activities}
+                options={options}
+                athlete={athlete}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
+          }
+        />
         <Route
           path='/stats'
           element={
