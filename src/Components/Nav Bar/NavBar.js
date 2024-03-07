@@ -5,6 +5,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdHome } from 'react-icons/io';
 import { IoCloseSharp } from 'react-icons/io5';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
+import { FaArrowTrendUp, FaChartSimple } from "react-icons/fa6";
 import { TbLogout2 } from 'react-icons/tb';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -40,6 +41,24 @@ const NavBar = ({ logout }) => {
                   activeClassName='active'
                 >
                   <IoMdHome className='sidebar-icon' /> Overview
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to='/dashboard'
+                  className='mobile-nav-link'
+                  activeClassName='active'
+                >
+                  <FaChartSimple className='sidebar-icon' /> Charts
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to='/dashboard'
+                  className='mobile-nav-link'
+                  activeClassName='active'
+                >
+                  <FaArrowTrendUp className='sidebar-icon' /> Stats
                 </NavLink>
               </li>
               <li>
