@@ -12,6 +12,7 @@
   grid-column-gap: 20px;
   grid-row-gap: 20px;
   padding: 30px;
+  margin-left: 20vw;
 }
 
 .cell-1 {
@@ -184,6 +185,7 @@
   .dashboard {
     width: 100vw;
     margin-top: 60px;
+    margin-left: 0;
   }
   .cell-main {
     font-size: 30px;
