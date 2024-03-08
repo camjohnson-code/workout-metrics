@@ -141,9 +141,10 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
 
       if (year === selectedYearNumber && activity.type === 'Swim') {
         const week = getWeekNumber(date);
-        const movingTimeInHours = activity.moving_time / 3600;
+        console.log('activity: ', activity);
+        const distance = Math.round(activity.distance * 1.09361);
 
-        activitiesPerWeek[week - 1] += movingTimeInHours;
+        activitiesPerWeek[week - 1] += distance;
       }
     });
 
@@ -193,25 +194,25 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
         </div>
         <section className='all-charts'>
           <section className='chart'>
-            <h1 className='chart-title'>Duration Per Month</h1>
+            <h1 className='chart-title'>Duration Per Month (hours)</h1>
             <div className='chart-container'>
               {durationData && <LineChart data={durationData} />}
             </div>
           </section>
           <section className='chart'>
-            <h1 className='chart-title'>Cycling Duration Per Week</h1>
+            <h1 className='chart-title'>Cycling Duration Per Week (hours)</h1>
             <div className='chart-container'>
               {cyclingData && <LineChart data={cyclingData} />}
             </div>
           </section>
           <section className='chart'>
-            <h1 className='chart-title'>Running Duration Per Week</h1>
+            <h1 className='chart-title'>Running Duration Per Week (hours)</h1>
             <div className='chart-container'>
               {runningData && <LineChart data={runningData} />}
             </div>
           </section>
           <section className='chart'>
-            <h1 className='chart-title'>Swimming Duration Per Week</h1>
+            <h1 className='chart-title'>Swimming Distance Per Week (yards)</h1>
             <div className='chart-container'>
               {swimmingData && <LineChart data={swimmingData} />}
             </div>
