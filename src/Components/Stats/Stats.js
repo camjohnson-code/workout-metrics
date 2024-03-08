@@ -54,7 +54,7 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
     calcNumActivities();
     calcNumAchievements();
     getFavoriteActivityTypes(activities);
-   setLineLayerCoordinates();
+    setLineLayerCoordinates();
     calcCaloriesBurned();
     calcDistance();
     calcElevationGain();
@@ -77,9 +77,10 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
       activityCount = activities.length;
       setNumActivities(activityCount);
     } else {
-      activityCount = activities
-        .filter((activity) => activity.start_date.slice(0, 4) === selectedYear.toString())
-        .length;
+      activityCount = activities.filter(
+        (activity) =>
+          activity.start_date.slice(0, 4) === selectedYear.toString()
+      ).length;
 
       setNumActivities(activityCount);
     }
@@ -89,13 +90,18 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
     let achievementCount;
 
     if (selectedYear === 'all-time') {
-      achievementCount = activities
-        .reduce((acc, activity) => acc + activity.achievement_count,0);
+      achievementCount = activities.reduce(
+        (acc, activity) => acc + activity.achievement_count,
+        0
+      );
 
       setNumAchievements(achievementCount);
     } else {
       achievementCount = activities
-        .filter((activity) => activity.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (activity) =>
+            activity.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, activity) => acc + activity.achievement_count, 0);
 
       setNumAchievements(achievementCount);
@@ -114,7 +120,10 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
       }, {});
     } else {
       activitiesByNumber = activities
-        .filter((activity) => activity.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (activity) =>
+            activity.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, activity) => {
           if (acc[activity?.type]) acc[activity?.type]++;
           else acc[activity?.type] = 1;
@@ -157,10 +166,15 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
     let longestActivity;
 
     if (selectedYear === 'all-time')
-      longestActivity = activities.sort((a, b) => b.moving_time - a.moving_time)[0];
-
-    else longestActivity = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+      longestActivity = activities.sort(
+        (a, b) => b.moving_time - a.moving_time
+      )[0];
+    else
+      longestActivity = activities
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .sort((a, b) => b.moving_time - a.moving_time)[0];
 
     setLongestActivity(longestActivity);
@@ -177,7 +191,7 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
 
   const setLineLayerCoordinates = () => {
     const coordinatesArray = getLongestActivityPolylines(getLongestActivity());
-  
+
     const output = coordinatesArray.reduce((acc, coordinates, index) => {
       if (coordinatesArray[index + 1]) {
         acc.push({
@@ -187,16 +201,17 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
       }
       return acc;
     }, []);
-  
+
     setLineLayer(output);
   };
 
   const INITIAL_VIEW_STATE =
-    lineLayer &&
-    lineLayer?.length
+    lineLayer && lineLayer?.length
       ? {
-          longitude: lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[0],
-          latitude: lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[1],
+          longitude:
+            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[0],
+          latitude:
+            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[1],
           zoom: 10,
           pitch: 0,
           bearing: 0,
@@ -218,6 +233,21 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
     if (selectedYear === 'all-time') {
       caloriesBurned = activities.reduce((acc, workout) => {
         if (workout.kilojoules) acc += workout.kilojoules / 4.184;
+        else if (athlete.weight) {
+          if (workout.type === 'Swim' || workout.type === 'Run') acc += 7 * athlete.weight * (workout.elapsed_time / 3600);
+          else if (workout.type === 'WeightTraining') acc += 4.5 * athlete.weight * (workout.elapsed_time / 3600);
+          else acc += 3 * athlete.weight * (workout.elapsed_time / 3600);
+        }
+        else {
+          let met;
+          if (workout.type === 'Swim') met = 10;
+          else if (workout.type === 'Run') met = 9.8;
+          else if (workout.type === 'WeightTraining') met = 3.5;
+          else met = 2.5;
+
+          const caloriesPerMinute = met * 3.5 * 70 / 200;
+          acc += caloriesPerMinute * (workout.elapsed_time / 60);
+        }
 
         return acc;
       }, 0);
@@ -225,9 +255,27 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
       setCaloriesBurned(Math.round(caloriesBurned));
     } else {
       caloriesBurned = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, workout) => {
           if (workout.kilojoules) acc += workout.kilojoules / 4.184;
+          else if (athlete.weight) {
+            if (workout.type === 'Swim' || workout.type === 'Run') acc += 7 * athlete.weight * (workout.elapsed_time / 3600);
+            else if (workout.type === 'WeightTraining') acc += 4.5 * athlete.weight * (workout.elapsed_time / 3600);
+            else acc += 3 * athlete.weight * (workout.elapsed_time / 3600);
+          }
+          else {
+            let met;
+            if (workout.type === 'Swim') met = 10;
+            else if (workout.type === 'Run') met = 9.8;
+            else if (workout.type === 'WeightTraining') met = 3.5;
+            else met = 2.5;
+
+            const caloriesPerMinute = met * 3.5 * 70 / 200;
+            acc += caloriesPerMinute * (workout.elapsed_time / 60);
+          }
 
           return acc;
         }, 0);
@@ -240,12 +288,16 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
     let elevationInMeters;
 
     if (selectedYear === 'all-time')
-      elevationInMeters = activities
-        .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
-
+      elevationInMeters = activities.reduce(
+        (acc, workout) => acc + workout.total_elevation_gain,
+        0
+      );
     else
       elevationInMeters = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
 
     const elevationInFeet = elevationInMeters * 3.28084;
@@ -263,12 +315,16 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
     let distanceInMeters;
 
     if (selectedYear === 'all-time')
-      distanceInMeters = activities
-        .reduce((acc, workout) => acc + workout.distance, 0);
-
+      distanceInMeters = activities.reduce(
+        (acc, workout) => acc + workout.distance,
+        0
+      );
     else
       distanceInMeters = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, workout) => acc + workout.distance, 0);
 
     const distanceInMiles = distanceInMeters * 0.000621371;
@@ -281,10 +337,12 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
 
     if (selectedYear === 'all-time')
       kudos = activities.reduce((acc, workout) => acc + workout.kudos_count, 0);
-
     else
       kudos = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, workout) => acc + workout.kudos_count, 0);
 
     setKudos(kudos);
@@ -293,10 +351,16 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
   const getMaxSpeed = () => {
     let maxSpeedActivity;
 
-    if (selectedYear === 'all-time') maxSpeedActivity = activities.sort((a, b) => b.max_speed - a.max_speed)[0];
-
-    else maxSpeedActivity = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+    if (selectedYear === 'all-time')
+      maxSpeedActivity = activities.sort(
+        (a, b) => b.max_speed - a.max_speed
+      )[0];
+    else
+      maxSpeedActivity = activities
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .sort((a, b) => b.max_speed - a.max_speed)[0];
 
     const maxSpeedInMetersPerSecond = maxSpeedActivity.max_speed;
@@ -341,10 +405,15 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
           </Cell>
           <Cell className='cell stats-cell-3'>
             <h1 className='cell-heading'>Favorite Activity Type</h1>
-            {favoriteActivityType === 'Ride' ? <MdDirectionsBike className='cell-icon fav-activity' />
-            : favoriteActivityType === 'Run' ? <FaRunning className='cell-icon fav-activity' />
-            : favoriteActivityType === 'Swim' ? <FaSwimmer className='cell-icon fav-activity' /> 
-            : <LuActivity className='cell-icon fav-activity' />}
+            {favoriteActivityType === 'Ride' ? (
+              <MdDirectionsBike className='cell-icon fav-activity' />
+            ) : favoriteActivityType === 'Run' ? (
+              <FaRunning className='cell-icon fav-activity' />
+            ) : favoriteActivityType === 'Swim' ? (
+              <FaSwimmer className='cell-icon fav-activity' />
+            ) : (
+              <LuActivity className='cell-icon fav-activity' />
+            )}
             <p className='cell-main'>
               {favoriteActivityType} | {favoriteActivityTypeCount}{' '}
               <span className='unit'>
@@ -369,22 +438,29 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
             <h1 className='cell-heading'>Longest Activity</h1>
             <IoMdStopwatch className='cell-icon longest-activity-stat' />
             <p className='cell-main'>
-              {Math.floor(longestActivity.moving_time / 3600)}<span className='unit'>hr</span>{' '}
-              {Math.floor((longestActivity.moving_time % 3600) / 60)}<span className='unit'>min</span>
+              {Math.floor(longestActivity.moving_time / 3600)}
+              <span className='unit'>hr</span>{' '}
+              {Math.floor((longestActivity.moving_time % 3600) / 60)}
+              <span className='unit'>min</span>
             </p>
             <div className='deckgl-container'>
-              {longestActivity?.map?.summary_polyline ? 
-              <DeckGL
-                initialViewState={INITIAL_VIEW_STATE}
-                controller={true}
-                layers={layers}
-              >
-                <Map
-                  mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                  mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
-                  attributionControl={false}
-                />
-              </DeckGL> : <p>Your longest activity had no gps data!</p>}
+              {longestActivity?.map?.summary_polyline ? (
+                <DeckGL
+                  initialViewState={INITIAL_VIEW_STATE}
+                  controller={true}
+                  layers={layers}
+                >
+                  <Map
+                    mapboxAccessToken={
+                      process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
+                    }
+                    mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
+                    attributionControl={false}
+                  />
+                </DeckGL>
+              ) : (
+                <p>Your longest activity had no gps data!</p>
+              )}
             </div>
             <Link
               target='#'
@@ -438,7 +514,8 @@ const Stats = ({ options, activities, year, athlete, logout }) => {
             <h1 className='cell-heading'>Max Speed</h1>
             <FaFighterJet className='cell-icon max-speed' />
             <p className='cell-main'>
-              {maxSpeed}<span className='unit'>mph</span>
+              {maxSpeed}
+              <span className='unit'>mph</span>
             </p>
             <Link
               target='#'
@@ -458,21 +535,23 @@ export default Stats;
 
 Stats.propTypes = {
   options: PropTypes.arrayOf(PropTypes.element).isRequired,
-  activities: PropTypes.arrayOf(PropTypes.shape({
-    achievement_count: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    start_date: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    moving_time: PropTypes.number.isRequired,
-    map: PropTypes.shape({
-      summary_polyline: PropTypes.string,
-    }),
-    kilojoules: PropTypes.number,
-    total_elevation_gain: PropTypes.number.isRequired,
-    distance: PropTypes.number.isRequired,
-    kudos_count: PropTypes.number.isRequired,
-    max_speed: PropTypes.number.isRequired,
-  })).isRequired,
+  activities: PropTypes.arrayOf(
+    PropTypes.shape({
+      achievement_count: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired,
+      start_date: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      moving_time: PropTypes.number.isRequired,
+      map: PropTypes.shape({
+        summary_polyline: PropTypes.string,
+      }),
+      kilojoules: PropTypes.number,
+      total_elevation_gain: PropTypes.number.isRequired,
+      distance: PropTypes.number.isRequired,
+      kudos_count: PropTypes.number.isRequired,
+      max_speed: PropTypes.number.isRequired,
+    })
+  ).isRequired,
   year: PropTypes.number.isRequired,
   athlete: PropTypes.shape({
     id: PropTypes.number.isRequired,
