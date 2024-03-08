@@ -3,6 +3,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import { useEffect, useState } from 'react';
 import LineChart from '../Line Chart/LineChart';
+import PropTypes from 'prop-types';
 
 const Charts = ({ activities, options, year, athlete, logout }) => {
   const [selectedYear, setSelectedYear] = useState(year);
@@ -222,3 +223,22 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
 };
 
 export default Charts;
+
+Charts.propTypes = {
+  activities: PropTypes.arrayOf(
+    PropTypes.shape({
+      start_date: PropTypes.string.isRequired,
+      moving_time: PropTypes.number.isRequired,
+      type: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  options: PropTypes.arrayOf(PropTypes.element).isRequired,
+  year: PropTypes.number.isRequired,
+  athlete: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    profile: PropTypes.string.isRequired,
+  }).isRequired,
+  logout: PropTypes.func.isRequired,
+};
