@@ -192,25 +192,25 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
         </div>
         <section className='all-charts'>
           <section className='chart'>
-            <h1>Duration Per Month</h1>
+            <h1 className='chart-title'>Duration Per Month</h1>
             <div className='chart-container'>
               {durationData && <LineChart data={durationData} />}
             </div>
           </section>
           <section className='chart'>
-            <h1>Cycling Duration Per Week</h1>
+            <h1 className='chart-title'>Cycling Duration Per Week</h1>
             <div className='chart-container'>
               {cyclingData && <LineChart data={cyclingData} />}
             </div>
           </section>
           <section className='chart'>
-            <h1>Running Duration Per Week</h1>
+            <h1 className='chart-title'>Running Duration Per Week</h1>
             <div className='chart-container'>
               {runningData && <LineChart data={runningData} />}
             </div>
           </section>
           <section className='chart'>
-            <h1>Swimming Duration Per Week</h1>
+            <h1 className='chart-title'>Swimming Duration Per Week</h1>
             <div className='chart-container'>
               {swimmingData && <LineChart data={swimmingData} />}
             </div>

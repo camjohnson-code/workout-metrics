@@ -24,3 +24,17 @@
 .chart-container {
   width: 100%;
 }
+
+.chart-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+/* media queries */
+@media (max-width: 768px) {
+  .charts-content {
+    width: 100vw;
+    margin-left: 0;
+  }
+}
