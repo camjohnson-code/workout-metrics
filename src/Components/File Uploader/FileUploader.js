@@ -10,23 +10,34 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
   const [fileTypeError, setFileTypeError] = useState(false);
   const [uploadError, setUploadError] = useState(false);
   const [uploadErrorMessage, setUploadErrorMessage] = useState(false);
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const [acceptedFiles, setAcceptedFiles] = useState([]);
+  
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (files) => {
+      const supportedTypes = ['fit', 'tcx', 'gpx'];
+      const validFiles = files.filter((file) => {
+        const extension = file?.name.split('.').pop().toLowerCase();
+        return supportedTypes.includes(extension);
+      });
+
+      if (validFiles.length !== files.length) {
+        setFileTypeError(true);
+      } else {
+        setFileTypeError(false);
+      }
+
+      setAcceptedFiles(validFiles);
+    },
+  });
 
   const handleSubmit = async () => {
     if (acceptedFiles?.length === 0) return;
 
-    const supportedTypes = ['fit', 'tcx', 'gpx'];
-
     for (const file of acceptedFiles) {
-      const formData = new FormData();
-      formData.append('file', file);
-
       const extension = file?.name.split('.').pop().toLowerCase();
 
-      if (!supportedTypes.includes(extension)) {
-        setFileTypeError(true);
-        return;
-      } else setFileTypeError(false);
+      const formData = new FormData();
+      formData.append('file', file);
       formData.append('data_type', extension);
 
       const athleteInfo = await getUserFromAPI(athlete?.id);
@@ -45,12 +56,6 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
       }
     }
   };
-
-  const files = acceptedFiles.map((file) => (
-    <li key={file?.path}>
-      {file?.path} - {file?.size} bytes
-    </li>
-  ));
 
   return (
     <form className='form'>
@@ -76,7 +81,7 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
         {...getRootProps({ className: 'dropzone' })}
       >
         <BsUpload className='upload-icon' />
-        <input id="fileUpload" name="fileUpload" {...getInputProps()} />
+        <input id='fileUpload' name='fileUpload' {...getInputProps()} />
         <p className='file-types'>
           {acceptedFiles?.length
             ? `File(s) added: ${acceptedFiles
