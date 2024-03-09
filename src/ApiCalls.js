@@ -38,6 +38,8 @@ export const handleAuthorizationCallback = async () => {
 
     const data = await response.json();
 
+    console.log('Data:', data);
+
     localStorage.setItem('stravaAccessToken', data.access_token);
     localStorage.setItem('stravaRefreshToken', data.refresh_token);
   }
@@ -54,12 +56,14 @@ export const getAthleteData = async () => {
   });
 
   if (!response.ok) {
+    localStorage.removeItem('stravaAccessToken');
+    localStorage.removeItem('stravaRefreshToken');
     console.log('Request failed');
     return;
   }
 
   const data = await response.json();
-  addAthleteToAPI(data, accessToken, refreshToken);
+  addAthleteToAPI(data, accessToken, refreshToken, tokenExpiration);
 
   return data;
 };
@@ -90,7 +94,7 @@ export const getAthleteActivities = async () => {
   return activities;
 };
 
-export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
+export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenExpiration) => {
   let response = await fetch(
     `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`
   );
@@ -105,6 +109,7 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
         ...athlete,
         stravaAccessToken: accessToken,
         stravaRefreshToken: refreshToken,
+        tokenExpiration: tokenExpiration,
       }),
     });
   } else {
@@ -117,6 +122,7 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
         ...athlete,
         stravaAccessToken: accessToken,
         stravaRefreshToken: refreshToken,
+        tokenExpiration: tokenExpiration,
       }),
     });
   }
