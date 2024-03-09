@@ -381,7 +381,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<LandingPage year={year} />} />
+      <Route path='/' element={<LandingPage year={year} />} />
+        {/* <Route path='/' element={<LandingPage year={year} />} />
         <Route
           path='/redirect'
           element={
@@ -483,7 +484,7 @@ const App = () => {
         <Route
           path='/hall-of-fame'
           element={
-            isLoggedIn ? (
+            
               <HallOfFame
                 formatDate={formatDate}
                 convertSecondsToHMS={convertSecondsToHMS}
@@ -492,9 +493,7 @@ const App = () => {
                 year={year}
                 logout={logout}
               />
-            ) : (
-              <NotLoggedInPage />
-            )
+            
           }
         />
         <Route
@@ -507,7 +506,7 @@ const App = () => {
             )
           }
         />
-        <Route path='/contact' element={<ContactForm year={year} />} />
+        <Route path='/contact' element={<ContactForm year={year} />} /> */}
         <Route path='*' element={<NotFoundPage isLoggedIn={isLoggedIn} />} />
       </Routes>
     </Router>
