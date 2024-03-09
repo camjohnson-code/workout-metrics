@@ -20,6 +20,7 @@ import {
   addQuoteToAPI,
 } from '../../ApiCalls';
 import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
+import UnderConstruction from '../Under Construction/UnderConstruction';
 
 const App = () => {
   const year = new Date().getFullYear();
@@ -381,7 +382,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-      <Route path='/' element={<LandingPage year={year} />} />
+      <Route path='/' element={<UnderConstruction />} />
         {/* <Route path='/' element={<LandingPage year={year} />} />
         <Route
           path='/redirect'
