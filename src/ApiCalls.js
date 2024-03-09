@@ -63,7 +63,7 @@ export const getAthleteData = async () => {
   }
 
   const data = await response.json();
-  addAthleteToAPI(data, accessToken, refreshToken, tokenExpiration);
+  addAthleteToAPI(data, accessToken, refreshToken);
 
   return data;
 };
