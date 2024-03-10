@@ -128,8 +128,6 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenE
 };
 
 export const addActivitiesToAPI = async (activities) => {
-  console.log('activities being added to the server:', activities);
-
   for (let activity of activities) {
     const newActivity = {
       userId: activity.athlete.id,
@@ -158,7 +156,6 @@ export const addActivitiesToAPI = async (activities) => {
     const data = await response.json();
   }
 
-  console.log('done adding to server!');
 };
 
 export const refreshAccessToken = async (refreshToken) => {
