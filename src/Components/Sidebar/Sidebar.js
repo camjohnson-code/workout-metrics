@@ -2,21 +2,40 @@ import './Sidebar.css';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { IoMdHome } from 'react-icons/io';
+import { IoMdHome, IoIosRefresh, IoMdSettings } from 'react-icons/io';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
-import { FaArrowTrendUp, FaChartSimple } from "react-icons/fa6";
+import { FaArrowTrendUp, FaChartSimple } from 'react-icons/fa6';
 import { TbLogout2 } from 'react-icons/tb';
 import PropTypes from 'prop-types';
 
-const Sidebar = ({ year, athlete, logout }) => {
+const Sidebar = ({
+  year,
+  athlete,
+  logout,
+  setSettingsShown,
+  settingsShown,
+}) => {
+  const handleRefresh = () => {
+    console.log('clicked');
+  };
+
+  const handleSettings = () => {
+    console.log('settings shown: ', settingsShown);
+    setSettingsShown(!settingsShown);
+    console.log('settings clicked!');
+  };
+
   return (
     <section className='sidebar'>
-      <Link target='#' to={`https://www.strava.com/athletes/${athlete?.id}`} className='sidebar-header'>
-        <img
-          src={`${athlete?.profile}`}
-          className='profile-photo'
-        />
-        <h1 className='user-name'>{athlete?.firstname} {athlete?.lastname}</h1>
+      <Link
+        target='#'
+        to={`https://www.strava.com/athletes/${athlete?.id}`}
+        className='sidebar-header'
+      >
+        <img src={`${athlete?.profile}`} className='profile-photo' />
+        <h1 className='user-name'>
+          {athlete?.firstname} {athlete?.lastname}
+        </h1>
       </Link>
       <nav className='sidebar-links'>
         <NavLink to='/dashboard' className='sidebar-link'>
@@ -28,7 +47,7 @@ const Sidebar = ({ year, athlete, logout }) => {
         </NavLink>
         <NavLink to='/stats' className='sidebar-link'>
           <FaArrowTrendUp className='sidebar-icon' /> Stats
-        </NavLink> 
+        </NavLink>
         <NavLink to='/heatmap' className='sidebar-link'>
           <FaFire className='sidebar-icon' /> Heatmap
         </NavLink>
@@ -38,9 +57,19 @@ const Sidebar = ({ year, athlete, logout }) => {
         <NavLink to='/add-workout' className='sidebar-link'>
           <FaPlus className='sidebar-icon' /> Add Workout
         </NavLink>
+        <button onClick={handleRefresh} className='sidebar-button sidebar-link'>
+          <IoIosRefresh className='sidebar-icon' /> Refresh Data
+        </button>
+        <button onClick={handleSettings} className='sidebar-button sidebar-link'>
+          <IoMdSettings className='sidebar-icon' /> Settings
+        </button>
       </nav>
       <footer className='sidebar-footer'>
-        <NavLink onClick={() => logout()} to='/' className='sidebar-link footer-link'>
+        <NavLink
+          onClick={() => logout()}
+          to='/'
+          className='sidebar-link footer-link'
+        >
           <TbLogout2 className='sidebar-icon' />
           Sign Out
         </NavLink>
