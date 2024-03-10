@@ -129,7 +129,7 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenE
 
 export const addActivitiesToAPI = async (activities) => {
   console.log('activities being added to the server:', activities);
-  
+
   for (let activity of activities) {
     const newActivity = {
       userId: activity.athlete.id,
@@ -241,9 +241,7 @@ export const fetchUserActivities = async (athlete, keywords, activityType) => {
     `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${athlete.id}`
   );
   const data = await response.json();
-    console.log('data', data);
   const allActivities = data.data;
-    console.log('allActivities', allActivities);
   const filteredActivities = allActivities.filter((activity) => {
     const matchesKeyword = activity.name
       .toLowerCase()
@@ -253,7 +251,6 @@ export const fetchUserActivities = async (athlete, keywords, activityType) => {
       activity.type.toLowerCase() === activityType.toLowerCase();
     return matchesKeyword && matchesType;
   });
-  console.log('filteredActivities', filteredActivities);
   return filteredActivities;
 };
 
@@ -319,7 +316,7 @@ export const getUserFromAPI = async (id) => {
 export const getActivitiesFromAPI = async (id) => {
   const response = await fetch(`http://localhost:3001/api/v1/activities/${id}`);
   const data = await response.json();
-  console.log('data', data);
+
   return data;
 }
 
