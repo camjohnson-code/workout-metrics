@@ -20,9 +20,7 @@ const Sidebar = ({
   };
 
   const handleSettings = () => {
-    console.log('settings shown: ', settingsShown);
     setSettingsShown(!settingsShown);
-    console.log('settings clicked!');
   };
 
   return (
