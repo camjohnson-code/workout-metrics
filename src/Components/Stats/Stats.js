@@ -324,41 +324,37 @@ const Stats = ({
   };
 
   const calcElevationGain = () => {
-    let elevationInMeters;
+    let elevation;
 
     if (selectedYear === 'all-time')
-      elevationInMeters = activities
+      elevation = activities
         .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
     else
-      elevationInMeters = activities
+      elevation = activities
         .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
 
-    const elevationInFeet = elevationInMeters * 3.28084;
-
-    selectedUnit === 'Imperial' ? setElevationGain(Math.round(elevationInFeet)) : setElevationGain(Math.round(elevationInMeters));
+    setElevationGain(elevationInMeters);
   };
 
   const calcMtEverests = () => {
-    const numMtEverests = elevationGain / 29029;
+    const numMtEverests = elevationGain / 8848;
 
     setMtEverests(numMtEverests.toFixed(1));
   };
 
   const calcDistance = () => {
-    let distanceInMeters;
+    let distance;
 
     if (selectedYear === 'all-time')
-      distanceInMeters = activities
+      distance = activities
         .reduce((acc, workout) => acc + workout.distance, 0);
     else
-      distanceInMeters = activities
+      distance = activities
         .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.distance, 0);
 
-    const distanceInMiles = distanceInMeters * 0.000621371;
-
-    selectedUnit === 'Imperial' ? setDistance(Math.round(distanceInMiles)) : setDistance(Math.round(distanceInMeters));
+    setDistance(Math.round(distance));
   };
 
   const calcKudos = () => {
@@ -390,10 +386,8 @@ const Stats = ({
           .sort((a, b) => b.max_speed - a.max_speed)[0];
 
       const maxSpeedInMetersPerSecond = maxSpeedActivity.max_speed;
-      const maxSpeedInKph = (maxSpeedInMetersPerSecond * 3.6).toFixed(1);
-      const maxSpeedInMph = (maxSpeedInMetersPerSecond * 2.23694).toFixed(1);
 
-      selectedUnit === 'Imperial' ? setMaxSpeed(maxSpeedInMph) : setMaxSpeed(maxSpeedInKph);
+      setMaxSpeed(maxSpeedInMetersPerSecond);
       setMaxSpeedActivityId(maxSpeedActivity.id);
     }
   };
@@ -565,8 +559,8 @@ const Stats = ({
             <h1 className='cell-heading'>Distance</h1>
             <LuBanana className='cell-icon banana' />
             <p className='cell-main'>
-              {distance.toLocaleString()}
-              <span className='unit'>mi</span>
+              {selectedUnit === 'Imperial' ? Math.round(distance * 0.000621371).toLocaleString() : Math.round(distance * 0.001).toLocaleString()}
+              <span className='unit'>{selectedUnit === 'Imperial' ? 'mi' : 'km'}</span>
             </p>
             <p className='cell-subtitle'>{`That's about ${Math.round(
               (distance * 63360) / 7
@@ -576,8 +570,8 @@ const Stats = ({
             <h1 className='cell-heading'>Elevation Gain</h1>
             <FaMountain className='cell-icon elevation-gain' />
             <p className='cell-main'>
-              {elevationGain.toLocaleString()}
-              <span className='unit'>ft</span>
+            {selectedUnit === 'Imperial' ? Math.round(elevationGain * 3.28084).toLocaleString() : Math.round(elevationGain).toLocaleString()}
+              <span className='unit'>{selectedUnit === 'Imperial' ? 'ft' : 'm'}</span>
             </p>
             <p className='cell-subtitle'>{`That's about ${mtEverests} Mt. Everests`}</p>
           </Cell>
@@ -597,7 +591,7 @@ const Stats = ({
             <FaFighterJet className='cell-icon max-speed' />
             {maxSpeed ? (
               <p className='cell-main'>
-                {maxSpeed}
+                {selectedUnit === 'Imperial' ? (maxSpeed * 2.23694).toFixed(1) : (maxSpeed * 3.6).toFixed(1)}
                 <span className='unit'>mph</span>
               </p>
             ) : (

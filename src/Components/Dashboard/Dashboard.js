@@ -162,7 +162,7 @@ const Dashboard = ({
             <p className='cell-main'>
               {recentActivityType === 'Swim'
                 ? convertMtoYds(recentActivity?.distance)
-                : selectedUnit === 'Imperial' ? convertMtoMiles(recentActivity?.distance) : recentActivity?.distance}
+                : selectedUnit === 'Imperial' ? convertMtoMiles(recentActivity?.distance).toLocaleString() : Math.round(recentActivity?.distance).toLocaleString()}
               <span className='unit'>
                 {recentActivityType === 'Swim' ? 'yds' : selectedUnit === 'Imperial' ? 'mi' : 'm'}
               </span>
