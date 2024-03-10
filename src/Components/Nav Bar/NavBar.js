@@ -45,7 +45,7 @@ const NavBar = ({ logout }) => {
               </li>
               <li>
                 <NavLink
-                  to='/dashboard'
+                  to='/charts'
                   className='mobile-nav-link'
                   activeClassName='active'
                 >
@@ -54,7 +54,7 @@ const NavBar = ({ logout }) => {
               </li>
               <li>
                 <NavLink
-                  to='/dashboard'
+                  to='/stats'
                   className='mobile-nav-link'
                   activeClassName='active'
                 >

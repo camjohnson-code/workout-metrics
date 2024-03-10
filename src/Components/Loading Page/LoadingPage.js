@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   getAthleteData,
   getAthleteActivities,
+  addActivitiesToAPI,
 } from '../../ApiCalls';
 import Lottie from 'lottie-react';
 import LoadingAnimation from '../../Animations/loading.json';
@@ -25,7 +26,8 @@ const LoadingPage = ({
     await getAthleteData().then((data) => {
       setAthlete(data);
     });
-    await getAthleteActivities().then((activities) => {
+    await getAthleteActivities().then(async (activities) => {
+      await addActivitiesToAPI(activities);
       setActivities(activities);
       getStreak(activities);
       getLongestYearActivity(activities);
