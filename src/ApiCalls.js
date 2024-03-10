@@ -128,26 +128,15 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenE
 };
 
 export const addActivitiesToAPI = async (activities) => {
-  for (let activity of activities) {
-    const newActivity = {
-      userId: activity.athlete.id,
-      name: activity.name,
-      distance: activity.distance,
-      type: activity.type,
-      start_date: activity.start_date,
-      start_latlng: activity.start_latlng,
-      time: activity.moving_time,
-      id: activity.id,
-      moving_time: activity.moving_time,
-      achievement_count: activity.achievement_count,
-    };
-
+  const batchSize = 100;
+  for (let i = 0; i < activities.length; i += batchSize) {
+    const batch = activities.slice(i, i + batchSize);
     const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newActivity),
+      body: JSON.stringify(batch),
     });
 
     if (!response.ok) {
