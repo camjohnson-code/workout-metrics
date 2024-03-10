@@ -128,7 +128,9 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenE
 };
 
 export const addActivitiesToAPI = async (activities) => {
-  const promises = activities.map(async (activity) => {
+  console.log('activities being added to the server:', activities);
+  
+  for (let activity of activities) {
     const newActivity = {
       userId: activity.athlete.id,
       name: activity.name,
@@ -154,15 +156,10 @@ export const addActivitiesToAPI = async (activities) => {
       console.log('Response status:', response.status);
     }
     const data = await response.json();
-    return data; // Return the response data
-  });
-
-  // Wait for all promises to resolve
-  await Promise.all(promises);
+  }
 
   console.log('done adding to server!');
 };
-
 
 export const refreshAccessToken = async (refreshToken) => {
   const clientId = process.env.REACT_APP_STRAVA_ID;
