@@ -155,6 +155,8 @@ export const addActivitiesToAPI = async (activities) => {
     }
     const data = await response.json();
   }
+
+  console.log('done adding to server!');
 };
 
 export const refreshAccessToken = async (refreshToken) => {
