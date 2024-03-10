@@ -26,8 +26,8 @@ const LoadingPage = ({
     await getAthleteData().then((data) => {
       setAthlete(data);
     });
-    await getAthleteActivities().then(async (activities) => {
-      await addActivitiesToAPI(activities);
+    await getAthleteActivities().then((activities) => {
+      addActivitiesToAPI(activities);
       setActivities(activities);
       getStreak(activities);
       getLongestYearActivity(activities);
