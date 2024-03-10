@@ -239,9 +239,9 @@ export const fetchUserActivities = async (athlete, keywords, activityType) => {
     `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${athlete.id}`
   );
   const data = await response.json();
-
+    console.log('data', data);
   const allActivities = data.data;
-
+    console.log('allActivities', allActivities);
   const filteredActivities = allActivities.filter((activity) => {
     const matchesKeyword = activity.name
       .toLowerCase()
@@ -251,7 +251,7 @@ export const fetchUserActivities = async (athlete, keywords, activityType) => {
       activity.type.toLowerCase() === activityType.toLowerCase();
     return matchesKeyword && matchesType;
   });
-
+  console.log('filteredActivities', filteredActivities);
   return filteredActivities;
 };
 
