@@ -87,8 +87,6 @@ export const getAthleteActivities = async () => {
   localStorage.removeItem('stravaRefreshToken');
   localStorage.removeItem('tokenExpiration');
 
-  addActivitiesToAPI(activities);
-
   return activities;
 };
 
