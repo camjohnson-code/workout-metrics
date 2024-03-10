@@ -1,6 +1,7 @@
 import './HallOfFame.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
+import LoadingModule from '../Loading Module/LoadingModule';
 import { useState, useEffect } from 'react';
 import { fetchUserActivities } from '../../ApiCalls';
 import Card from '../Card/Card';
@@ -10,6 +11,12 @@ import {
   getHallOfFameActivities,
 } from '../../ApiCalls';
 import PropTypes from 'prop-types';
+import {
+  getUserFromAPI,
+  refreshAccessToken,
+  addAthleteToAPI,
+  getAthleteActivities,
+} from '../../ApiCalls';
 
 const HallOfFame = ({
   year,
@@ -18,6 +25,8 @@ const HallOfFame = ({
   convertSecondsToHMS,
   formatDate,
   logout,
+  isLoading,
+  setIsLoading,
 }) => {
   const [favorites, setFavorites] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -25,6 +34,31 @@ const HallOfFame = ({
   const [activityType, setActivityType] = useState('all');
   const [hasSearched, setHasSearched] = useState(false);
   const isValidForm = !keywords;
+
+  useEffect(() => {
+    const refreshActivityData = async () => {
+      setIsLoading(true);
+      const user = await getUserFromAPI(athlete?.id);
+
+      if (user?.data?.tokenExpiration >= String(Date.now())) {
+        setIsLoading(false);
+      } else {
+        const newAccessToken = await refreshAccessToken(
+          user?.data?.stravaRefreshToken
+        );
+        await addAthleteToAPI(
+          user?.data,
+          newAccessToken?.access_token,
+          user?.data?.stravaRefreshToken,
+          newAccessToken?.expires_at
+        );
+        await getAthleteActivities();
+        setIsLoading(false);
+      }
+    };
+
+    refreshActivityData();
+  }, []);
 
   useEffect(() => {
     getHallOfFameActivities(athlete).then((favorites) =>
@@ -50,6 +84,7 @@ const HallOfFame = ({
           keywords,
           activityType
         );
+
         setActivities(activities);
       };
 
@@ -112,6 +147,7 @@ const HallOfFame = ({
 
   return (
     <section className='hall-of-fame'>
+      {isLoading && <LoadingModule />}
       <NavBar logout={logout} />
       <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
       <section className='hall-of-fame-section'>

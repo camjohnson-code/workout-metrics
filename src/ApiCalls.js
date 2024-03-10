@@ -40,12 +40,14 @@ export const handleAuthorizationCallback = async () => {
 
     localStorage.setItem('stravaAccessToken', data.access_token);
     localStorage.setItem('stravaRefreshToken', data.refresh_token);
+    localStorage.setItem('tokenExpiration', data.expires_at);
   }
 };
 
 export const getAthleteData = async () => {
   const accessToken = localStorage.getItem('stravaAccessToken');
   const refreshToken = localStorage.getItem('stravaRefreshToken');
+  const tokenExpiration = localStorage.getItem('tokenExpiration');
 
   const response = await fetch('https://www.strava.com/api/v3/athlete', {
     headers: {
@@ -59,14 +61,13 @@ export const getAthleteData = async () => {
   }
 
   const data = await response.json();
-  addAthleteToAPI(data, accessToken, refreshToken);
+  addAthleteToAPI(data, accessToken, refreshToken, tokenExpiration);
 
   return data;
 };
 
 export const getAthleteActivities = async () => {
   const accessToken = localStorage.getItem('stravaAccessToken');
-  const refreshToken = localStorage.getItem('stravaRefreshToken');
   let page = 1;
   let activities = [];
 
@@ -84,13 +85,14 @@ export const getAthleteActivities = async () => {
 
   localStorage.removeItem('stravaAccessToken');
   localStorage.removeItem('stravaRefreshToken');
+  localStorage.removeItem('tokenExpiration');
 
   addActivitiesToAPI(activities);
 
   return activities;
 };
 
-export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
+export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenExpiration) => {
   let response = await fetch(
     `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`
   );
@@ -104,7 +106,7 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
       body: JSON.stringify({
         ...athlete,
         stravaAccessToken: accessToken,
-        stravaRefreshToken: refreshToken,
+        tokenExpiration: tokenExpiration,
       }),
     });
   } else {
@@ -117,6 +119,7 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken) => {
         ...athlete,
         stravaAccessToken: accessToken,
         stravaRefreshToken: refreshToken,
+        tokenExpiration: tokenExpiration,
       }),
     });
   }
@@ -137,6 +140,8 @@ export const addActivitiesToAPI = async (activities) => {
       start_latlng: activity.start_latlng,
       time: activity.moving_time,
       id: activity.id,
+      moving_time: activity.moving_time,
+      achievement_count: activity.achievement_count,
     };
 
     const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
@@ -153,6 +158,33 @@ export const addActivitiesToAPI = async (activities) => {
     const data = await response.json();
   }
 };
+
+export const refreshAccessToken = async (refreshToken) => {
+  const clientId = process.env.REACT_APP_STRAVA_ID;
+  const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
+  const grantType = 'refresh_token';
+
+  const response = await fetch('https://www.strava.com/oauth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: clientId,
+      client_secret: clientSecret,
+      refresh_token: refreshToken,
+      grant_type: grantType,
+    }),
+  });
+
+  const data = await response.json();
+
+  localStorage.setItem('stravaAccessToken', data.access_token);
+  localStorage.setItem('stravaRefreshToken', data.refresh_token);
+  localStorage.setItem('tokenExpiration', data.expires_at);
+
+  return data;
+}
 
 export const getWeather = async (coordinates) => {
   const [longitude, latitude] = coordinates;
@@ -173,7 +205,6 @@ export const getWeather = async (coordinates) => {
 export const getQuote = async () => {
   const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote');
   const data = await response.json();
-
   return data;
 };
 
@@ -283,6 +314,13 @@ export const getUserFromAPI = async (id) => {
   return data;
 };
 
+export const getActivitiesFromAPI = async (id) => {
+  const response = await fetch(`http://localhost:3001/api/v1/activities/${id}`);
+  const data = await response.json();
+  console.log('data', data);
+  return data;
+}
+
 export const uploadFile = async (file, accessToken) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -316,8 +354,8 @@ export const postActivity = async (activityData, accessToken) => {
       body: JSON.stringify(activityData),
     });
 
-    if (response.ok) return { ok: true };
-    else return { ok: false };
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
     return { ok: false, error: error.message };
   }

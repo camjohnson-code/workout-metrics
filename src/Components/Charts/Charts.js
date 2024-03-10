@@ -1,16 +1,56 @@
 import './Charts.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
+import LoadingModule from '../Loading Module/LoadingModule';
 import { useEffect, useState } from 'react';
 import LineChart from '../Line Chart/LineChart';
 import PropTypes from 'prop-types';
+import {
+  getUserFromAPI,
+  addAthleteToAPI,
+  getAthleteActivities,
+  refreshAccessToken,
+} from '../../ApiCalls';
 
-const Charts = ({ activities, options, year, athlete, logout }) => {
+const Charts = ({
+  activities,
+  options,
+  year,
+  athlete,
+  logout,
+  isLoading,
+  setIsLoading,
+}) => {
   const [selectedYear, setSelectedYear] = useState(year);
   const [durationData, setDurationData] = useState(null);
   const [cyclingData, setCyclingData] = useState(null);
   const [runningData, setRunningData] = useState(null);
   const [swimmingData, setSwimmingData] = useState(null);
+
+  useEffect(() => {
+    const refreshActivityData = async () => {
+      setIsLoading(true);
+      const user = await getUserFromAPI(athlete.id);
+
+      if (user?.data?.tokenExpiration >= String(Date.now())) {
+        setIsLoading(false);
+      } else {
+        const newAccessToken = await refreshAccessToken(
+          user?.data?.stravaRefreshToken
+        );
+        await addAthleteToAPI(
+          user?.data,
+          newAccessToken?.access_token,
+          user?.data?.stravaRefreshToken,
+          newAccessToken?.expires_at
+        );
+        await getAthleteActivities();
+        setIsLoading(false);
+      }
+    };
+
+    refreshActivityData();
+  }, []);
 
   useEffect(() => {
     calcDurationData(activities);
@@ -45,7 +85,7 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
 
       if (year === selectedYearNumber) {
         const week = getWeekNumber(date);
-        const movingTimeInHours = activity.moving_time / 3600;
+        const movingTimeInHours = activity?.moving_time / 3600;
 
         activitiesPerWeek[week - 1] += movingTimeInHours;
       }
@@ -75,10 +115,10 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
 
       if (
         year === selectedYearNumber &&
-        (activity.type === 'Ride' || activity.type === 'VirtualRide')
+        (activity?.type === 'Ride' || activity?.type === 'VirtualRide')
       ) {
         const week = getWeekNumber(date);
-        const movingTimeInHours = activity.moving_time / 3600;
+        const movingTimeInHours = activity?.moving_time / 3600;
 
         activitiesPerWeek[week - 1] += movingTimeInHours;
       }
@@ -103,15 +143,15 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
     const activitiesPerWeek = Array.from({ length: 52 }, () => 0);
 
     data.forEach((activity) => {
-      const date = new Date(activity.start_date);
+      const date = new Date(activity?.start_date);
       const year = date.getFullYear();
 
       if (
         year === selectedYearNumber &&
-        (activity.type === 'Run' || activity.type === 'TrailRun')
+        (activity?.type === 'Run' || activity?.type === 'TrailRun')
       ) {
         const week = getWeekNumber(date);
-        const movingTimeInHours = activity.moving_time / 3600;
+        const movingTimeInHours = activity?.moving_time / 3600;
 
         activitiesPerWeek[week - 1] += movingTimeInHours;
       }
@@ -136,13 +176,12 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
     const activitiesPerWeek = Array.from({ length: 52 }, () => 0);
 
     data.forEach((activity) => {
-      const date = new Date(activity.start_date);
+      const date = new Date(activity?.start_date);
       const year = date.getFullYear();
 
-      if (year === selectedYearNumber && activity.type === 'Swim') {
+      if (year === selectedYearNumber && activity?.type === 'Swim') {
         const week = getWeekNumber(date);
-        console.log('activity: ', activity);
-        const distance = Math.round(activity.distance * 1.09361);
+        const distance = Math.round(activity?.distance * 1.09361);
 
         activitiesPerWeek[week - 1] += distance;
       }
@@ -179,6 +218,7 @@ const Charts = ({ activities, options, year, athlete, logout }) => {
 
   return (
     <section className='charts'>
+      {isLoading && <LoadingModule />}
       <NavBar logout={logout} />
       <Sidebar athlete={athlete} year={year} />
       <section className='charts-content'>

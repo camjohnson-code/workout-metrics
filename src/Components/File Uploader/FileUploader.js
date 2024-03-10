@@ -3,15 +3,21 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { BsUpload } from 'react-icons/bs';
-import { getUserFromAPI, uploadFile } from '../../ApiCalls';
+import { getUserFromAPI, uploadFile, addActivitiesToAPI } from '../../ApiCalls';
 import PropTypes from 'prop-types';
 
-const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
+const FileUploader = ({
+  setActivities,
+  setManualForm,
+  manualForm,
+  setSubmitted,
+  athlete,
+}) => {
   const [fileTypeError, setFileTypeError] = useState(false);
   const [uploadError, setUploadError] = useState(false);
   const [uploadErrorMessage, setUploadErrorMessage] = useState(false);
   const [acceptedFiles, setAcceptedFiles] = useState([]);
-  
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (files) => {
       const supportedTypes = ['fit', 'tcx', 'gpx'];
@@ -45,7 +51,13 @@ const FileUploader = ({ setManualForm, manualForm, setSubmitted, athlete }) => {
 
       const data = await uploadFile(file, accessToken);
 
-      if (data?.error) {
+      if (data && data.id) {
+        await addActivitiesToAPI([{ ...data }]);
+        await setActivities((prevActivities) => [
+          { ...data },
+          ...prevActivities,
+        ]);
+      } else {
         setUploadError(true);
         if (data.error.includes('duplicate'))
           setUploadErrorMessage('This file has already been uploaded.');
