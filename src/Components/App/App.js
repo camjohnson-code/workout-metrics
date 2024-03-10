@@ -426,125 +426,145 @@ const App = () => {
         <Route
           path='/dashboard'
           element={
-            <Dashboard
-              selectedUnit={selectedUnit}
-              setSelectedUnit={setSelectedUnit}
-              selectedTheme={selectedTheme}
-              setSelectedTheme={setSelectedTheme}
-              settingsShown={settingsShown}
-              setSettingsShown={setSettingsShown}
-              setActivities={setActivities}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              convertMtoMiles={convertMtoMiles}
-              lineLayer={lineLayer}
-              effortUp={effortUp}
-              quote={quote}
-              weather={weather}
-              streak={streak}
-              longestYearActivity={longestYearActivity}
-              achievements={achievementsYTD}
-              getCoordinates={getCoordinates}
-              activities={activities}
-              convertMtoYds={convertMtoYds}
-              recentActivity={recentActivity}
-              athlete={athlete}
-              year={year}
-              logout={logout}
-            />
+            isLoggedIn ? (
+              <Dashboard
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                convertMtoMiles={convertMtoMiles}
+                lineLayer={lineLayer}
+                effortUp={effortUp}
+                quote={quote}
+                weather={weather}
+                streak={streak}
+                longestYearActivity={longestYearActivity}
+                achievements={achievementsYTD}
+                getCoordinates={getCoordinates}
+                activities={activities}
+                convertMtoYds={convertMtoYds}
+                recentActivity={recentActivity}
+                athlete={athlete}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/charts'
           element={
-            <Charts
-              selectedUnit={selectedUnit}
-              setSelectedUnit={setSelectedUnit}
-              selectedTheme={selectedTheme}
-              setSelectedTheme={setSelectedTheme}
-              settingsShown={settingsShown}
-              setSettingsShown={setSettingsShown}
-              setActivities={setActivities}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              activities={activities}
-              options={options}
-              athlete={athlete}
-              year={year}
-              logout={logout}
-            />
+            isLoggedIn ? (
+              <Charts
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                activities={activities}
+                options={options}
+                athlete={athlete}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/stats'
           element={
-            <Stats
-              selectedUnit={selectedUnit}
-              setSelectedUnit={setSelectedUnit}
-              selectedTheme={selectedTheme}
-              setSelectedTheme={setSelectedTheme}
-              settingsShown={settingsShown}
-              setSettingsShown={setSettingsShown}
-              setActivities={setActivities}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              options={options}
-              activities={activities}
-              logout={logout}
-              athlete={athlete}
-              year={year}
-            />
+            isLoggedIn ? (
+              <Stats
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                options={options}
+                activities={activities}
+                logout={logout}
+                athlete={athlete}
+                year={year}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/heatmap'
           element={
-            <Heatmap
-              selectedUnit={selectedUnit}
-              setSelectedUnit={setSelectedUnit}
-              selectedTheme={selectedTheme}
-              setSelectedTheme={setSelectedTheme}
-              settingsShown={settingsShown}
-              setSettingsShown={setSettingsShown}
-              setActivities={setActivities}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              activities={activities}
-              athlete={athlete}
-              homeCoordinates={homeCoordinates}
-              year={year}
-              logout={logout}
-            />
+            isLoggedIn ? (
+              <Heatmap
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                activities={activities}
+                athlete={athlete}
+                homeCoordinates={homeCoordinates}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/hall-of-fame'
           element={
-            <HallOfFame
-              selectedUnit={selectedUnit}
-              setSelectedUnit={setSelectedUnit}
-              selectedTheme={selectedTheme}
-              setSelectedTheme={setSelectedTheme}
-              settingsShown={settingsShown}
-              setSettingsShown={setSettingsShown}
-              setActivities={setActivities}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              formatDate={formatDate}
-              convertSecondsToHMS={convertSecondsToHMS}
-              convertMtoMiles={convertMtoMiles}
-              athlete={athlete}
-              year={year}
-              logout={logout}
-            />
+            isLoggedIn ? (
+              <HallOfFame
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                formatDate={formatDate}
+                convertSecondsToHMS={convertSecondsToHMS}
+                convertMtoMiles={convertMtoMiles}
+                athlete={athlete}
+                year={year}
+                logout={logout}
+              />
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route
           path='/add-workout'
           element={
-            
+            isLoggedIn ? (
               <AddWorkout
-              isLoading={isLoading}
+                isLoading={isLoading}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
                 selectedTheme={selectedTheme}
@@ -556,7 +576,9 @@ const App = () => {
                 year={year}
                 logout={logout}
               />
-            
+            ) : (
+              <NotLoggedInPage />
+            )
           }
         />
         <Route path='/contact' element={<ContactForm year={year} />} />
