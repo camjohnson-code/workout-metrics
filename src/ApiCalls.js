@@ -128,25 +128,41 @@ export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenE
 };
 
 export const addActivitiesToAPI = async (activities) => {
-  const batchSize = 100;
-  for (let i = 0; i < activities.length; i += batchSize) {
-    const batch = activities.slice(i, i + batchSize);
+  const promises = activities.map(async (activity) => {
+    const newActivity = {
+      userId: activity.athlete.id,
+      name: activity.name,
+      distance: activity.distance,
+      type: activity.type,
+      start_date: activity.start_date,
+      start_latlng: activity.start_latlng,
+      time: activity.moving_time,
+      id: activity.id,
+      moving_time: activity.moving_time,
+      achievement_count: activity.achievement_count,
+    };
+
     const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(batch),
+      body: JSON.stringify(newActivity),
     });
 
     if (!response.ok) {
       console.log('Response status:', response.status);
     }
     const data = await response.json();
-  }
+    return data; // Return the response data
+  });
+
+  // Wait for all promises to resolve
+  await Promise.all(promises);
 
   console.log('done adding to server!');
 };
+
 
 export const refreshAccessToken = async (refreshToken) => {
   const clientId = process.env.REACT_APP_STRAVA_ID;
