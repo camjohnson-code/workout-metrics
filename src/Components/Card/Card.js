@@ -34,7 +34,7 @@ const Card = ({
       <section className='card-info-section'>
         <p className='card-info'>{activity?.type}</p>
         <p className='card-info'>{formatDate(activity?.start_date)}</p>
-        {selectedUnit === 'Imperial' ? <p className='card-info'>{convertMtoMiles(activity?.distance)} miles</p> : <p className='card-info'>{activity?.distance} km</p>}
+        {selectedUnit === 'Imperial' ? <p className='card-info'>{convertMtoMiles(activity?.distance)} miles</p> : <p className='card-info'>{Math.round(activity?.distance / 1000).toFixed(2)} km</p>}
         <p className='card-info'>{convertSecondsToHMS(activity?.time)}</p>
         <p className='card-info'>
           <Link
