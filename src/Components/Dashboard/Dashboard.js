@@ -1,8 +1,9 @@
 import './Dashboard.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
+import LoadingModule from '../Loading Module/LoadingModule';
 import {
   FaCalendarDays,
   FaArrowTrendUp,
@@ -17,8 +18,13 @@ import { CiTempHigh } from 'react-icons/ci';
 import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
-import GL from '@luma.gl/constants';
 import PropTypes from 'prop-types';
+import {
+  getUserFromAPI,
+  refreshAccessToken,
+  addAthleteToAPI,
+  getAthleteActivities,
+} from '../../ApiCalls';
 
 const Dashboard = ({
   year,
@@ -34,8 +40,36 @@ const Dashboard = ({
   lineLayer,
   convertMtoMiles,
   logout,
+  isLoading,
+  setIsLoading,
+  setActivities,
 }) => {
-  const recentActivityType = recentActivity.type;
+  useEffect(() => {
+    const refreshActivityData = async () => {
+      setIsLoading(true);
+      const user = await getUserFromAPI(athlete.id);
+
+      if (user?.data?.tokenExpiration >= String(Date.now())) {
+        setIsLoading(false);
+      } else {
+        const newAccessToken = await refreshAccessToken(
+          user?.data?.stravaRefreshToken
+        );
+        await addAthleteToAPI(
+          user?.data,
+          newAccessToken?.access_token,
+          user?.data?.stravaRefreshToken,
+          newAccessToken?.expires_at
+        );
+        await getAthleteActivities();
+        setIsLoading(false);
+      }
+    };
+
+    refreshActivityData();
+  }, []);
+
+  const recentActivityType = recentActivity?.type;
 
   const date = new Date().toLocaleDateString('en-US', {
     month: 'short',
@@ -71,15 +105,16 @@ const Dashboard = ({
   ];
 
   const generateWeatherSubtitle = () => {
-    if (weather.temp < 40) return 'Bundle up!';
-    if (weather.temp >= 40 && weather.temp < 60)
+    if (weather?.temp < 40) return 'Bundle up!';
+    if (weather?.temp >= 40 && weather?.temp < 60)
       return 'Slightly on the cooler side.';
-    if (weather.temp >= 60 && weather.temp < 80) return 'Perfect weather!';
-    if (weather.temp >= 80) return 'Stay cool. It\'s a hot one out there!';
+    if (weather?.temp >= 60 && weather?.temp < 80) return 'Perfect weather!';
+    if (weather?.temp >= 80) return "Stay cool. It's a hot one out there!";
   };
 
   return (
     <section className='dashboard-container'>
+      {isLoading && <LoadingModule />}
       <NavBar logout={logout} />
       <Sidebar logout={logout} year={year} athlete={athlete}></Sidebar>
       <section className='dashboard'>
