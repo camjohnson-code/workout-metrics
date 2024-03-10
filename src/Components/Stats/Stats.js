@@ -505,9 +505,9 @@ const Stats = ({
             {longestActivity.moving_time ? (
               <p className='cell-main'>
                 {Math.floor(longestActivity.moving_time / 3600)}
-                <span className='unit'>hr</span>{' '}
+                {' '}<span className='unit'>hr</span>{' '}
                 {Math.floor((longestActivity.moving_time % 3600) / 60)}
-                <span className='unit'>min</span>
+                {' '}<span className='unit'>min</span>
               </p>
             ) : (
               <p></p>
@@ -549,7 +549,7 @@ const Stats = ({
             <FaFire className='cell-icon calories' />
             <p className='cell-main'>
               {caloriesBurned.toLocaleString()}
-              <span className='unit'>kcal</span>
+              {' '}<span className='unit'>kcal</span>
             </p>
             <p className='cell-subtitle'>{`That's ${Math.round(
               Number(caloriesBurned) / 285
@@ -560,7 +560,7 @@ const Stats = ({
             <LuBanana className='cell-icon banana' />
             <p className='cell-main'>
               {selectedUnit === 'Imperial' ? Math.round(distance * 0.000621371).toLocaleString() : Math.round(distance * 0.001).toLocaleString()}
-              <span className='unit'>{selectedUnit === 'Imperial' ? 'mi' : 'km'}</span>
+              {' '}<span className='unit'>{selectedUnit === 'Imperial' ? 'mi' : 'km'}</span>
             </p>
             <p className='cell-subtitle'>{`That's about ${Math.round(
               (distance * 63360) / 7
@@ -571,7 +571,7 @@ const Stats = ({
             <FaMountain className='cell-icon elevation-gain' />
             <p className='cell-main'>
             {selectedUnit === 'Imperial' ? Math.round(elevationGain * 3.28084).toLocaleString() : Math.round(elevationGain).toLocaleString()}
-               <span className='unit'>{selectedUnit === 'Imperial' ? 'ft' : 'm'}</span>
+            {' '}<span className='unit'>{selectedUnit === 'Imperial' ? 'ft' : 'm'}</span>
             </p>
             <p className='cell-subtitle'>{`That's about ${mtEverests} Mt. Everests`}</p>
           </Cell>
@@ -580,7 +580,7 @@ const Stats = ({
             <FaThumbsUp className='cell-icon kudos' />
             <p className='cell-main'>
               {kudos.toLocaleString()}
-               <span className='unit'>kudos</span>
+              {' '}<span className='unit'>kudos</span>
             </p>
             <p className='cell-subtitle'>
               {kudos ? 'Way to inspire others!' : ''}
@@ -592,7 +592,7 @@ const Stats = ({
             {maxSpeed ? (
               <p className='cell-main'>
                 {selectedUnit === 'Imperial' ? (maxSpeed * 2.23694).toFixed(1) : (maxSpeed * 3.6).toFixed(1)}
-                 <span className='unit'>{selectedUnit === 'Imperial' ? 'mph' : 'kph'}</span>
+                 {' '}<span className='unit'>{selectedUnit === 'Imperial' ? 'mph' : 'kph'}</span>
               </p>
             ) : (
               <p className='cell-main'>No GPS data</p>
