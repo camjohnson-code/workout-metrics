@@ -592,7 +592,7 @@ const Stats = ({
             {maxSpeed ? (
               <p className='cell-main'>
                 {selectedUnit === 'Imperial' ? (maxSpeed * 2.23694).toFixed(1) : (maxSpeed * 3.6).toFixed(1)}
-                <span className='unit'>mph</span>
+                <span className='unit'>{selectedUnit === 'Imperial' ? 'mph' : 'kph'}</span>
               </p>
             ) : (
               <p className='cell-main'>No GPS data</p>
