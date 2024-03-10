@@ -334,7 +334,7 @@ const Stats = ({
         .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
 
-    setElevationGain(elevationInMeters);
+    setElevationGain(elevation);
   };
 
   const calcMtEverests = () => {
