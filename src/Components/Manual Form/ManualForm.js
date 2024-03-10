@@ -1,10 +1,10 @@
 import './ManualForm.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserFromAPI, postActivity } from '../../ApiCalls';
+import { getUserFromAPI, postActivity, addActivitiesToAPI } from '../../ApiCalls';
 import PropTypes from 'prop-types';
 
-const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
+const ManualForm = ({ setActivities, athlete, setManualForm, manualForm, setSubmitted }) => {
   const [error, setError] = useState(false);
   const today = new Date();
   const formattedDate = `${today.getFullYear()}-${String(
@@ -45,7 +45,7 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
     const activityData = {
       name: title,
       type: type,
-      start_date_local: `${date}T${time}`,
+      start_date: `${date}T${time}:00Z`,
       elapsed_time:
         parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds),
       description: description,
@@ -61,7 +61,11 @@ const ManualForm = ({ athlete, setManualForm, manualForm, setSubmitted }) => {
 
     const response = await postActivity(activityData, accessToken);
 
-    if (response.ok) setSubmitted(true);
+    if (response && response.id) {
+      await addActivitiesToAPI([{...response}]);
+      await setActivities((prevActivities) => [{...response}, ...prevActivities]);
+      setSubmitted(true);
+    }
     else setError(true);
   };
 

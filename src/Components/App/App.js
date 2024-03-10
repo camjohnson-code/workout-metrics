@@ -23,9 +23,9 @@ import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
 
 const App = () => {
   const year = new Date().getFullYear();
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [athlete, setAthlete] = useState(() => {
     const savedAthlete = localStorage.getItem('athlete');
     return savedAthlete
@@ -111,6 +111,12 @@ const App = () => {
     localStorage.setItem('activities', JSON.stringify(activities));
     setAchievementsYTD(numAchievementsYTD);
     analyzeRelativeEffort(activities);
+    if (activities.length) {
+      const sortedActivities = activities.sort(
+        (a, b) => new Date(b.start_date) - new Date(a.start_date)
+      );
+      setRecentActivity(sortedActivities[0]);
+    }
   }, [activities]);
 
   useEffect(() => {
@@ -411,6 +417,9 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Dashboard
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 convertMtoMiles={convertMtoMiles}
                 lineLayer={lineLayer}
                 effortUp={effortUp}
@@ -437,6 +446,9 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Charts
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 activities={activities}
                 options={options}
                 athlete={athlete}
@@ -453,6 +465,9 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Stats
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 options={options}
                 activities={activities}
                 logout={logout}
@@ -469,6 +484,9 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Heatmap
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 activities={activities}
                 athlete={athlete}
                 homeCoordinates={homeCoordinates}
@@ -485,6 +503,9 @@ const App = () => {
           element={
             isLoggedIn ? (
               <HallOfFame
+                setActivities={setActivities}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 formatDate={formatDate}
                 convertSecondsToHMS={convertSecondsToHMS}
                 convertMtoMiles={convertMtoMiles}
@@ -501,7 +522,12 @@ const App = () => {
           path='/add-workout'
           element={
             isLoggedIn ? (
-              <AddWorkout athlete={athlete} year={year} logout={logout} />
+              <AddWorkout
+                setActivities={setActivities}
+                athlete={athlete}
+                year={year}
+                logout={logout}
+              />
             ) : (
               <NotLoggedInPage />
             )
