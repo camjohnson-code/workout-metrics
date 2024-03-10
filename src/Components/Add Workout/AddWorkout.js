@@ -1,6 +1,8 @@
 import './AddWorkout.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
+import SettingsModule from '../Settings Module/SettingsModule';
+import LoadingModule from '../Loading Module/LoadingModule';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -8,7 +10,19 @@ import ManualForm from '../Manual Form/ManualForm';
 import FileUploader from '../File Uploader/FileUploader';
 import PropTypes from 'prop-types';
 
-const AddWorkout = ({ setActivities, year, athlete, logout }) => {
+const AddWorkout = ({
+  setActivities,
+  year,
+  athlete,
+  logout,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
+  isLoading,
+}) => {
   const [isMobile, setIsMobile] = useState(false);
   const [manualForm, setManualForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -33,8 +47,29 @@ const AddWorkout = ({ setActivities, year, athlete, logout }) => {
 
   return (
     <section className='add-workout'>
-      <NavBar logout={logout} />
-      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
+      {isLoading && <LoadingModule />}
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+        athlete={athlete}
+        year={year}
+      ></Sidebar>
       <section className='upload-section'>
         {!submitted && !isMobile && (
           <h1 className='upload-title'>Missing an activity?</h1>

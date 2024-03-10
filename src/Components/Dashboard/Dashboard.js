@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import {
   FaCalendarDays,
   FaArrowTrendUp,
@@ -43,35 +44,44 @@ const Dashboard = ({
   isLoading,
   setIsLoading,
   setActivities,
+  settingsShown,
+  setSettingsShown,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
 }) => {
-  useEffect(() => {
-    const refreshActivityData = async () => {
-      setIsLoading(true);
-      const user = await getUserFromAPI(athlete.id);
-
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
-
-    refreshActivityData();
-  }, []);
+  // useEffect(() => {
+  //   // const refreshActivityData = async () => {
+  //   //   setIsLoading(true);
+  //   //   const user = await getUserFromAPI(athlete.id);
+  //   //   if (user?.data?.tokenExpiration >= String(Date.now())) {
+  //   //     setIsLoading(false);
+  //   //   } else {
+  //   //     const newAccessToken = await refreshAccessToken(
+  //   //       user?.data?.stravaRefreshToken
+  //   //     );
+  //   //     await addAthleteToAPI(
+  //   //       user?.data,
+  //   //       newAccessToken?.access_token,
+  //   //       user?.data?.stravaRefreshToken,
+  //   //       newAccessToken?.expires_at
+  //   //     );
+  //   //     await getAthleteActivities();
+  //   //     setIsLoading(false);
+  //   //   }
+  //   // };
+  //   // refreshActivityData();
+  // }, []);
 
   const recentActivityType = recentActivity?.type;
 
-  const date = new Date().toLocaleDateString('en-US', {
+  const imperialDate = new Date().toLocaleDateString('en-US', {
+    month: 'short',
+    day: '2-digit',
+  });
+
+  const metricDate = new Date().toLocaleDateString('en-GB', {
     month: 'short',
     day: '2-digit',
   });
@@ -115,13 +125,29 @@ const Dashboard = ({
   return (
     <section className='dashboard-container'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar logout={logout} year={year} athlete={athlete}></Sidebar>
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar logout={logout} settingsShown={settingsShown} setSettingsShown={setSettingsShown} />
+      <Sidebar
+        setSettingsShown={setSettingsShown}
+        settingsShown={settingsShown}
+        logout={logout}
+        year={year}
+        athlete={athlete}
+      ></Sidebar>
       <section className='dashboard'>
         <Cell className='cell cell-1'>
           <h1 className='cell-heading'>Date</h1>
           <FaCalendarDays className='cell-icon calendar' />
-          <p className='cell-main'>{date}</p>
+          <p className='cell-main'>{selectedUnit === 'Imperial' ? imperialDate : metricDate}</p>
           <p className='cell-subtitle'>{year}</p>
         </Cell>
         <Cell className='cell cell-2'>
@@ -136,9 +162,9 @@ const Dashboard = ({
             <p className='cell-main'>
               {recentActivityType === 'Swim'
                 ? convertMtoYds(recentActivity?.distance)
-                : convertMtoMiles(recentActivity?.distance)}
+                : selectedUnit === 'Imperial' ? convertMtoMiles(recentActivity?.distance) : recentActivity?.distance}
               <span className='unit'>
-                {recentActivityType === 'Swim' ? 'yds' : 'mi'}
+                {recentActivityType === 'Swim' ? 'yds' : selectedUnit === 'Imperial' ? 'mi' : 'm'}
               </span>
             </p>
           )}

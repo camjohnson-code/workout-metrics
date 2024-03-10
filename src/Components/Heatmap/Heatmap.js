@@ -2,6 +2,7 @@ import './Heatmap.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import NoLocationModule from '../No Location Module/NoLocationModule';
 import { useEffect, useState } from 'react';
 import DeckGL from '@deck.gl/react';
@@ -27,13 +28,19 @@ const Heatmap = ({
   logout,
   isLoading,
   setIsLoading,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
 }) => {
   const [loading, setLoading] = useState(true);
   const [polylines, setPolylines] = useState([]);
   const [lineCoordinates, setLineCoordinates] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
 
     if (activities.length) {
       const polylines = activities.map(
@@ -42,27 +49,27 @@ const Heatmap = ({
       setPolylines(polylines);
     }
 
-    const refreshActivityData = async () => {
-      const user = await getUserFromAPI(athlete.id);
+    // const refreshActivityData = async () => {
+    //   const user = await getUserFromAPI(athlete.id);
 
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
+    //   if (user?.data?.tokenExpiration >= String(Date.now())) {
+    //     setIsLoading(false);
+    //   } else {
+    //     const newAccessToken = await refreshAccessToken(
+    //       user?.data?.stravaRefreshToken
+    //     );
+    //     await addAthleteToAPI(
+    //       user?.data,
+    //       newAccessToken?.access_token,
+    //       user?.data?.stravaRefreshToken,
+    //       newAccessToken?.expires_at
+    //     );
+    //     await getAthleteActivities();
+    //     setIsLoading(false);
+    //   }
+    // };
 
-    refreshActivityData();
+    // refreshActivityData();
   }, []);
 
   useEffect(() => {
@@ -117,8 +124,28 @@ const Heatmap = ({
   return (
     <section className='heatmap-page'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+        athlete={athlete}
+        year={year}
+      ></Sidebar>
       <section className='heatmap-container'>
         {!athlete?.city && <NoLocationModule />}
         {loading && (

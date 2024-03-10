@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import { Link } from 'react-router-dom';
 import { CiShare1 } from 'react-icons/ci';
 import { FaChartSimple } from 'react-icons/fa6';
@@ -38,6 +39,12 @@ const Stats = ({
   logout,
   isLoading,
   setIsLoading,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
 }) => {
   const [numActivities, setNumActivities] = useState(activities.length);
   const [numAchievements, setNumAchievements] = useState(0);
@@ -61,28 +68,26 @@ const Stats = ({
   const [maxSpeedActivityId, setMaxSpeedActivityId] = useState('');
 
   useEffect(() => {
-    const refreshActivityData = async () => {
-      setIsLoading(true);
-      const user = await getUserFromAPI(athlete.id);
-
-      if (user.data.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user.data.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user.data,
-          newAccessToken.access_token,
-          user.data.stravaRefreshToken,
-          newAccessToken.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
-
-    refreshActivityData();
+    // const refreshActivityData = async () => {
+    //   setIsLoading(true);
+    //   const user = await getUserFromAPI(athlete.id);
+    //   if (user.data.tokenExpiration >= String(Date.now())) {
+    //     setIsLoading(false);
+    //   } else {
+    //     const newAccessToken = await refreshAccessToken(
+    //       user.data.stravaRefreshToken
+    //     );
+    //     await addAthleteToAPI(
+    //       user.data,
+    //       newAccessToken.access_token,
+    //       user.data.stravaRefreshToken,
+    //       newAccessToken.expires_at
+    //     );
+    //     await getAthleteActivities();
+    //     setIsLoading(false);
+    //   }
+    // };
+    // refreshActivityData();
   }, []);
 
   useEffect(() => {
@@ -322,21 +327,16 @@ const Stats = ({
     let elevationInMeters;
 
     if (selectedYear === 'all-time')
-      elevationInMeters = activities.reduce(
-        (acc, workout) => acc + workout.total_elevation_gain,
-        0
-      );
+      elevationInMeters = activities
+        .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
     else
       elevationInMeters = activities
-        .filter(
-          (workout) =>
-            workout.start_date.slice(0, 4) === selectedYear.toString()
-        )
+        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
 
     const elevationInFeet = elevationInMeters * 3.28084;
 
-    setElevationGain(Math.round(elevationInFeet));
+    selectedUnit === 'Imperial' ? setElevationGain(Math.round(elevationInFeet)) : setElevationGain(Math.round(elevationInMeters));
   };
 
   const calcMtEverests = () => {
@@ -349,21 +349,16 @@ const Stats = ({
     let distanceInMeters;
 
     if (selectedYear === 'all-time')
-      distanceInMeters = activities.reduce(
-        (acc, workout) => acc + workout.distance,
-        0
-      );
+      distanceInMeters = activities
+        .reduce((acc, workout) => acc + workout.distance, 0);
     else
       distanceInMeters = activities
-        .filter(
-          (workout) =>
-            workout.start_date.slice(0, 4) === selectedYear.toString()
-        )
+        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.distance, 0);
 
     const distanceInMiles = distanceInMeters * 0.000621371;
 
-    setDistance(Math.round(distanceInMiles));
+    selectedUnit === 'Imperial' ? setDistance(Math.round(distanceInMiles)) : setDistance(Math.round(distanceInMeters));
   };
 
   const calcKudos = () => {
@@ -387,21 +382,18 @@ const Stats = ({
 
     if (activities.length) {
       if (selectedYear === 'all-time')
-        maxSpeedActivity = activities.sort(
-          (a, b) => b.max_speed - a.max_speed
-        )[0];
+        maxSpeedActivity = activities
+          .sort((a, b) => b.max_speed - a.max_speed)[0];
       else
         maxSpeedActivity = activities
-          .filter(
-            (workout) =>
-              workout.start_date.slice(0, 4) === selectedYear.toString()
-          )
+          .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
           .sort((a, b) => b.max_speed - a.max_speed)[0];
 
       const maxSpeedInMetersPerSecond = maxSpeedActivity.max_speed;
+      const maxSpeedInKph = (maxSpeedInMetersPerSecond * 3.6).toFixed(1);
       const maxSpeedInMph = (maxSpeedInMetersPerSecond * 2.23694).toFixed(1);
 
-      setMaxSpeed(maxSpeedInMph);
+      selectedUnit === 'Imperial' ? setMaxSpeed(maxSpeedInMph) : setMaxSpeed(maxSpeedInKph);
       setMaxSpeedActivityId(maxSpeedActivity.id);
     }
   };
@@ -422,8 +414,27 @@ const Stats = ({
   return (
     <section className='stats-page'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar athlete={athlete} year={year}></Sidebar>
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        athlete={athlete}
+        year={year}
+      ></Sidebar>
       <section className='stats-container'>
         <div className='stats-header'>
           <label className='filter-title'>Filter:</label>
@@ -432,9 +443,7 @@ const Stats = ({
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
           >
-            <option value='all-time'>
-              All Time
-            </option>
+            <option value='all-time'>All Time</option>
             {options}
           </select>
         </div>

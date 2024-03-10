@@ -2,6 +2,7 @@ import './Charts.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import { useEffect, useState } from 'react';
 import LineChart from '../Line Chart/LineChart';
 import PropTypes from 'prop-types';
@@ -20,6 +21,12 @@ const Charts = ({
   logout,
   isLoading,
   setIsLoading,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
 }) => {
   const [selectedYear, setSelectedYear] = useState(year);
   const [durationData, setDurationData] = useState(null);
@@ -28,28 +35,28 @@ const Charts = ({
   const [swimmingData, setSwimmingData] = useState(null);
 
   useEffect(() => {
-    const refreshActivityData = async () => {
-      setIsLoading(true);
-      const user = await getUserFromAPI(athlete.id);
+    // const refreshActivityData = async () => {
+    //   setIsLoading(true);
+    //   const user = await getUserFromAPI(athlete.id);
 
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
+    //   if (user?.data?.tokenExpiration >= String(Date.now())) {
+    //     setIsLoading(false);
+    //   } else {
+    //     const newAccessToken = await refreshAccessToken(
+    //       user?.data?.stravaRefreshToken
+    //     );
+    //     await addAthleteToAPI(
+    //       user?.data,
+    //       newAccessToken?.access_token,
+    //       user?.data?.stravaRefreshToken,
+    //       newAccessToken?.expires_at
+    //     );
+    //     await getAthleteActivities();
+    //     setIsLoading(false);
+    //   }
+    // };
 
-    refreshActivityData();
+    // refreshActivityData();
   }, []);
 
   useEffect(() => {
@@ -180,8 +187,11 @@ const Charts = ({
       const year = date.getFullYear();
 
       if (year === selectedYearNumber && activity?.type === 'Swim') {
+        let distance;
         const week = getWeekNumber(date);
-        const distance = Math.round(activity?.distance * 1.09361);
+        
+        if (selectedUnit === 'Imperial') distance = Math.round(activity?.distance * 1.09361);
+        else if (selectedUnit === 'Metric') distance = Math.round(activity?.distance);
 
         activitiesPerWeek[week - 1] += distance;
       }
@@ -219,8 +229,27 @@ const Charts = ({
   return (
     <section className='charts'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar athlete={athlete} year={year} />
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        athlete={athlete}
+        year={year}
+      />
       <section className='charts-content'>
         <div className='stats-header'>
           <label className='filter-title'>Filter:</label>

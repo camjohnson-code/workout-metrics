@@ -13,6 +13,8 @@ const Card = ({
   formatDate,
   onStarClick,
   isFavorite,
+  selectedUnit,
+  selectedTheme,
 }) => {
   const [isStarred, setIsStarred] = useState(false);
 
@@ -32,7 +34,7 @@ const Card = ({
       <section className='card-info-section'>
         <p className='card-info'>{activity?.type}</p>
         <p className='card-info'>{formatDate(activity?.start_date)}</p>
-        <p className='card-info'>{convertMtoMiles(activity?.distance)} miles</p>
+        {selectedUnit === 'Imperial' ? <p className='card-info'>{convertMtoMiles(activity?.distance)} miles</p> : <p className='card-info'>{activity?.distance} km</p>}
         <p className='card-info'>{convertSecondsToHMS(activity?.time)}</p>
         <p className='card-info'>
           <Link

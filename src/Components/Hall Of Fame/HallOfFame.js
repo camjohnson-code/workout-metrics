@@ -2,6 +2,7 @@ import './HallOfFame.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import { useState, useEffect } from 'react';
 import { fetchUserActivities } from '../../ApiCalls';
 import Card from '../Card/Card';
@@ -27,6 +28,12 @@ const HallOfFame = ({
   logout,
   isLoading,
   setIsLoading,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
 }) => {
   const [favorites, setFavorites] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -36,28 +43,26 @@ const HallOfFame = ({
   const isValidForm = !keywords;
 
   useEffect(() => {
-    const refreshActivityData = async () => {
-      setIsLoading(true);
-      const user = await getUserFromAPI(athlete?.id);
-
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
-
-    refreshActivityData();
+    // const refreshActivityData = async () => {
+    //   setIsLoading(true);
+    //   const user = await getUserFromAPI(athlete?.id);
+    //   if (user?.data?.tokenExpiration >= String(Date.now())) {
+    //     setIsLoading(false);
+    //   } else {
+    //     const newAccessToken = await refreshAccessToken(
+    //       user?.data?.stravaRefreshToken
+    //     );
+    //     await addAthleteToAPI(
+    //       user?.data,
+    //       newAccessToken?.access_token,
+    //       user?.data?.stravaRefreshToken,
+    //       newAccessToken?.expires_at
+    //     );
+    //     await getAthleteActivities();
+    //     setIsLoading(false);
+    //   }
+    // };
+    // refreshActivityData();
   }, []);
 
   useEffect(() => {
@@ -120,6 +125,8 @@ const HallOfFame = ({
 
     return (
       <Card
+        selectedUnit={selectedUnit}
+        selectedTheme={selectedTheme}
         formatDate={formatDate}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
@@ -134,6 +141,8 @@ const HallOfFame = ({
   const favoriteCards = favorites.map((activity, index) => {
     return (
       <Card
+        selectedUnit={selectedUnit}
+        selectedTheme={selectedTheme}
         formatDate={formatDate}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
@@ -148,8 +157,28 @@ const HallOfFame = ({
   return (
     <section className='hall-of-fame'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+        athlete={athlete}
+        year={year}
+      ></Sidebar>
       <section className='hall-of-fame-section'>
         <h1 className='hall-of-fame-title'>
           {athlete?.firstname}'s Hall of Fame
