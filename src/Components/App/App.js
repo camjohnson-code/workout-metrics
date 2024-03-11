@@ -464,6 +464,7 @@ const App = () => {
           path='/loading'
           element={
             <LoadingPage
+              athlete={athlete}
               setAthlete={setAthlete}
               setRecentActivity={setRecentActivity}
               setActivities={setActivities}
