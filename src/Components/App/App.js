@@ -18,15 +18,20 @@ import {
   getQuote,
   fetchQuote,
   addQuoteToAPI,
+  getUserFromAPI,
+  refreshAccessToken,
+  addAthleteToAPI,
+  getAthleteActivities,
 } from '../../ApiCalls';
 import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
-import '../../themes.css'
+import '../../themes.css';
 
 const App = () => {
   const year = new Date().getFullYear();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshData, setRefreshData] = useState(false);
   const [settingsShown, setSettingsShown] = useState(false);
   const [selectedUnit, setSelectedUnit] = useState('Imperial');
   const [selectedTheme, setSelectedTheme] = useState('Dark');
@@ -116,6 +121,10 @@ const App = () => {
   }, [selectedTheme]);
 
   useEffect(() => {
+    if (refreshData) refreshActivityData();
+  }, [refreshData]);
+
+  useEffect(() => {
     localStorage.setItem('activities', JSON.stringify(activities));
     setAchievementsYTD(numAchievementsYTD);
     analyzeRelativeEffort(activities);
@@ -198,6 +207,31 @@ const App = () => {
   const authenticate = () => {
     setIsAuthorized(true);
     localStorage.setItem('isAuthorized', 'true');
+  };
+
+  const refreshActivityData = async () => {
+    setIsLoading(true);
+
+    const user = await getUserFromAPI(athlete.id);
+
+    const newAccessToken = await refreshAccessToken(
+      user?.data?.stravaRefreshToken
+    );
+
+    await addAthleteToAPI(
+      user?.data,
+      newAccessToken?.access_token,
+      user?.data?.stravaRefreshToken,
+      newAccessToken?.expires_at
+    );
+
+    const updatedActivities = await getAthleteActivities(
+      newAccessToken?.access_token
+    );
+
+    await setActivities(updatedActivities);
+    setIsLoading(false);
+    setRefreshData(false);
   };
 
   const numAchievementsYTD = activities
@@ -433,15 +467,14 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Dashboard
+                setRefreshData={setRefreshData}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
                 selectedTheme={selectedTheme}
                 setSelectedTheme={setSelectedTheme}
                 settingsShown={settingsShown}
                 setSettingsShown={setSettingsShown}
-                setActivities={setActivities}
                 isLoading={isLoading}
-                setIsLoading={setIsLoading}
                 convertMtoMiles={convertMtoMiles}
                 lineLayer={lineLayer}
                 effortUp={effortUp}
@@ -468,6 +501,7 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Charts
+                setRefreshData={setRefreshData}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
                 selectedTheme={selectedTheme}
@@ -493,6 +527,7 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Stats
+                setRefreshData={setRefreshData}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
                 selectedTheme={selectedTheme}
@@ -518,6 +553,7 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Heatmap
+                setRefreshData={setRefreshData}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
                 selectedTheme={selectedTheme}
@@ -541,8 +577,9 @@ const App = () => {
         <Route
           path='/hall-of-fame'
           element={
-           isLoggedIn ? (
+            isLoggedIn ? (
               <HallOfFame
+                setRefreshData={setRefreshData}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
                 selectedTheme={selectedTheme}
@@ -559,7 +596,7 @@ const App = () => {
                 year={year}
                 logout={logout}
               />
-           ) : (
+            ) : (
               <NotLoggedInPage />
             )
           }
@@ -569,6 +606,7 @@ const App = () => {
           element={
             isLoggedIn ? (
               <AddWorkout
+                setRefreshData={setRefreshData}
                 isLoading={isLoading}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
