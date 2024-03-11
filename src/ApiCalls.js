@@ -311,7 +311,7 @@ export const getUserFromAPI = async (id) => {
 };
 
 export const getActivitiesFromAPI = async (id) => {
-  const response = await fetch(`http://localhost:3001/api/v1/activities/${id}`);
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`);
   const data = await response.json();
 
   return data;
