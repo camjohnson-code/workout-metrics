@@ -14,6 +14,7 @@ const Sidebar = ({
   logout,
   setSettingsShown,
   settingsShown,
+  selectedTheme,
 }) => {
   const handleRefresh = () => {
     console.log('clicked');
@@ -73,7 +74,7 @@ const Sidebar = ({
         </NavLink>
         <img
           className='sidebar-strava-power-btn'
-          src={require('../../Images/api_logo_pwrdBy_strava_horiz_white.png')}
+          src={selectedTheme === 'Dark' ? require('../../Images/api_logo_pwrdBy_strava_horiz_white.png') : require('../../Images/api_logo_pwrdBy_strava_horiz_light.png')}
           alt='Powered by Strava'
         />
         <p className='sidebar-copyright'>© {year} Cameron Johnson</p>
