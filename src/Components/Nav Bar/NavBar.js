@@ -9,11 +9,11 @@ import { FaArrowTrendUp, FaChartSimple } from 'react-icons/fa6';
 import { TbLogout2 } from 'react-icons/tb';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const NavBar = ({ logout, setSettingsShown, settingsShown }) => {
+const NavBar = ({ logout, setSettingsShown, settingsShown, setRefreshData }) => {
   const [open, setOpen] = useState(false);
 
   const handleRefresh = () => {
-    console.log('clicked');
+    setRefreshData(true);
   };
 
   const handleSettings = () => {

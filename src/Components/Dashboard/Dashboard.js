@@ -20,12 +20,6 @@ import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  refreshAccessToken,
-  addAthleteToAPI,
-  getAthleteActivities,
-} from '../../ApiCalls';
 
 const Dashboard = ({
   year,
@@ -42,38 +36,14 @@ const Dashboard = ({
   convertMtoMiles,
   logout,
   isLoading,
-  setIsLoading,
-  setActivities,
   settingsShown,
   setSettingsShown,
   selectedUnit,
   setSelectedUnit,
   selectedTheme,
   setSelectedTheme,
+  setRefreshData,
 }) => {
-  // useEffect(() => {
-  //   // const refreshActivityData = async () => {
-  //   //   setIsLoading(true);
-  //   //   const user = await getUserFromAPI(athlete.id);
-  //   //   if (user?.data?.tokenExpiration >= String(Date.now())) {
-  //   //     setIsLoading(false);
-  //   //   } else {
-  //   //     const newAccessToken = await refreshAccessToken(
-  //   //       user?.data?.stravaRefreshToken
-  //   //     );
-  //   //     await addAthleteToAPI(
-  //   //       user?.data,
-  //   //       newAccessToken?.access_token,
-  //   //       user?.data?.stravaRefreshToken,
-  //   //       newAccessToken?.expires_at
-  //   //     );
-  //   //     await getAthleteActivities();
-  //   //     setIsLoading(false);
-  //   //   }
-  //   // };
-  //   // refreshActivityData();
-  // }, []);
-
   const [layerColor, setLayerColor] = useState([]);
 
   useEffect(() => {
@@ -143,11 +113,13 @@ const Dashboard = ({
         />
       )}
       <NavBar
+        setRefreshData={setRefreshData}
         logout={logout}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
       />
       <Sidebar
+        setRefreshData={setRefreshData}
         selectedTheme={selectedTheme}
         setSettingsShown={setSettingsShown}
         settingsShown={settingsShown}

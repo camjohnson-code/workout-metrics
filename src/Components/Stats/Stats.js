@@ -24,12 +24,6 @@ import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  refreshAccessToken,
-  addAthleteToAPI,
-  getAthleteActivities,
-} from '../../ApiCalls';
 
 const Stats = ({
   options,
@@ -38,13 +32,13 @@ const Stats = ({
   athlete,
   logout,
   isLoading,
-  setIsLoading,
   selectedUnit,
   setSelectedUnit,
   selectedTheme,
   setSelectedTheme,
   settingsShown,
   setSettingsShown,
+  setRefreshData,
 }) => {
   const [numActivities, setNumActivities] = useState(activities.length);
   const [numAchievements, setNumAchievements] = useState(0);
@@ -69,33 +63,6 @@ const Stats = ({
   const [layerColor, setLayerColor] = useState([]);
 
   useEffect(() => {
-    // const refreshActivityData = async () => {
-    //   setIsLoading(true);
-    //   const user = await getUserFromAPI(athlete.id);
-    //   if (user.data.tokenExpiration >= String(Date.now())) {
-    //     setIsLoading(false);
-    //   } else {
-    //     const newAccessToken = await refreshAccessToken(
-    //       user.data.stravaRefreshToken
-    //     );
-    //     await addAthleteToAPI(
-    //       user.data,
-    //       newAccessToken.access_token,
-    //       user.data.stravaRefreshToken,
-    //       newAccessToken.expires_at
-    //     );
-    //     await getAthleteActivities();
-    //     setIsLoading(false);
-    //   }
-    // };
-    // refreshActivityData();
-  }, []);
-
-  useEffect(() => {
-    calcNumAchievements();
-  }, [activities]);
-
-  useEffect(() => {
     calcNumActivities();
     calcNumAchievements();
     getFavoriteActivityTypes(activities);
@@ -105,7 +72,7 @@ const Stats = ({
     calcElevationGain();
     calcKudos();
     getMaxSpeed();
-  }, [selectedYear]);
+  }, [selectedYear, activities]);
 
   useEffect(() => {
     calcMtEverests();
@@ -436,11 +403,13 @@ const Stats = ({
         />
       )}
       <NavBar
+        setRefreshData={setRefreshData}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         logout={logout}
       />
       <Sidebar
+        setRefreshData={setRefreshData}
         selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}

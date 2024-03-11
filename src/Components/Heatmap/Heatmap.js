@@ -13,12 +13,6 @@ import polyline from '@mapbox/polyline';
 import Lottie from 'lottie-react';
 import LoadingAnimation from '../../Animations/loading.json';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  refreshAccessToken,
-  addAthleteToAPI,
-  getAthleteActivities,
-} from '../../ApiCalls';
 
 const Heatmap = ({
   year,
@@ -27,52 +21,27 @@ const Heatmap = ({
   activities,
   logout,
   isLoading,
-  setIsLoading,
   selectedUnit,
   setSelectedUnit,
   selectedTheme,
   setSelectedTheme,
   settingsShown,
   setSettingsShown,
+  setRefreshData,
 }) => {
   const [loading, setLoading] = useState(true);
   const [polylines, setPolylines] = useState([]);
   const [lineCoordinates, setLineCoordinates] = useState([]);
   const [layerColor, setLayerColor] = useState([]);
-  const [blendFunc, setBlendFunc] = useState([]);
 
   useEffect(() => {
-    // setIsLoading(true);
-
     if (activities.length) {
       const polylines = activities.map(
         (activity) => activity?.map?.summary_polyline
       );
       setPolylines(polylines);
     }
-
-    // const refreshActivityData = async () => {
-    //   const user = await getUserFromAPI(athlete.id);
-
-    //   if (user?.data?.tokenExpiration >= String(Date.now())) {
-    //     setIsLoading(false);
-    //   } else {
-    //     const newAccessToken = await refreshAccessToken(
-    //       user?.data?.stravaRefreshToken
-    //     );
-    //     await addAthleteToAPI(
-    //       user?.data,
-    //       newAccessToken?.access_token,
-    //       user?.data?.stravaRefreshToken,
-    //       newAccessToken?.expires_at
-    //     );
-    //     await getAthleteActivities();
-    //     setIsLoading(false);
-    //   }
-    // };
-
-    // refreshActivityData();
-  }, []);
+  }, [activities]);
 
   useEffect(() => {
     const encryptedPolylines = polylines.filter(Boolean);
@@ -93,10 +62,8 @@ const Heatmap = ({
 
   useEffect(() => {
     if (selectedTheme === 'Dark') {
-      setBlendFunc([GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE]);
       setLayerColor([138, 169, 249]);
     } else {
-      setBlendFunc([GL.ZERO, GL.DST_COLOR, GL.ZERO, GL.ONE]);
       setLayerColor([255, 70, 0]);
     }
   }, [selectedTheme]);
@@ -146,11 +113,13 @@ const Heatmap = ({
         />
       )}
       <NavBar
+        setRefreshData={setRefreshData}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         logout={logout}
       />
       <Sidebar
+        setRefreshData={setRefreshData}
         selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
@@ -173,17 +142,13 @@ const Heatmap = ({
             layers={layers}
             parameters={{
               blend: true,
-              blendFunc: blendFunc,
+              blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
               blendEquation: GL.FUNC_ADD,
             }}
           >
             <Map
               mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-              mapStyle={
-                selectedTheme === 'Dark'
-                  ? process.env.REACT_APP_MAPBOX_STYLE_DARK
-                  : process.env.REACT_APP_MAPBOX_STYLE_LIGHT
-              }
+              mapStyle={process.env.REACT_APP_MAPBOX_STYLE_DARK}
               attributionControl={false}
             />
           </DeckGL>

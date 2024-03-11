@@ -6,12 +6,6 @@ import SettingsModule from '../Settings Module/SettingsModule';
 import { useEffect, useState } from 'react';
 import LineChart from '../Line Chart/LineChart';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  addAthleteToAPI,
-  getAthleteActivities,
-  refreshAccessToken,
-} from '../../ApiCalls';
 
 const Charts = ({
   activities,
@@ -20,13 +14,13 @@ const Charts = ({
   athlete,
   logout,
   isLoading,
-  setIsLoading,
   selectedUnit,
   setSelectedUnit,
   selectedTheme,
   setSelectedTheme,
   settingsShown,
   setSettingsShown,
+  setRefreshData,
 }) => {
   const [selectedYear, setSelectedYear] = useState(year);
   const [durationData, setDurationData] = useState(null);
@@ -35,31 +29,6 @@ const Charts = ({
   const [swimmingData, setSwimmingData] = useState(null);
   const [borderColor, setBorderColor] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState(null);
-
-  useEffect(() => {
-    // const refreshActivityData = async () => {
-    //   setIsLoading(true);
-    //   const user = await getUserFromAPI(athlete.id);
-
-    //   if (user?.data?.tokenExpiration >= String(Date.now())) {
-    //     setIsLoading(false);
-    //   } else {
-    //     const newAccessToken = await refreshAccessToken(
-    //       user?.data?.stravaRefreshToken
-    //     );
-    //     await addAthleteToAPI(
-    //       user?.data,
-    //       newAccessToken?.access_token,
-    //       user?.data?.stravaRefreshToken,
-    //       newAccessToken?.expires_at
-    //     );
-    //     await getAthleteActivities();
-    //     setIsLoading(false);
-    //   }
-    // };
-
-    // refreshActivityData();
-  }, []);
 
   useEffect(() => {
     calcDurationData(activities);
@@ -72,27 +41,11 @@ const Charts = ({
     if (selectedTheme === 'Dark') {
       setBorderColor('#8aa9f9');
       setBackgroundColor('rgba(138, 169, 249, 0.25)');
-    } 
-    else {
+    } else {
       setBorderColor('#ff4600');
       setBackgroundColor('rgba(255, 70, 0, 0.25)');
     }
   }, [selectedTheme]);
-
-  const monthOrder = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
 
   const calcDurationData = (data) => {
     const selectedYearNumber = Number(selectedYear);
@@ -202,9 +155,11 @@ const Charts = ({
       if (year === selectedYearNumber && activity?.type === 'Swim') {
         let distance;
         const week = getWeekNumber(date);
-        
-        if (selectedUnit === 'Imperial') distance = Math.round(activity?.distance * 1.09361);
-        else if (selectedUnit === 'Metric') distance = Math.round(activity?.distance);
+
+        if (selectedUnit === 'Imperial')
+          distance = Math.round(activity?.distance * 1.09361);
+        else if (selectedUnit === 'Metric')
+          distance = Math.round(activity?.distance);
 
         activitiesPerWeek[week - 1] += distance;
       }
@@ -253,11 +208,13 @@ const Charts = ({
         />
       )}
       <NavBar
+        setRefreshData={setRefreshData}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         logout={logout}
       />
       <Sidebar
+        setRefreshData={setRefreshData}
         selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
@@ -295,7 +252,10 @@ const Charts = ({
             </div>
           </section>
           <section className='chart'>
-            <h1 className='chart-title'>Swimming Distance Per Week ({selectedUnit === 'Imperial' ? 'yards' : 'meters'})</h1>
+            <h1 className='chart-title'>
+              Swimming Distance Per Week (
+              {selectedUnit === 'Imperial' ? 'yards' : 'meters'})
+            </h1>
             <div className='chart-container'>
               {swimmingData && <LineChart data={swimmingData} />}
             </div>

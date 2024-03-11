@@ -22,6 +22,7 @@ const AddWorkout = ({
   settingsShown,
   setSettingsShown,
   isLoading,
+  setRefreshData,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [manualForm, setManualForm] = useState(false);
@@ -41,10 +42,6 @@ const AddWorkout = ({
     };
   }, []);
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-  };
-
   return (
     <section className='add-workout'>
       {isLoading && <LoadingModule />}
@@ -59,11 +56,13 @@ const AddWorkout = ({
         />
       )}
       <NavBar
+        setRefreshData={setRefreshData}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         logout={logout}
       />
       <Sidebar
+        setRefreshData={setRefreshData}
         selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}

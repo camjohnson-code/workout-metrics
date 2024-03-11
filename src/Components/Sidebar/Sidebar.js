@@ -17,6 +17,7 @@ const Sidebar = ({
   setSettingsShown,
   settingsShown,
   selectedTheme,
+  setRefreshData,
 }) => {
   const [imgSrc, setImgSrc] = useState('');
 
@@ -26,7 +27,7 @@ const Sidebar = ({
   }, [selectedTheme]);
 
   const handleRefresh = () => {
-    console.log('clicked');
+    setRefreshData(true);
   };
 
   const handleSettings = () => {
