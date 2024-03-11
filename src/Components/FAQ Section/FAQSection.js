@@ -72,7 +72,7 @@ const FAQSection = () => {
                 </>
               }
             >
-              Nothing-it's free! It actually costs me a little to run this.
+              Nothing-it's free!
             </AccordionItem>
           </motion.div>
 
