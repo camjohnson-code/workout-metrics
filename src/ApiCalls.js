@@ -66,8 +66,8 @@ export const getAthleteData = async () => {
   return data;
 };
 
-export const getAthleteActivities = async () => {
-  const accessToken = localStorage.getItem('stravaAccessToken');
+export const getAthleteActivities = async (userAccessToken) => {
+  const accessToken = userAccessToken || localStorage.getItem('stravaAccessToken');
   let page = 1;
   let activities = [];
 
