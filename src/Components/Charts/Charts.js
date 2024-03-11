@@ -33,6 +33,8 @@ const Charts = ({
   const [cyclingData, setCyclingData] = useState(null);
   const [runningData, setRunningData] = useState(null);
   const [swimmingData, setSwimmingData] = useState(null);
+  const [borderColor, setBorderColor] = useState(null);
+  const [backgroundColor, setBackgroundColor] = useState(null);
 
   useEffect(() => {
     // const refreshActivityData = async () => {
@@ -64,7 +66,18 @@ const Charts = ({
     calcCyclingData(activities);
     calcRunningData(activities);
     calcSwimmingData(activities);
-  }, [selectedYear]);
+  }, [selectedYear, borderColor, backgroundColor]);
+
+  useEffect(() => {
+    if (selectedTheme === 'Dark') {
+      setBorderColor('#8aa9f9');
+      setBackgroundColor('rgba(138, 169, 249, 0.25)');
+    } 
+    else {
+      setBorderColor('#ff4600');
+      setBackgroundColor('rgba(255, 70, 0, 0.25)');
+    }
+  }, [selectedTheme]);
 
   const monthOrder = [
     'January',
@@ -104,8 +117,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -137,8 +150,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -170,8 +183,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -203,8 +216,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -245,6 +258,7 @@ const Charts = ({
         logout={logout}
       />
       <Sidebar
+        selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         athlete={athlete}
@@ -281,7 +295,7 @@ const Charts = ({
             </div>
           </section>
           <section className='chart'>
-            <h1 className='chart-title'>Swimming Distance Per Week (yards)</h1>
+            <h1 className='chart-title'>Swimming Distance Per Week ({selectedUnit === 'Imperial' ? 'yards' : 'meters'})</h1>
             <div className='chart-container'>
               {swimmingData && <LineChart data={swimmingData} />}
             </div>
