@@ -77,9 +77,9 @@ export const getAthleteActivities = async (userAccessToken) => {
     );
     const data = await requests.json();
 
-    if (!data.length) break;
-
     activities = activities.concat(data);
+    
+    if (data.length < 200) break;
     page++;
   }
 
@@ -311,7 +311,7 @@ export const getUserFromAPI = async (id) => {
 };
 
 export const getActivitiesFromAPI = async (id) => {
-  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`);
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${id}`);
   const data = await response.json();
 
   return data;
