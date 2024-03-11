@@ -5,12 +5,14 @@ import {
   getAthleteData,
   getAthleteActivities,
   addActivitiesToAPI,
+  getActivitiesFromAPI,
 } from '../../ApiCalls';
 import Lottie from 'lottie-react';
 import LoadingAnimation from '../../Animations/loading.json';
 
 const LoadingPage = ({
   setAthlete,
+  athlete,
   setRecentActivity,
   setActivities,
   getStreak,
