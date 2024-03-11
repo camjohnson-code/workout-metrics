@@ -235,7 +235,8 @@ const App = () => {
     );
       console.log('got activities from Strava: ', updatedActivities);
 
-    const oldActivities = await getActivitiesFromAPI(athlete.id);
+      const oldActivitiesResponse = await getActivitiesFromAPI(athlete.id);
+      const oldActivities = oldActivitiesResponse.data;
     console.log('got activities from API: ', oldActivities);
 
     const newActivities = updatedActivities.filter(
@@ -245,7 +246,7 @@ const App = () => {
         )
     );
     console.log('new activities: ', newActivities);
-    
+
     await addActivitiesToAPI(newActivities);
     await setActivities(updatedActivities);
     setIsLoading(false);
