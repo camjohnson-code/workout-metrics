@@ -259,7 +259,7 @@ const Stats = ({
     new LineLayer({
       id: 'line-layer',
       data: lineLayer,
-      getColor: () => [138, 169, 249],
+      getColor: () => selectedTheme === 'Dark' ? [138, 169, 249] : [255, 70, 0],
       opacity: 1,
     }),
   ];
@@ -524,7 +524,7 @@ const Stats = ({
                     mapboxAccessToken={
                       process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
                     }
-                    mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
+                    mapStyle={selectedTheme === 'Dark' ? process.env.REACT_APP_MAPBOX_STYLE_DARK : process.env.REACT_APP_MAPBOX_STYLE_LIGHT}
                     attributionControl={false}
                   />
                 </DeckGL>
