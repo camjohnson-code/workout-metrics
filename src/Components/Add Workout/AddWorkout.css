@@ -21,13 +21,13 @@
 }
 
 .upload-section {
-  background-color: #171a26;
+  background-color: var(--background-color);
   width: 80vw;
   min-height: 100vh;
   margin-left: 20vw;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  color: var(--color);
 }
 
 .upload-title {
@@ -36,18 +36,18 @@
 }
 
 .upload-subtitle {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--subtitle);
   font-size: 16px;
 }
 
 .manual-form label,
 .submit-button {
   font-size: 16px;
-  color: #fff;
+  color: var(--color);
 }
 
 .submit-button {
-  background-color: #355be5;
+  background-color: var(--ok-button);
   font-weight: 700;
   border: none;
   border-radius: 10px;
@@ -58,7 +58,7 @@
 
 .submit-button:disabled {
   cursor: not-allowed;
-  background-color: #171a26;
+  background-color: var(--background-color);
 }
 
 /* media queries */

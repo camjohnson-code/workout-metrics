@@ -5,7 +5,7 @@
 
 .dashboard {
   width: 80vw;
-  background-color: #171a26;
+  background-color: var(--background-color);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -48,10 +48,10 @@
 }
 
 .cell {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border: var(--border);
+  box-shadow: var(--box-shadow);
   border-radius: 10px;
-  color: #fff;
+  color: var(--color);
   padding: 20px;
   position: relative;
   display: flex;
@@ -83,7 +83,7 @@
 .cell-subtitle,
 .unit {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--subtitle);
 }
 
 .unit {
@@ -105,7 +105,7 @@
 }
 
 .view-link {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--subtitle);
   display: flex;
   align-items: center;
   z-index: 9;
@@ -127,23 +127,23 @@
 .calendar,
 .relative-effort-same,
 .weather {
-  color: #609bf1;
+  color: var(--blue);
 }
 
 .activity,
 .quote-icon,
 .relative-effort-up {
-  color: #77ba4b;
+  color: var(--green);
 }
 
 .achievements,
 .streak {
-  color: #dfc572;
+  color: var(--yellow);
 }
 
 .longest-activity,
 .relative-effort-down {
-  color: #db6975;
+  color: var(--red);
 }
 
 .deckgl-container {

@@ -1,5 +1,5 @@
 .card {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: var(--border);
   width: 200px;
   height: 200px;
   border-radius: 10px;
@@ -11,7 +11,7 @@
   padding: 10px;
   margin: 10px;
   position: relative;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--box-shadow);
 }
 
 .card-info,
@@ -29,13 +29,13 @@
 
 .card-title {
   font-weight: 700;
-  color: #fff;
+  color: var(--color);
   max-width: 150px;
 }
 
 .card-info {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--subtitle);
   width: 100%;
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  color: #fff;
+  color: var(--color);
   height: 20px;
   width: auto;
   cursor: pointer;

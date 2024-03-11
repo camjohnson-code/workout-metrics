@@ -1,6 +1,6 @@
 .manual-form {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: #0f1119;
+  border: var(--border);
+  background-color: var(--sidebar-background-color);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
   justify-content: center;
   align-items: center;
   margin: 20px 0;
-  box-shadow: 6px 7px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--box-shadow);
 }
 
 .manual-upload-instruction {
@@ -35,10 +35,10 @@
 
 .manual-form-input {
   border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: var(--border);
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
-  background-color: #171a26;
+  color: var(--subtitle);
+  background-color: var(--background-color);
   width: 75px;
   height: 25px;
   padding-left: 10px;
