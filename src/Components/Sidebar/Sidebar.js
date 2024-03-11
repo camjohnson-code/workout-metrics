@@ -1,11 +1,13 @@
 import './Sidebar.css';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { IoMdHome, IoIosRefresh, IoMdSettings } from 'react-icons/io';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
 import { FaArrowTrendUp, FaChartSimple } from 'react-icons/fa6';
 import { TbLogout2 } from 'react-icons/tb';
+import darkLogo from '../../Images/api_logo_pwrdBy_strava_horiz_white.png';
+import lightLogo from '../../Images/api_logo_pwrdBy_strava_horiz_light.png';
 import PropTypes from 'prop-types';
 
 const Sidebar = ({
@@ -16,6 +18,13 @@ const Sidebar = ({
   settingsShown,
   selectedTheme,
 }) => {
+  const [imgSrc, setImgSrc] = useState('');
+
+  useEffect(() => {
+    if (selectedTheme === 'Dark') setImgSrc(darkLogo);
+    else setImgSrc(lightLogo);
+  }, [selectedTheme]);
+
   const handleRefresh = () => {
     console.log('clicked');
   };
@@ -31,7 +40,7 @@ const Sidebar = ({
         to={`https://www.strava.com/athletes/${athlete?.id}`}
         className='sidebar-header'
       >
-        <img src={`${athlete?.profile}`} className='profile-photo' />
+        <img src={`${athlete?.profile}`} className='profile-photo' alt='Profile photo' />
         <h1 className='user-name'>
           {athlete?.firstname} {athlete?.lastname}
         </h1>
@@ -74,7 +83,7 @@ const Sidebar = ({
         </NavLink>
         <img
           className='sidebar-strava-power-btn'
-          src={selectedTheme === 'Dark' ? require('../../Images/api_logo_pwrdBy_strava_horiz_white.png') : require('../../Images/api_logo_pwrdBy_strava_horiz_light.png')}
+          src={imgSrc}
           alt='Powered by Strava'
         />
         <p className='sidebar-copyright'>© {year} Cameron Johnson</p>
