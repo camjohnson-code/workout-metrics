@@ -14,7 +14,7 @@ const FeaturesSection = () => {
       <section ref={ref} className='features-images'>
         <motion.img
           className='img-1'
-          src={require('../../Images/chart.png')}
+          src={require('../../Images/charts.png')}
           initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -200 }}
           transition={{ duration: 1, ease: [0.17, 0.59, 0.24, 0.99], delay: 0.2 }}
@@ -22,7 +22,7 @@ const FeaturesSection = () => {
         />
         <motion.img
           className='img-2'
-          src={require('../../Images/shahadat-rahman-BfrQnKBulYQ-unsplash.jpg')}
+          src={require('../../Images/hall-of-fame.png')}
           initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -200 }}
           transition={{
@@ -107,8 +107,7 @@ const FeaturesSection = () => {
           >
             <FaCheckCircle className='check' />
             <p>
-              <span className='bold-text'>Easy share</span> - Showcase your
-              achievements easily
+              <span className='bold-text'>Hall of Fame</span> - Favorite activities you're proud of
             </p>
           </motion.li>
         </ul>
