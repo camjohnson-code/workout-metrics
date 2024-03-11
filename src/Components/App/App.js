@@ -20,6 +20,7 @@ import {
   addQuoteToAPI,
 } from '../../ApiCalls';
 import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
+import '../../themes.css'
 
 const App = () => {
   const year = new Date().getFullYear();
@@ -109,6 +110,10 @@ const App = () => {
       ? JSON.parse(savedLineLayer)
       : [{ sourcePosition: [0, 0], targetPosition: [0, 0] }];
   });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', selectedTheme);
+  }, [selectedTheme]);
 
   useEffect(() => {
     localStorage.setItem('activities', JSON.stringify(activities));
@@ -536,7 +541,7 @@ const App = () => {
         <Route
           path='/hall-of-fame'
           element={
-            isLoggedIn ? (
+           isLoggedIn ? (
               <HallOfFame
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
@@ -554,7 +559,7 @@ const App = () => {
                 year={year}
                 logout={logout}
               />
-            ) : (
+           ) : (
               <NotLoggedInPage />
             )
           }
