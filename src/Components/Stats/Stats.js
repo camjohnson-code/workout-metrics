@@ -66,6 +66,7 @@ const Stats = ({
   const [kudos, setKudos] = useState(0);
   const [maxSpeed, setMaxSpeed] = useState(0);
   const [maxSpeedActivityId, setMaxSpeedActivityId] = useState('');
+  const [layerColor, setLayerColor] = useState([]);
 
   useEffect(() => {
     // const refreshActivityData = async () => {
@@ -109,6 +110,11 @@ const Stats = ({
   useEffect(() => {
     calcMtEverests();
   }, [elevationGain]);
+
+  useEffect(() => {
+    if (selectedTheme === 'Dark') setLayerColor([138, 169, 249]);
+    else setLayerColor([255, 70, 0]);
+  }, [selectedTheme]);
 
   const Cell = ({ className, children }) => {
     return <section className={className}>{children}</section>;
@@ -259,7 +265,7 @@ const Stats = ({
     new LineLayer({
       id: 'line-layer',
       data: lineLayer,
-      getColor: () => selectedTheme === 'Dark' ? [138, 169, 249] : [255, 70, 0],
+      getColor: layerColor,
       opacity: 1,
     }),
   ];
@@ -327,11 +333,16 @@ const Stats = ({
     let elevation;
 
     if (selectedYear === 'all-time')
-      elevation = activities
-        .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
+      elevation = activities.reduce(
+        (acc, workout) => acc + workout.total_elevation_gain,
+        0
+      );
     else
       elevation = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
 
     setElevationGain(elevation);
@@ -347,11 +358,13 @@ const Stats = ({
     let distance;
 
     if (selectedYear === 'all-time')
-      distance = activities
-        .reduce((acc, workout) => acc + workout.distance, 0);
+      distance = activities.reduce((acc, workout) => acc + workout.distance, 0);
     else
       distance = activities
-        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+        .filter(
+          (workout) =>
+            workout.start_date.slice(0, 4) === selectedYear.toString()
+        )
         .reduce((acc, workout) => acc + workout.distance, 0);
 
     setDistance(Math.round(distance));
@@ -378,11 +391,15 @@ const Stats = ({
 
     if (activities.length) {
       if (selectedYear === 'all-time')
-        maxSpeedActivity = activities
-          .sort((a, b) => b.max_speed - a.max_speed)[0];
+        maxSpeedActivity = activities.sort(
+          (a, b) => b.max_speed - a.max_speed
+        )[0];
       else
         maxSpeedActivity = activities
-          .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+          .filter(
+            (workout) =>
+              workout.start_date.slice(0, 4) === selectedYear.toString()
+          )
           .sort((a, b) => b.max_speed - a.max_speed)[0];
 
       const maxSpeedInMetersPerSecond = maxSpeedActivity.max_speed;
@@ -424,6 +441,7 @@ const Stats = ({
         logout={logout}
       />
       <Sidebar
+        selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         athlete={athlete}
@@ -504,15 +522,14 @@ const Stats = ({
             <IoMdStopwatch className='cell-icon longest-activity-stat' />
             {longestActivity.moving_time ? (
               <p className='cell-main'>
-                {Math.floor(longestActivity.moving_time / 3600)}
-                {' '}<span className='unit'>hr</span>{' '}
-                {Math.floor((longestActivity.moving_time % 3600) / 60)}
-                {' '}<span className='unit'>min</span>
+                {Math.floor(longestActivity.moving_time / 3600)}{' '}
+                <span className='unit'>hr</span>{' '}
+                {Math.floor((longestActivity.moving_time % 3600) / 60)}{' '}
+                <span className='unit'>min</span>
               </p>
             ) : (
               <p></p>
             )}
-
             <div className='deckgl-container'>
               {longestActivity?.map?.summary_polyline ? (
                 <DeckGL
@@ -524,17 +541,19 @@ const Stats = ({
                     mapboxAccessToken={
                       process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
                     }
-                    mapStyle={selectedTheme === 'Dark' ? process.env.REACT_APP_MAPBOX_STYLE_DARK : process.env.REACT_APP_MAPBOX_STYLE_LIGHT}
+                    mapStyle={
+                      selectedTheme === 'Dark'
+                        ? process.env.REACT_APP_MAPBOX_STYLE_DARK
+                        : process.env.REACT_APP_MAPBOX_STYLE_LIGHT
+                    }
                     attributionControl={false}
                   />
                 </DeckGL>
               ) : (
-                <p className='cell-main'>
-                  Your longest activity had no gps data!
-                </p>
+                <p>Your longest activity had no gps data!</p>
               )}
             </div>
-            {longestActivity?.map?.summary_polyline && (
+            {longestActivity?.map?.summary_polyline ? (
               <Link
                 target='#'
                 to={`https://www.strava.com/activities/${longestActivity.id}`}
@@ -542,14 +561,16 @@ const Stats = ({
               >
                 View on Strava <CiShare1 className='view-icon' />
               </Link>
+            ) : (
+              <p></p>
             )}
           </Cell>
           <Cell className='cell stats-cell-5'>
             <h1 className='cell-heading'>Calories Burned</h1>
             <FaFire className='cell-icon calories' />
             <p className='cell-main'>
-              {caloriesBurned.toLocaleString()}
-              {' '}<span className='unit'>kcal</span>
+              {caloriesBurned.toLocaleString()}{' '}
+              <span className='unit'>kcal</span>
             </p>
             <p className='cell-subtitle'>{`That's ${Math.round(
               Number(caloriesBurned) / 285
@@ -559,8 +580,12 @@ const Stats = ({
             <h1 className='cell-heading'>Distance</h1>
             <LuBanana className='cell-icon banana' />
             <p className='cell-main'>
-              {selectedUnit === 'Imperial' ? Math.round(distance * 0.000621371).toLocaleString() : Math.round(distance * 0.001).toLocaleString()}
-              {' '}<span className='unit'>{selectedUnit === 'Imperial' ? 'mi' : 'km'}</span>
+              {selectedUnit === 'Imperial'
+                ? Math.round(distance * 0.000621371).toLocaleString()
+                : Math.round(distance * 0.001).toLocaleString()}{' '}
+              <span className='unit'>
+                {selectedUnit === 'Imperial' ? 'mi' : 'km'}
+              </span>
             </p>
             <p className='cell-subtitle'>{`That's about ${Math.round(
               (distance * 63360) / 7
@@ -570,8 +595,12 @@ const Stats = ({
             <h1 className='cell-heading'>Elevation Gain</h1>
             <FaMountain className='cell-icon elevation-gain' />
             <p className='cell-main'>
-            {selectedUnit === 'Imperial' ? Math.round(elevationGain * 3.28084).toLocaleString() : Math.round(elevationGain).toLocaleString()}
-            {' '}<span className='unit'>{selectedUnit === 'Imperial' ? 'ft' : 'm'}</span>
+              {selectedUnit === 'Imperial'
+                ? Math.round(elevationGain * 3.28084).toLocaleString()
+                : Math.round(elevationGain).toLocaleString()}{' '}
+              <span className='unit'>
+                {selectedUnit === 'Imperial' ? 'ft' : 'm'}
+              </span>
             </p>
             <p className='cell-subtitle'>{`That's about ${mtEverests} Mt. Everests`}</p>
           </Cell>
@@ -579,8 +608,7 @@ const Stats = ({
             <h1 className='cell-heading'>Kudos Received</h1>
             <FaThumbsUp className='cell-icon kudos' />
             <p className='cell-main'>
-              {kudos.toLocaleString()}
-              {' '}<span className='unit'>kudos</span>
+              {kudos.toLocaleString()} <span className='unit'>kudos</span>
             </p>
             <p className='cell-subtitle'>
               {kudos ? 'Way to inspire others!' : ''}
@@ -591,13 +619,17 @@ const Stats = ({
             <FaFighterJet className='cell-icon max-speed' />
             {maxSpeed ? (
               <p className='cell-main'>
-                {selectedUnit === 'Imperial' ? (maxSpeed * 2.23694).toFixed(1) : (maxSpeed * 3.6).toFixed(1)}
-                 {' '}<span className='unit'>{selectedUnit === 'Imperial' ? 'mph' : 'kph'}</span>
+                {selectedUnit === 'Imperial'
+                  ? (maxSpeed * 2.23694).toFixed(1)
+                  : (maxSpeed * 3.6).toFixed(1)}{' '}
+                <span className='unit'>
+                  {selectedUnit === 'Imperial' ? 'mph' : 'kph'}
+                </span>
               </p>
             ) : (
-              <p className='cell-main'>No GPS data</p>
+              <p>No GPS data</p>
             )}
-            {maxSpeed !== 0 && (
+            {maxSpeed !== 0 ? (
               <Link
                 target='#'
                 to={`https://www.strava.com/activities/${maxSpeedActivityId}`}
@@ -605,6 +637,8 @@ const Stats = ({
               >
                 View on Strava <CiShare1 className='view-icon' />
               </Link>
+            ) : (
+              <p></p>
             )}
           </Cell>
         </section>

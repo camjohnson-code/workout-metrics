@@ -38,6 +38,8 @@ const Heatmap = ({
   const [loading, setLoading] = useState(true);
   const [polylines, setPolylines] = useState([]);
   const [lineCoordinates, setLineCoordinates] = useState([]);
+  const [layerColor, setLayerColor] = useState([]);
+  const [blendFunc, setBlendFunc] = useState([]);
 
   useEffect(() => {
     // setIsLoading(true);
@@ -89,15 +91,24 @@ const Heatmap = ({
     setLoading(false);
   }, [polylines]);
 
+  useEffect(() => {
+    if (selectedTheme === 'Dark') {
+      setBlendFunc([GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE]);
+      setLayerColor([138, 169, 249]);
+    } else {
+      setBlendFunc([GL.ZERO, GL.DST_COLOR, GL.ZERO, GL.ONE]);
+      setLayerColor([255, 70, 0]);
+    }
+  }, [selectedTheme]);
+
   const formatCoordinatesPairs = (array) => {
     const nestedCoordinatePairs = array.map((coordinatesArray, index) =>
       coordinatesArray.map((coordinates, index) => {
-        if (coordinatesArray[index + 1]) {
+        if (coordinatesArray[index + 1])
           return {
             sourcePosition: coordinates,
             targetPosition: coordinatesArray[index + 1],
           };
-        }
       })
     );
 
@@ -116,7 +127,7 @@ const Heatmap = ({
     new LineLayer({
       id: 'line-layer',
       data: lineCoordinates,
-      getColor: () => selectedTheme === 'Dark' ? [138, 169, 249] : [255, 70, 0],
+      getColor: layerColor,
       opacity: 0.05,
     }),
   ];
@@ -140,6 +151,7 @@ const Heatmap = ({
         logout={logout}
       />
       <Sidebar
+        selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         logout={logout}
@@ -161,13 +173,17 @@ const Heatmap = ({
             layers={layers}
             parameters={{
               blend: true,
-              blendFunc: [GL.SRC_ALPHA, GL.ONE, GL.ONE_MINUS_DST_ALPHA, GL.ONE],
+              blendFunc: blendFunc,
               blendEquation: GL.FUNC_ADD,
             }}
           >
             <Map
               mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-              mapStyle={selectedTheme === 'Dark' ? process.env.REACT_APP_MAPBOX_STYLE_DARK : process.env.REACT_APP_MAPBOX_STYLE_LIGHT}
+              mapStyle={
+                selectedTheme === 'Dark'
+                  ? process.env.REACT_APP_MAPBOX_STYLE_DARK
+                  : process.env.REACT_APP_MAPBOX_STYLE_LIGHT
+              }
               attributionControl={false}
             />
           </DeckGL>
