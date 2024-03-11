@@ -215,12 +215,10 @@ const App = () => {
     setIsLoading(true);
 
     const user = await getUserFromAPI(athlete.id);
-    console.log('got user from API: ', user);
 
     const newAccessToken = await refreshAccessToken(
       user?.data?.stravaRefreshToken
     );
-    console.log('got new access token: ', newAccessToken);
 
     await addAthleteToAPI(
       user?.data,
@@ -228,16 +226,13 @@ const App = () => {
       user?.data?.stravaRefreshToken,
       newAccessToken?.expires_at
     );
-      console.log('added athlete to API: ', user?.data);
 
     const updatedActivities = await getAthleteActivities(
       newAccessToken?.access_token
     );
-      console.log('got activities from Strava: ', updatedActivities);
 
-      const oldActivitiesResponse = await getActivitiesFromAPI(athlete.id);
-      const oldActivities = oldActivitiesResponse.data;
-    console.log('got activities from API: ', oldActivities);
+    const oldActivitiesResponse = await getActivitiesFromAPI(athlete.id);
+    const oldActivities = oldActivitiesResponse.data;
 
     const newActivities = updatedActivities.filter(
       (updatedActivity) =>
@@ -245,7 +240,6 @@ const App = () => {
           (oldActivity) => oldActivity.id === updatedActivity.id
         )
     );
-    console.log('new activities: ', newActivities);
 
     await addActivitiesToAPI(newActivities);
     await setActivities(updatedActivities);
