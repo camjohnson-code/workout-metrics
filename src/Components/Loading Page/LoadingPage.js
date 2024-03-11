@@ -27,7 +27,7 @@ const LoadingPage = ({
       setAthlete(data);
     });
     await getAthleteActivities().then(async (activities) => {
-      await addActivitiesToAPI(activities);
+      await addNewActivities(activities);
       setActivities(activities);
       getStreak(activities);
       getLongestYearActivity(activities);
@@ -49,6 +49,23 @@ const LoadingPage = ({
     if (!isLoggedIn && isAuthorized) fetchData();
     else navigate('/dashboard');
   }, []);
+  
+
+  const addNewActivities = async (activities) => {
+    const updatedActivities = activities;
+
+    const oldActivitiesResponse = await getActivitiesFromAPI(athlete.id);
+    const oldActivities = oldActivitiesResponse.data;
+
+    const newActivities = updatedActivities.filter(
+      (updatedActivity) =>
+        !oldActivities.some(
+          (oldActivity) => oldActivity.id === updatedActivity.id
+        )
+    );
+
+    if (newActivities.length) await addActivitiesToAPI(newActivities);
+  }
 
   return (
     <section className='loading-page'>
