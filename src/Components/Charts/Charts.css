@@ -1,13 +1,13 @@
 .charts {
   display: flex;
-  color: white;
+  color: var(--color);
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 }
 
 .charts-content {
   width: 80vw;
-  background-color: #171a26;
+  background-color: var(--background-color);
   display: flex;
   flex-direction: column;
   margin-left: 20vw;

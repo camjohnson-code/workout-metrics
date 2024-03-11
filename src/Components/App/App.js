@@ -18,14 +18,25 @@ import {
   getQuote,
   fetchQuote,
   addQuoteToAPI,
+  getUserFromAPI,
+  refreshAccessToken,
+  addAthleteToAPI,
+  getAthleteActivities,
+  addActivitiesToAPI,
+  getActivitiesFromAPI,
 } from '../../ApiCalls';
 import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
+import '../../themes.css';
 
 const App = () => {
   const year = new Date().getFullYear();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [refreshData, setRefreshData] = useState(false);
+  const [settingsShown, setSettingsShown] = useState(false);
+  const [selectedUnit, setSelectedUnit] = useState('Imperial');
+  const [selectedTheme, setSelectedTheme] = useState('Dark');
   const [athlete, setAthlete] = useState(() => {
     const savedAthlete = localStorage.getItem('athlete');
     return savedAthlete
@@ -106,6 +117,14 @@ const App = () => {
       ? JSON.parse(savedLineLayer)
       : [{ sourcePosition: [0, 0], targetPosition: [0, 0] }];
   });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', selectedTheme);
+  }, [selectedTheme]);
+
+  useEffect(() => {
+    if (refreshData) refreshActivityData();
+  }, [refreshData]);
 
   useEffect(() => {
     localStorage.setItem('activities', JSON.stringify(activities));
@@ -190,6 +209,42 @@ const App = () => {
   const authenticate = () => {
     setIsAuthorized(true);
     localStorage.setItem('isAuthorized', 'true');
+  };
+
+  const refreshActivityData = async () => {
+    setIsLoading(true);
+
+    const user = await getUserFromAPI(athlete.id);
+
+    const newAccessToken = await refreshAccessToken(
+      user?.data?.stravaRefreshToken
+    );
+
+    await addAthleteToAPI(
+      user?.data,
+      newAccessToken?.access_token,
+      user?.data?.stravaRefreshToken,
+      newAccessToken?.expires_at
+    );
+
+    const updatedActivities = await getAthleteActivities(
+      newAccessToken?.access_token
+    );
+
+    const oldActivitiesResponse = await getActivitiesFromAPI(athlete.id);
+    const oldActivities = oldActivitiesResponse.data;
+
+    const newActivities = updatedActivities.filter(
+      (updatedActivity) =>
+        !oldActivities.some(
+          (oldActivity) => oldActivity.id === updatedActivity.id
+        )
+    );
+
+    await addActivitiesToAPI(newActivities);
+    await setActivities(updatedActivities);
+    setIsLoading(false);
+    setRefreshData(false);
   };
 
   const numAchievementsYTD = activities
@@ -326,12 +381,20 @@ const App = () => {
   };
 
   const formatDate = (dateString) => {
+    let formattedDate;
     const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    selectedUnit === 'Imperial'
+      ? (formattedDate = date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }))
+      : (formattedDate = date.toLocaleDateString('en-GB', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }));
+
     return formattedDate;
   };
 
@@ -417,9 +480,14 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Dashboard
-                setActivities={setActivities}
+                setRefreshData={setRefreshData}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
                 isLoading={isLoading}
-                setIsLoading={setIsLoading}
                 convertMtoMiles={convertMtoMiles}
                 lineLayer={lineLayer}
                 effortUp={effortUp}
@@ -446,6 +514,13 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Charts
+                setRefreshData={setRefreshData}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
                 setActivities={setActivities}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
@@ -465,6 +540,13 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Stats
+                setRefreshData={setRefreshData}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
                 setActivities={setActivities}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
@@ -484,6 +566,13 @@ const App = () => {
           element={
             isLoggedIn ? (
               <Heatmap
+                setRefreshData={setRefreshData}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
                 setActivities={setActivities}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
@@ -503,6 +592,13 @@ const App = () => {
           element={
             isLoggedIn ? (
               <HallOfFame
+                setRefreshData={setRefreshData}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
                 setActivities={setActivities}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
@@ -523,6 +619,14 @@ const App = () => {
           element={
             isLoggedIn ? (
               <AddWorkout
+                setRefreshData={setRefreshData}
+                isLoading={isLoading}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+                selectedTheme={selectedTheme}
+                setSelectedTheme={setSelectedTheme}
+                settingsShown={settingsShown}
+                setSettingsShown={setSettingsShown}
                 setActivities={setActivities}
                 athlete={athlete}
                 year={year}

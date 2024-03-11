@@ -2,6 +2,7 @@ import './HallOfFame.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import { useState, useEffect } from 'react';
 import { fetchUserActivities } from '../../ApiCalls';
 import Card from '../Card/Card';
@@ -11,12 +12,6 @@ import {
   getHallOfFameActivities,
 } from '../../ApiCalls';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  refreshAccessToken,
-  addAthleteToAPI,
-  getAthleteActivities,
-} from '../../ApiCalls';
 
 const HallOfFame = ({
   year,
@@ -26,7 +21,13 @@ const HallOfFame = ({
   formatDate,
   logout,
   isLoading,
-  setIsLoading,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
+  setRefreshData,
 }) => {
   const [favorites, setFavorites] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -34,31 +35,6 @@ const HallOfFame = ({
   const [activityType, setActivityType] = useState('all');
   const [hasSearched, setHasSearched] = useState(false);
   const isValidForm = !keywords;
-
-  useEffect(() => {
-    const refreshActivityData = async () => {
-      setIsLoading(true);
-      const user = await getUserFromAPI(athlete?.id);
-
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
-
-    refreshActivityData();
-  }, []);
 
   useEffect(() => {
     getHallOfFameActivities(athlete).then((favorites) =>
@@ -113,13 +89,15 @@ const HallOfFame = ({
     }
   };
 
-  const cards = activities.map((activity, index) => {
+  const cards = activities.map((activity) => {
     const isFavorite = favorites.some(
       (favorite) => favorite?.id === activity?.id
     );
 
     return (
       <Card
+        selectedUnit={selectedUnit}
+        selectedTheme={selectedTheme}
         formatDate={formatDate}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
@@ -131,9 +109,11 @@ const HallOfFame = ({
     );
   });
 
-  const favoriteCards = favorites.map((activity, index) => {
+  const favoriteCards = favorites.map((activity) => {
     return (
       <Card
+        selectedUnit={selectedUnit}
+        selectedTheme={selectedTheme}
         formatDate={formatDate}
         convertSecondsToHMS={convertSecondsToHMS}
         convertMtoMiles={convertMtoMiles}
@@ -148,8 +128,31 @@ const HallOfFame = ({
   return (
     <section className='hall-of-fame'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        setRefreshData={setRefreshData}
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        setRefreshData={setRefreshData}
+        selectedTheme={selectedTheme}
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+        athlete={athlete}
+        year={year}
+      ></Sidebar>
       <section className='hall-of-fame-section'>
         <h1 className='hall-of-fame-title'>
           {athlete?.firstname}'s Hall of Fame
@@ -169,7 +172,6 @@ const HallOfFame = ({
               onChange={(e) => setKeywords(e.target.value)}
             />
           </section>
-
           <section className='selector'>
             <label htmlFor='activity-type'>Activity Type:</label>
             <select

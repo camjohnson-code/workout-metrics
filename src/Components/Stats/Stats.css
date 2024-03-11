@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   width: 100vw;
-  background-color: #171a26;
+  background-color: var(--background-color);
   margin-left: 20vw;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .filter-title {
-  color: #fff;
+  color: var(--color);
   font-family: Inter, sans-serif;
   font-size: 18px;
   font-weight: 500;
@@ -38,10 +38,10 @@
 }
 
 .year-select {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: var(--border);
   border-radius: 10px;
   background-color: transparent;
-  color: #fff;
+  color: var(--color);
   padding: 5px;
   margin-left: 10px;
 }
@@ -84,23 +84,23 @@
 
 .activities,
 .max-speed {
-  color: #609bf1;
+  color: var(--blue);
 }
 
 .fav-activity,
 .kudos,
 .longest-activity-stat {
-  color: #77ba4b;
+  color: var(--green);
 }
 
 .achievements,
 .banana {
-  color: #dfc572;
+  color: var(--yellow);
 }
 
 .calories,
 .elevation-gain {
-  color: #db6975;
+  color: var(--red);
 }
 
 /* media queries */

@@ -1,9 +1,10 @@
 import './Dashboard.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import {
   FaCalendarDays,
   FaArrowTrendUp,
@@ -19,12 +20,6 @@ import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  refreshAccessToken,
-  addAthleteToAPI,
-  getAthleteActivities,
-} from '../../ApiCalls';
 
 const Dashboard = ({
   year,
@@ -41,37 +36,29 @@ const Dashboard = ({
   convertMtoMiles,
   logout,
   isLoading,
-  setIsLoading,
-  setActivities,
+  settingsShown,
+  setSettingsShown,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  setRefreshData,
 }) => {
+  const [layerColor, setLayerColor] = useState([]);
+
   useEffect(() => {
-    const refreshActivityData = async () => {
-      setIsLoading(true);
-      const user = await getUserFromAPI(athlete.id);
-
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
-
-    refreshActivityData();
-  }, []);
+    if (selectedTheme === 'Dark') setLayerColor([138, 169, 249]);
+    else setLayerColor([255, 70, 0]);
+  }, [selectedTheme]);
 
   const recentActivityType = recentActivity?.type;
 
-  const date = new Date().toLocaleDateString('en-US', {
+  const imperialDate = new Date().toLocaleDateString('en-US', {
+    month: 'short',
+    day: '2-digit',
+  });
+
+  const metricDate = new Date().toLocaleDateString('en-GB', {
     month: 'short',
     day: '2-digit',
   });
@@ -99,7 +86,7 @@ const Dashboard = ({
     new LineLayer({
       id: 'line-layer',
       data: lineLayer,
-      getColor: () => [138, 169, 249],
+      getColor: layerColor,
       opacity: 1,
     }),
   ];
@@ -115,13 +102,38 @@ const Dashboard = ({
   return (
     <section className='dashboard-container'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar logout={logout} year={year} athlete={athlete}></Sidebar>
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        setRefreshData={setRefreshData}
+        logout={logout}
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+      />
+      <Sidebar
+        setRefreshData={setRefreshData}
+        selectedTheme={selectedTheme}
+        setSettingsShown={setSettingsShown}
+        settingsShown={settingsShown}
+        logout={logout}
+        year={year}
+        athlete={athlete}
+      ></Sidebar>
       <section className='dashboard'>
         <Cell className='cell cell-1'>
           <h1 className='cell-heading'>Date</h1>
           <FaCalendarDays className='cell-icon calendar' />
-          <p className='cell-main'>{date}</p>
+          <p className='cell-main'>
+            {selectedUnit === 'Imperial' ? imperialDate : metricDate}
+          </p>
           <p className='cell-subtitle'>{year}</p>
         </Cell>
         <Cell className='cell cell-2'>
@@ -136,9 +148,15 @@ const Dashboard = ({
             <p className='cell-main'>
               {recentActivityType === 'Swim'
                 ? convertMtoYds(recentActivity?.distance)
-                : convertMtoMiles(recentActivity?.distance)}
+                : selectedUnit === 'Imperial'
+                ? convertMtoMiles(recentActivity?.distance).toLocaleString()
+                : Math.round(recentActivity?.distance).toLocaleString()}
               <span className='unit'>
-                {recentActivityType === 'Swim' ? 'yds' : 'mi'}
+                {recentActivityType === 'Swim'
+                  ? 'yds'
+                  : selectedUnit === 'Imperial'
+                  ? 'mi'
+                  : 'm'}
               </span>
             </p>
           )}
@@ -171,8 +189,10 @@ const Dashboard = ({
           ) : (
             <p>You don't have your location set in your Strava profile!</p>
           )}
-          {athlete?.city && (
+          {athlete?.city ? (
             <p className='cell-subtitle'>{generateWeatherSubtitle()}</p>
+          ) : (
+            <p></p>
           )}
         </Cell>
         <Cell className='cell cell-5'>
@@ -215,7 +235,11 @@ const Dashboard = ({
               >
                 <Map
                   mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                  mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
+                  mapStyle={
+                    selectedTheme === 'Dark'
+                      ? process.env.REACT_APP_MAPBOX_STYLE_DARK
+                      : process.env.REACT_APP_MAPBOX_STYLE_LIGHT
+                  }
                   attributionControl={false}
                 />
               </DeckGL>

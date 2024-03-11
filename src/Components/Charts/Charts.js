@@ -2,15 +2,10 @@ import './Charts.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import { useEffect, useState } from 'react';
 import LineChart from '../Line Chart/LineChart';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  addAthleteToAPI,
-  getAthleteActivities,
-  refreshAccessToken,
-} from '../../ApiCalls';
 
 const Charts = ({
   activities,
@@ -19,60 +14,38 @@ const Charts = ({
   athlete,
   logout,
   isLoading,
-  setIsLoading,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
+  setRefreshData,
 }) => {
   const [selectedYear, setSelectedYear] = useState(year);
   const [durationData, setDurationData] = useState(null);
   const [cyclingData, setCyclingData] = useState(null);
   const [runningData, setRunningData] = useState(null);
   const [swimmingData, setSwimmingData] = useState(null);
-
-  useEffect(() => {
-    const refreshActivityData = async () => {
-      setIsLoading(true);
-      const user = await getUserFromAPI(athlete.id);
-
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
-
-    refreshActivityData();
-  }, []);
+  const [borderColor, setBorderColor] = useState(null);
+  const [backgroundColor, setBackgroundColor] = useState(null);
 
   useEffect(() => {
     calcDurationData(activities);
     calcCyclingData(activities);
     calcRunningData(activities);
     calcSwimmingData(activities);
-  }, [selectedYear]);
+  }, [selectedYear, borderColor, backgroundColor]);
 
-  const monthOrder = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  useEffect(() => {
+    if (selectedTheme === 'Dark') {
+      setBorderColor('#8aa9f9');
+      setBackgroundColor('rgba(138, 169, 249, 0.25)');
+    } else {
+      setBorderColor('#ff4600');
+      setBackgroundColor('rgba(255, 70, 0, 0.25)');
+    }
+  }, [selectedTheme]);
 
   const calcDurationData = (data) => {
     const selectedYearNumber = Number(selectedYear);
@@ -97,8 +70,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -130,8 +103,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -163,8 +136,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -180,8 +153,13 @@ const Charts = ({
       const year = date.getFullYear();
 
       if (year === selectedYearNumber && activity?.type === 'Swim') {
+        let distance;
         const week = getWeekNumber(date);
-        const distance = Math.round(activity?.distance * 1.09361);
+
+        if (selectedUnit === 'Imperial')
+          distance = Math.round(activity?.distance * 1.09361);
+        else if (selectedUnit === 'Metric')
+          distance = Math.round(activity?.distance);
 
         activitiesPerWeek[week - 1] += distance;
       }
@@ -193,8 +171,8 @@ const Charts = ({
         {
           fill: true,
           data: activitiesPerWeek,
-          borderColor: '#8aa9f9',
-          backgroundColor: 'rgba(138, 169, 249, 0.25)',
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         },
       ],
     });
@@ -219,8 +197,30 @@ const Charts = ({
   return (
     <section className='charts'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar athlete={athlete} year={year} />
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        setRefreshData={setRefreshData}
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        setRefreshData={setRefreshData}
+        selectedTheme={selectedTheme}
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        athlete={athlete}
+        year={year}
+      />
       <section className='charts-content'>
         <div className='stats-header'>
           <label className='filter-title'>Filter:</label>
@@ -252,7 +252,10 @@ const Charts = ({
             </div>
           </section>
           <section className='chart'>
-            <h1 className='chart-title'>Swimming Distance Per Week (yards)</h1>
+            <h1 className='chart-title'>
+              Swimming Distance Per Week (
+              {selectedUnit === 'Imperial' ? 'yards' : 'meters'})
+            </h1>
             <div className='chart-container'>
               {swimmingData && <LineChart data={swimmingData} />}
             </div>

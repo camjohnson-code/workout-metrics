@@ -2,6 +2,7 @@ import './Heatmap.css';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
+import SettingsModule from '../Settings Module/SettingsModule';
 import NoLocationModule from '../No Location Module/NoLocationModule';
 import { useEffect, useState } from 'react';
 import DeckGL from '@deck.gl/react';
@@ -12,12 +13,6 @@ import polyline from '@mapbox/polyline';
 import Lottie from 'lottie-react';
 import LoadingAnimation from '../../Animations/loading.json';
 import PropTypes from 'prop-types';
-import {
-  getUserFromAPI,
-  refreshAccessToken,
-  addAthleteToAPI,
-  getAthleteActivities,
-} from '../../ApiCalls';
 
 const Heatmap = ({
   year,
@@ -26,44 +21,27 @@ const Heatmap = ({
   activities,
   logout,
   isLoading,
-  setIsLoading,
+  selectedUnit,
+  setSelectedUnit,
+  selectedTheme,
+  setSelectedTheme,
+  settingsShown,
+  setSettingsShown,
+  setRefreshData,
 }) => {
   const [loading, setLoading] = useState(true);
   const [polylines, setPolylines] = useState([]);
   const [lineCoordinates, setLineCoordinates] = useState([]);
+  const [layerColor, setLayerColor] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-
     if (activities.length) {
       const polylines = activities.map(
         (activity) => activity?.map?.summary_polyline
       );
       setPolylines(polylines);
     }
-
-    const refreshActivityData = async () => {
-      const user = await getUserFromAPI(athlete.id);
-
-      if (user?.data?.tokenExpiration >= String(Date.now())) {
-        setIsLoading(false);
-      } else {
-        const newAccessToken = await refreshAccessToken(
-          user?.data?.stravaRefreshToken
-        );
-        await addAthleteToAPI(
-          user?.data,
-          newAccessToken?.access_token,
-          user?.data?.stravaRefreshToken,
-          newAccessToken?.expires_at
-        );
-        await getAthleteActivities();
-        setIsLoading(false);
-      }
-    };
-
-    refreshActivityData();
-  }, []);
+  }, [activities]);
 
   useEffect(() => {
     const encryptedPolylines = polylines.filter(Boolean);
@@ -82,15 +60,22 @@ const Heatmap = ({
     setLoading(false);
   }, [polylines]);
 
+  useEffect(() => {
+    if (selectedTheme === 'Dark') {
+      setLayerColor([138, 169, 249]);
+    } else {
+      setLayerColor([255, 70, 0]);
+    }
+  }, [selectedTheme]);
+
   const formatCoordinatesPairs = (array) => {
     const nestedCoordinatePairs = array.map((coordinatesArray, index) =>
       coordinatesArray.map((coordinates, index) => {
-        if (coordinatesArray[index + 1]) {
+        if (coordinatesArray[index + 1])
           return {
             sourcePosition: coordinates,
             targetPosition: coordinatesArray[index + 1],
           };
-        }
       })
     );
 
@@ -109,7 +94,7 @@ const Heatmap = ({
     new LineLayer({
       id: 'line-layer',
       data: lineCoordinates,
-      getColor: () => [138, 169, 249],
+      getColor: layerColor,
       opacity: 0.05,
     }),
   ];
@@ -117,8 +102,31 @@ const Heatmap = ({
   return (
     <section className='heatmap-page'>
       {isLoading && <LoadingModule />}
-      <NavBar logout={logout} />
-      <Sidebar logout={logout} athlete={athlete} year={year}></Sidebar>
+      {settingsShown && (
+        <SettingsModule
+          selectedUnit={selectedUnit}
+          selectedTheme={selectedTheme}
+          setSelectedTheme={setSelectedTheme}
+          setSelectedUnit={setSelectedUnit}
+          settingsShown={settingsShown}
+          setSettingsShown={setSettingsShown}
+        />
+      )}
+      <NavBar
+        setRefreshData={setRefreshData}
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+      />
+      <Sidebar
+        setRefreshData={setRefreshData}
+        selectedTheme={selectedTheme}
+        settingsShown={settingsShown}
+        setSettingsShown={setSettingsShown}
+        logout={logout}
+        athlete={athlete}
+        year={year}
+      ></Sidebar>
       <section className='heatmap-container'>
         {!athlete?.city && <NoLocationModule />}
         {loading && (
@@ -140,7 +148,7 @@ const Heatmap = ({
           >
             <Map
               mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-              mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
+              mapStyle={process.env.REACT_APP_MAPBOX_STYLE_DARK}
               attributionControl={false}
             />
           </DeckGL>

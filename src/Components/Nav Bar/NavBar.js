@@ -2,15 +2,23 @@ import './NavBar.css';
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { IoMdHome } from 'react-icons/io';
+import { IoMdHome, IoMdSettings, IoIosRefresh } from 'react-icons/io';
 import { IoCloseSharp } from 'react-icons/io5';
 import { FaFire, FaMedal, FaPlus } from 'react-icons/fa';
-import { FaArrowTrendUp, FaChartSimple } from "react-icons/fa6";
+import { FaArrowTrendUp, FaChartSimple } from 'react-icons/fa6';
 import { TbLogout2 } from 'react-icons/tb';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const NavBar = ({ logout }) => {
+const NavBar = ({ logout, setSettingsShown, settingsShown, setRefreshData }) => {
   const [open, setOpen] = useState(false);
+
+  const handleRefresh = () => {
+    setRefreshData(true);
+  };
+
+  const handleSettings = () => {
+    setSettingsShown(!settingsShown);
+  };
 
   return (
     <section className='mobile-nav'>
@@ -88,6 +96,22 @@ const NavBar = ({ logout }) => {
                   <FaPlus className='sidebar-icon' />
                   Add Workout
                 </NavLink>
+              </li>
+              <li>
+                <button
+                  onClick={handleRefresh}
+                  className='mobile-nav-button mobile-nav-link'
+                >
+                  <IoIosRefresh className='sidebar-icon' /> Refresh Data
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={handleSettings}
+                  className='mobile-nav-button mobile-nav-link'
+                >
+                  <IoMdSettings className='sidebar-icon' /> Settings
+                </button>
               </li>
               <li>
                 <NavLink
