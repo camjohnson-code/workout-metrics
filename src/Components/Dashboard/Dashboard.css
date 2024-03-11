@@ -170,6 +170,10 @@
 
 /* media queries */
 @media (max-width: 1005px) {
+  .cell-heading {
+    font-size: 14px;
+  }
+  
   .cell-main {
     font-size: 30px;
   }
