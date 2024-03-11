@@ -37,7 +37,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 60%;
+  height: 70%;
   width: 100%;
   z-index: 1000;
 }
@@ -68,7 +68,7 @@
 
 .active,
 .mobile-nav-link:hover {
-  background-color: var(--background-color);
+  background-color: var(--hover-color);
   color: var(--sidebar-link-color);
 }
 

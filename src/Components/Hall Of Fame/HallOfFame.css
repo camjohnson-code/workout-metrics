@@ -49,7 +49,7 @@
   height: 40px;
   margin: 10px 0;
   padding: 0 10px;
-  border: none;
+  border: var(--border);
   border-radius: 5px;
   background-color: var(--input);
   color: var(--color);

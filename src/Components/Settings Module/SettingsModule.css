@@ -53,8 +53,9 @@
 .setting-option {
   font-size: 16px;
   font-family: Inter, sans-serif;
-  color: #fff;
+  color: var(--color);
   cursor: pointer;
+  font-weight: 700;
 }
 
 .ok-button {
@@ -65,6 +66,7 @@
   background-color: var(--ok-button);
   font-weight: 700;
   max-width: 200px;
+  color: white;
 }
 
 .setting-option {
