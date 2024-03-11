@@ -64,6 +64,7 @@ const AddWorkout = ({
         logout={logout}
       />
       <Sidebar
+        selectedTheme={selectedTheme}
         settingsShown={settingsShown}
         setSettingsShown={setSettingsShown}
         logout={logout}
