@@ -67,7 +67,8 @@ export const getAthleteData = async () => {
 };
 
 export const getAthleteActivities = async (userAccessToken) => {
-  const accessToken = userAccessToken || localStorage.getItem('stravaAccessToken');
+  const accessToken =
+    userAccessToken || localStorage.getItem('stravaAccessToken');
   let page = 1;
   let activities = [];
 
@@ -78,7 +79,7 @@ export const getAthleteActivities = async (userAccessToken) => {
     const data = await requests.json();
 
     activities = activities.concat(data);
-    
+
     if (data.length < 200) break;
     page++;
   }
@@ -90,36 +91,53 @@ export const getAthleteActivities = async (userAccessToken) => {
   return activities;
 };
 
-export const addAthleteToAPI = async (athlete, accessToken, refreshToken, tokenExpiration) => {
+export const addAthleteToAPI = async (
+  athlete,
+  accessToken,
+  refreshToken,
+  tokenExpiration
+) => {
   let response = await fetch(
     `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`
   );
 
   if (response.ok) {
-    response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...athlete,
-        stravaAccessToken: accessToken,
-        tokenExpiration: tokenExpiration,
-      }),
-    });
+    response = await fetch(
+      `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...athlete,
+          stravaAccessToken: accessToken,
+          tokenExpiration: tokenExpiration,
+        }),
+      }
+    );
   } else {
-    response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...athlete,
-        stravaAccessToken: accessToken,
-        stravaRefreshToken: refreshToken,
-        tokenExpiration: tokenExpiration,
-      }),
-    });
+    response = await fetch(
+      'https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: athlete.id,
+          firstname: athlete.firstname,
+          lastname: athlete.lastname,
+          city: athlete.city,
+          state: athlete.state,
+          weight: athlete.weight || undefined,
+          profile: athlete.profile,
+          stravaAccessToken: accessToken,
+          stravaRefreshToken: refreshToken,
+          tokenExpiration: tokenExpiration,
+        }),
+      }
+    );
   }
 
   const data = await response.json();
@@ -142,20 +160,22 @@ export const addActivitiesToAPI = async (activities) => {
       achievement_count: activity.achievement_count,
     };
 
-    const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newActivity),
-    });
+    const response = await fetch(
+      'https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newActivity),
+      }
+    );
 
     if (!response.ok) {
       console.log('Response status:', response.status);
     }
     const data = await response.json();
   }
-
 };
 
 export const refreshAccessToken = async (refreshToken) => {
@@ -183,7 +203,7 @@ export const refreshAccessToken = async (refreshToken) => {
   localStorage.setItem('tokenExpiration', data.expires_at);
 
   return data;
-}
+};
 
 export const getWeather = async (coordinates) => {
   const [longitude, latitude] = coordinates;
@@ -202,7 +222,9 @@ export const getWeather = async (coordinates) => {
 };
 
 export const getQuote = async () => {
-  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote');
+  const response = await fetch(
+    'https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote'
+  );
   const data = await response.json();
   return data;
 };
@@ -218,13 +240,16 @@ export const fetchQuote = async (url) => {
 };
 
 export const addQuoteToAPI = async (quote) => {
-  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(quote),
-  });
+  const response = await fetch(
+    'https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(quote),
+    }
+  );
 
   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   else {
@@ -271,13 +296,16 @@ export const getHallOfFameActivities = async (athlete) => {
 
 export const addFavoriteToHallOfFame = async (favorite) => {
   try {
-    const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(favorite),
-    });
+    const response = await fetch(
+      'https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(favorite),
+      }
+    );
 
     if (!response.ok) {
       throw new Error('Error adding favorite to Hall of Fame');
@@ -304,18 +332,22 @@ export const removeFavoriteFromHallOfFame = async (activityId) => {
 };
 
 export const getUserFromAPI = async (id) => {
-  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`);
+  const response = await fetch(
+    `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`
+  );
   const data = await response.json();
 
   return data;
 };
 
 export const getActivitiesFromAPI = async (id) => {
-  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${id}`);
+  const response = await fetch(
+    `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${id}`
+  );
   const data = await response.json();
 
   return data;
-}
+};
 
 export const uploadFile = async (file, accessToken) => {
   const formData = new FormData();
