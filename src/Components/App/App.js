@@ -22,6 +22,8 @@ import {
   refreshAccessToken,
   addAthleteToAPI,
   getAthleteActivities,
+  addActivitiesToAPI,
+  getActivitiesFromAPI,
 } from '../../ApiCalls';
 import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
 import '../../themes.css';
@@ -229,6 +231,16 @@ const App = () => {
       newAccessToken?.access_token
     );
 
+    const oldActivities = await getActivitiesFromAPI(athlete.id);
+
+    const newActivities = updatedActivities.filter(
+      (updatedActivity) =>
+        !oldActivities.some(
+          (oldActivity) => oldActivity.id === updatedActivity.id
+        )
+    );
+
+    await addActivitiesToAPI(newActivities);
     await setActivities(updatedActivities);
     setIsLoading(false);
     setRefreshData(false);
