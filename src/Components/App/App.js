@@ -78,6 +78,18 @@ const App = () => {
   useEffect(() => {
     fetchUser();
     checkQuote();
+    const fetchLineLayer = async () => {
+      const activities = await getUserActivitiesFromAPI(athlete.id);
+      const longestActivity = await getLongestYearActivity(activities);
+
+      if (longestActivity && longestActivity.map && longestActivity.map.summary_polyline) {
+        const polylines = await getPolylines(longestActivity);
+        const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
+        setLineLayer(lineLayerCoordinates);
+      }
+    };
+
+    fetchLineLayer();
   }, []);
 
   useEffect(() => {
@@ -95,44 +107,45 @@ const App = () => {
       getWeather(homeCoordinates).then((weather) => setWeather(weather));
   }, [homeCoordinates]);
 
-  useEffect(() => {
-    setAchievementsYTD(numAchievementsYTD);
+useEffect(() => {
+  setAchievementsYTD(numAchievementsYTD);
 
-    const effort = analyzeRelativeEffort(activities);
-    setEffortUp(effort);
+  const effort = analyzeRelativeEffort(activities);
+  setEffortUp(effort);
 
-    if (activities.length) {
-      const sortedActivities = activities.sort(
-        (a, b) => new Date(b.start_date) - new Date(a.start_date)
-      );
-      setRecentActivity(sortedActivities[0]);
-    }
+  if (activities.length) {
+    const sortedActivities = activities.sort(
+      (a, b) => new Date(b.start_date) - new Date(a.start_date)
+    );
+    setRecentActivity(sortedActivities[0]);
+  }
 
-    const handleLongestActivity = async () => {
-      const longestActivity = await getLongestYearActivity(activities);
-      setLongestYearActivity(longestActivity);
+  handleLongestActivity();
 
-      if (longestActivity?.map) {
-        const polylines = getPolylines();
-        const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
-        setLineLayer(lineLayerCoordinates);
-      }
-    };
+  const streak = getStreak(activities);
+  setStreak(streak);
 
-    handleLongestActivity();
+  if (activities.length) setRecentActivity(activities[0]);
+  else
+    setRecentActivity({
+      distance: 0,
+      moving_time: 0,
+      type: '',
+      id: 0,
+    });
+}, [activities, achievementsYTD]);
 
-    const streak = getStreak(activities);
-    setStreak(streak);
+const handleLongestActivity = async () => {
+  const longestActivity = await getLongestYearActivity(activities);
+  setLongestYearActivity(longestActivity);
 
-    if (activities.length) setRecentActivity(activities[0]);
-    else
-      setRecentActivity({
-        distance: 0,
-        moving_time: 0,
-        type: '',
-        id: 0,
-      });
-  }, [activities, achievementsYTD]);
+  if (longestActivity && longestActivity.map && longestActivity.map.summary_polyline) {
+    const polylines = await getPolylines(longestActivity);
+    const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
+
+    setLineLayer(lineLayerCoordinates);
+  }
+};
 
   const fetchAthleteFromDB = async (userId) => {
     try {
@@ -255,8 +268,8 @@ const App = () => {
     )
     .reduce((acc, activity) => acc + activity?.achievement_count, 0);
 
-  const getPolylines = () => {
-    const encryptedPolyline = longestYearActivity?.map?.summary_polyline;
+  const getPolylines = (longestActivity) => {
+    const encryptedPolyline = longestActivity?.map?.summary_polyline;
     const decryptedPolyline = polyline.decode(encryptedPolyline);
     const flippedLngLat = decryptedPolyline.map(([lat, lng]) => [lng, lat]);
 

@@ -202,7 +202,6 @@ const Stats = ({
 
   const getLongestActivityPolylines = (longestActivity) => {
     const encryptedPolyline = longestActivity?.map?.summary_polyline;
-    console.log('encryptedPolyline:', encryptedPolyline);
     const decryptedPolyline = polyline.decode(encryptedPolyline);
     const flippedLngLat = decryptedPolyline.map(([lat, lng]) => [lng, lat]);
 
@@ -274,14 +273,17 @@ const Stats = ({
             workout.start_date.slice(0, 4) === selectedYear.toString()
         )
         .reduce((acc, workout) => {
-          if (workout.kilojoules) acc += workout.kilojoules / 4.184;
+          if (workout.kilojoules) {
+            acc += workout.kilojoules / 4.184;
+          }
           else if (athlete.weight) {
             if (workout.type === 'Swim' || workout.type === 'Run')
               acc += 7 * athlete.weight * (workout.elapsed_time / 3600);
             else if (workout.type === 'WeightTraining')
               acc += 4.5 * athlete.weight * (workout.elapsed_time / 3600);
             else acc += 3 * athlete.weight * (workout.elapsed_time / 3600);
-          } else {
+          } 
+          else {
             let met;
             if (workout.type === 'Swim') met = 10;
             else if (workout.type === 'Run') met = 9.8;

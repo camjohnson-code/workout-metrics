@@ -45,7 +45,7 @@ const Dashboard = ({
   setRefreshData,
 }) => {
   const [layerColor, setLayerColor] = useState([]);
-  console.log('longestYearActivity', longestYearActivity);
+
   useEffect(() => {
     if (selectedTheme === 'Dark') setLayerColor([138, 169, 249]);
     else setLayerColor([255, 70, 0]);
