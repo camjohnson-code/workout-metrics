@@ -1,7 +1,7 @@
 // Authorization functions
 export const redirectToStravaAuthorization = () => {
   const clientId = process.env.REACT_APP_STRAVA_ID;
-  const redirectUri = 'http://localhost:3000/redirect/';
+  const redirectUri = 'https://workout-metrics.vercel.app/redirect/';
   const responseType = 'code';
   const approvalPrompt = 'auto';
   const scope = 'activity:write,read,activity:read_all';
@@ -91,18 +91,18 @@ export const getAthleteFromStrava = async () => {
 };
 
 export const getAthleteFromAPI = async (id) => {
-  const response = await fetch(`http://localhost:3001/api/v1/users/${id}`);
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`);
   const data = await response.json();
 
   return data;
 };
 
 export const postAthleteToAPI = async (athlete) => {
-  let response = await fetch(`http://localhost:3001/api/v1/users/${athlete.id}`);
+  let response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`);
 
   if (response.ok) updateAthleteInAPI(athlete);
   else {
-    response = await fetch('http://localhost:3001/api/v1/users', {
+    response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ export const postAthleteToAPI = async (athlete) => {
 };
 
 export const updateAthleteInAPI = async (athlete) => {
-  const response = await fetch(`http://localhost:3001/api/v1/users/${athlete.id}`, {
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${athlete.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export const updateAthleteInAPI = async (athlete) => {
 }
 
 export const deleteUserFromAPI = async (id) => {
-  const response = await fetch(`http://localhost:3001/api/v1/users/${id}`, {
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`, {
     method: 'DELETE',
   });
 
@@ -181,7 +181,7 @@ export const getAthleteActivitiesFromStrava = async (userAccessToken) => {
 };
 
 export const getUserActivitiesFromAPI = async (id) => {
-  const response = await fetch(`http://localhost:3001/api/v1/activities/${id}`);
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${id}`);
   const data = await response.json();
 
   return data;
@@ -189,7 +189,7 @@ export const getUserActivitiesFromAPI = async (id) => {
 
 export const getFilteredActivitiesFromAPI = async (athlete, keywords, activityType) => {
   const activities = await fetch(
-    `http://localhost:3001/api/v1/activities/${athlete.id}`
+    `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${athlete.id}`
   );
   const allActivities = await activities.json();
   const filteredActivities = allActivities.filter((activity) => {
@@ -219,7 +219,7 @@ export const postActivitiesToAPI = async (activities) => {
       achievement_count: activity.achievement_count,
     };
 
-    const response = await fetch('http://localhost:3001/api/v1/activities', {
+    const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -275,7 +275,7 @@ export const postActivityToStrava = async (activityData, accessToken) => {
 };
 
 export const deleteActivitiesFromAPI = async (id) => {
-  const response = await fetch(`http://localhost:3001/api/v1/activities/${id}`, {
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${id}`, {
     method: 'DELETE',
   });
 
@@ -285,7 +285,7 @@ export const deleteActivitiesFromAPI = async (id) => {
 }
 
 export const deleteUserActivitiesFromAPI = async (userId) => {
-  const response = await fetch(`http://localhost:3001/api/v1/users/${userId}/activities`, {
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${userId}/activities`, {
     method: 'DELETE',
   });
 
@@ -298,7 +298,7 @@ export const deleteUserActivitiesFromAPI = async (userId) => {
 export const getHallOfFameActivities = async (athlete) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/v1/hallOfFame/${athlete.id}`
+      `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame/${athlete.id}`
     );
 
     if (!response.ok) {
@@ -315,7 +315,7 @@ export const getHallOfFameActivities = async (athlete) => {
 
 export const postFavoriteToHallOfFame = async (favorite) => {
   try {
-    const response = await fetch('http://localhost:3001/api/v1/hallOfFame', {
+    const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -336,7 +336,7 @@ export const postFavoriteToHallOfFame = async (favorite) => {
 
 export const deleteFavoriteFromHallOfFame = async (activityId) => {
   const response = await fetch(
-    `http://localhost:3001/api/v1/hallOfFame/${activityId}`,
+    `https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame/${activityId}`,
     {
       method: 'DELETE',
     }
@@ -349,7 +349,7 @@ export const deleteFavoriteFromHallOfFame = async (activityId) => {
 
 // Quote functions
 export const getQuoteFromDB = async () => {
-  const response = await fetch('http://localhost:3001/api/v1/quote');
+  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote');
   const data = await response.json();
 
   return data[0];
@@ -366,7 +366,7 @@ export const getQuoteFromAPI = async (url) => {
 };
 
 export const postQuoteToAPI = async (quote) => {
-  const response = await fetch('http://localhost:3001/api/v1/quote', {
+  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -382,7 +382,7 @@ export const postQuoteToAPI = async (quote) => {
 };
 
 export const deleteQuoteFromAPI = async (id) => {
-  const response = await fetch(`http://localhost:3001/api/v1/quote/${id}`, {
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote/${id}`, {
     method: 'DELETE',
   });
 
