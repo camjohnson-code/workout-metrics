@@ -1,7 +1,7 @@
 import './ManualForm.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAthleteFromAPI, postActivityToStrava, postActivitiesToAPI } from '../../ApiCalls';
+import { getAthleteFromAPI, postActivityToStrava, postActivityToAPI } from '../../ApiCalls';
 import PropTypes from 'prop-types';
 
 const ManualForm = ({ setActivities, athlete, setManualForm, manualForm, setSubmitted }) => {
@@ -62,7 +62,7 @@ const ManualForm = ({ setActivities, athlete, setManualForm, manualForm, setSubm
     const response = await postActivityToStrava(activityData, accessToken);
 
     if (response && response.id) {
-      await postActivitiesToAPI([{...response}]);
+      await postActivityToAPI([{...response}]);
       await setActivities((prevActivities) => [{...response}, ...prevActivities]);
       setSubmitted(true);
     }

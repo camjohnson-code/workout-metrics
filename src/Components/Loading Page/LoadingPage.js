@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   getAthleteFromStrava,
   getAthleteActivitiesFromStrava,
-  postActivitiesToAPI,
+  postActivityToAPI,
   getUserActivitiesFromAPI,
   postAthleteToAPI,
   deleteActivitiesFromAPI,
@@ -20,8 +20,10 @@ const LoadingPage = ({
   login,
   isAuthorized,
 }) => {
+  let numActivities;
   const [loading, setLoading] = useState(true);
   const [addingToDb, setAddingToDb] = useState(false);
+  const [uploadCount, setUploadCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,8 +40,12 @@ const LoadingPage = ({
       await getAthleteActivitiesFromStrava().then(async (activities) => {
         const newActivities = await getNewActivities(activities, stravaAthlete);
         if (newActivities.length) {
+          numActivities = newActivities.length;
           setAddingToDb(true);
-          await postActivitiesToAPI(newActivities);
+          newActivities.forEact(async (activity) => {
+            await postActivityToAPI(activities);
+            uploadCount++;
+          });
         }
         setActivities(activities);
       });
@@ -66,9 +72,6 @@ const LoadingPage = ({
     return newActivities;
   };
   
-  
-  
-
   return (
     <section className='loading-page'>
       {loading && (
@@ -77,7 +80,7 @@ const LoadingPage = ({
           style={{ width: 300, height: 300 }}
         />
       )}
-      {!addingToDb ? <p>Getting your activities from Strava</p> : <p>Saving your activities</p>}
+      {!addingToDb ? <p>Getting your activities from Strava</p> : <p>{`Saving your activities ${Math.round(uploadCount / numActivities)}%`}</p>}
     </section>
   );
 };

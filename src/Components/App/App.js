@@ -21,7 +21,7 @@ import {
   postQuoteToAPI,
   getAthleteFromAPI,
   refreshAccessToken,
-  postActivitiesToAPI,
+  postActivityToAPI,
   getUserActivitiesFromAPI,
   updateAthleteInAPI,
   deleteActivitiesFromAPI,
@@ -114,7 +114,7 @@ const App = () => {
 
     const longestActivity = getLongestYearActivity(activities);
     setLongestYearActivity(longestActivity);
-
+    console.log('longestYearActivity from App', longestYearActivity);
     if (longestYearActivity?.map) {
       const polylines = getPolylines();
       const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
@@ -219,7 +219,9 @@ const App = () => {
         )
     );
 
-    await postActivitiesToAPI(newActivities);
+    newActivities.forEach(async (activity) => {
+      await postActivityToAPI(activity);
+    });
     await setActivities(updatedActivities);
     setIsLoading(false);
     setRefreshData(false);
