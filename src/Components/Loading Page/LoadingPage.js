@@ -15,7 +15,6 @@ import Cookies from 'js-cookie';
 
 const LoadingPage = ({
   setAthlete,
-  athlete,
   setActivities,
   isLoggedIn,
   login,
@@ -78,7 +77,7 @@ const LoadingPage = ({
           style={{ width: 300, height: 300 }}
         />
       )}
-      {addingToDb ? <p>Getting your activities from Strava...</p> : <p>Saving your activities...</p>}
+      {!addingToDb ? <p>Getting your activities from Strava</p> : <p>Saving your activities</p>}
     </section>
   );
 };
