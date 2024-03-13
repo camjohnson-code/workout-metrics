@@ -316,7 +316,7 @@ const App = () => {
       );
       const date = new Date().toISOString().split('T')[0];
 
-      await deleteQuoteFromAPI(quote?._id);
+      if (quote?._id) await deleteQuoteFromAPI(quote?._id);
       await postQuoteToAPI({ date: date, ...newQuote[0] });
       setQuote(newQuote[0]);
     }
