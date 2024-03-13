@@ -43,7 +43,7 @@ const LoadingPage = ({
           numActivities = newActivities.length;
           setAddingToDb(true);
           newActivities.forEach(async (activity) => {
-            await postActivityToAPI(activities);
+            await postActivityToAPI(activity);
             uploadCount++;
           });
         }
