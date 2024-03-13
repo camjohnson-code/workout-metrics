@@ -218,6 +218,7 @@ export const postActivityToAPI = async (activity) => {
       id: activity.id,
       moving_time: activity.moving_time,
       achievement_count: activity.achievement_count,
+      total_elevation_gain: activity.total_elevation_gain,
     };
 
     const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
