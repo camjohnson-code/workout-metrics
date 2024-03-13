@@ -80,7 +80,7 @@ const LoadingPage = ({
           style={{ width: 300, height: 300 }}
         />
       )}
-      {!addingToDb ? <p>Getting your activities from Strava</p> : <p>{`Saving your activities ${Math.round(uploadCount / numActivities)}%`}</p>}
+      {!addingToDb ? <p>Getting your activities from Strava</p> : <p>{`Saving your activities ${numActivities ? Math.round(uploadCount / numActivities * 100) : 0}%`}</p>}
     </section>
   );
 };
