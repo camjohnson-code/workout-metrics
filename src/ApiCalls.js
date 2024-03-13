@@ -205,7 +205,6 @@ export const getFilteredActivitiesFromAPI = async (athlete, keywords, activityTy
 };
 
 export const postActivityToAPI = async (activity) => {
-  console.log('activity: ', activity);
     const newActivity = {
       userId: activity.athlete.id,
       name: activity.name,
