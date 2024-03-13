@@ -135,7 +135,7 @@ const Heatmap = ({
             style={{ width: 300, height: 300 }}
           />
         )}
-        {activities.length ? (
+        {activities.length && lineCoordinates.length ? (
           <DeckGL
             initialViewState={INITIAL_VIEW_STATE}
             controller={true}

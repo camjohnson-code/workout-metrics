@@ -94,10 +94,8 @@ const Stats = ({
       activityCount = activities.length;
       setNumActivities(activityCount);
     } else {
-      activityCount = activities.filter(
-        (activity) =>
-          activity.start_date.slice(0, 4) === selectedYear.toString()
-      ).length;
+      activityCount = activities
+          .filter((activity) => activity.start_date.slice(0, 4) === selectedYear.toString()).length;
 
       setNumActivities(activityCount);
     }
@@ -107,18 +105,12 @@ const Stats = ({
     let achievementCount;
 
     if (selectedYear === 'all-time') {
-      achievementCount = activities.reduce(
-        (acc, activity) => acc + activity.achievement_count,
-        0
-      );
+      achievementCount = activities.reduce((acc, activity) => acc + activity.achievement_count, 0);
 
       setNumAchievements(achievementCount);
     } else {
       achievementCount = activities
-        .filter(
-          (activity) =>
-            activity.start_date.slice(0, 4) === selectedYear.toString()
-        )
+        .filter((activity) => activity.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, activity) => acc + activity.achievement_count, 0);
 
       setNumAchievements(achievementCount);
@@ -138,10 +130,7 @@ const Stats = ({
         }, {});
       } else {
         activitiesByNumber = activities
-          .filter(
-            (activity) =>
-              activity.start_date.slice(0, 4) === selectedYear.toString()
-          )
+          .filter((activity) => activity.start_date.slice(0, 4) === selectedYear.toString())
           .reduce((acc, activity) => {
             if (acc[activity?.type]) acc[activity?.type]++;
             else acc[activity?.type] = 1;
@@ -185,15 +174,10 @@ const Stats = ({
     let longestActivity;
 
     if (selectedYear === 'all-time')
-      longestActivity = activities.sort(
-        (a, b) => b.moving_time - a.moving_time
-      )[0];
+      longestActivity = activities.sort((a, b) => b.moving_time - a.moving_time)[0];
     else
       longestActivity = activities
-        .filter(
-          (workout) =>
-            workout.start_date.slice(0, 4) === selectedYear.toString()
-        )
+        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .sort((a, b) => b.moving_time - a.moving_time)[0];
 
     setLongestActivity(longestActivity);
@@ -210,21 +194,23 @@ const Stats = ({
 
   const setLineLayerCoordinates = () => {
     if (activities.length) {
-      const coordinatesArray = getLongestActivityPolylines(
-        getLongestActivity()
-      );
+      const longestActivity = getLongestActivity();
 
-      const output = coordinatesArray.reduce((acc, coordinates, index) => {
-        if (coordinatesArray[index + 1]) {
-          acc.push({
-            sourcePosition: coordinates,
-            targetPosition: coordinatesArray[index + 1],
-          });
-        }
-        return acc;
-      }, []);
+      if (longestActivity?.map?.summary_polyline) {
+        const coordinatesArray = getLongestActivityPolylines(longestActivity);
 
-      setLineLayer(output);
+        const output = coordinatesArray.reduce((acc, coordinates, index) => {
+          if (coordinatesArray[index + 1]) {
+            acc.push({
+              sourcePosition: coordinates,
+              targetPosition: coordinatesArray[index + 1],
+            });
+          }
+          return acc;
+        }, []);
+
+        setLineLayer(output);
+      }
     }
   };
 
@@ -244,11 +230,9 @@ const Stats = ({
       caloriesBurned = activities.reduce((acc, workout) => {
         if (workout.kilojoules) acc += workout.kilojoules / 4.184;
         else if (athlete.weight) {
-          if (workout.type === 'Swim' || workout.type === 'Run')
-            acc += 7 * athlete.weight * (workout.elapsed_time / 3600);
-          else if (workout.type === 'WeightTraining')
-            acc += 4.5 * athlete.weight * (workout.elapsed_time / 3600);
-          else acc += 3 * athlete.weight * (workout.elapsed_time / 3600);
+          if (workout.type === 'Swim' || workout.type === 'Run') acc += 7 * athlete.weight * (workout.moving_time / 3600);
+          else if (workout.type === 'WeightTraining') acc += 4.5 * athlete.weight * (workout.moving_time / 3600);
+          else acc += 3 * athlete.weight * (workout.moving_time / 3600);
         } else {
           let met;
           if (workout.type === 'Swim') met = 10;
@@ -257,7 +241,7 @@ const Stats = ({
           else met = 2.5;
 
           const caloriesPerMinute = (met * 3.5 * 70) / 200;
-          acc += caloriesPerMinute * (workout.elapsed_time / 60);
+          acc += caloriesPerMinute * (workout.moving_time / 60);
         }
 
         return acc;
@@ -266,19 +250,15 @@ const Stats = ({
       setCaloriesBurned(Math.round(caloriesBurned));
     } else {
       caloriesBurned = activities
-        .filter(
-          (workout) =>
-            workout.start_date.slice(0, 4) === selectedYear.toString()
-        )
+        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => {
           if (workout.kilojoules) acc += workout.kilojoules / 4.184;
           else if (athlete.weight) {
-            if (workout.type === 'Swim' || workout.type === 'Run')
-              acc += 7 * athlete.weight * (workout.elapsed_time / 3600);
-            else if (workout.type === 'WeightTraining')
-              acc += 4.5 * athlete.weight * (workout.elapsed_time / 3600);
-            else acc += 3 * athlete.weight * (workout.elapsed_time / 3600);
-          } else {
+            if (workout.type === 'Swim' || workout.type === 'Run') acc += 7 * athlete.weight * (workout.moving_time / 3600);
+            else if (workout.type === 'WeightTraining') acc += 4.5 * athlete.weight * (workout.moving_time / 3600);
+            else acc += 3 * athlete.weight * (workout.moving_time / 3600);
+          } 
+          else {
             let met;
             if (workout.type === 'Swim') met = 10;
             else if (workout.type === 'Run') met = 9.8;
@@ -286,7 +266,7 @@ const Stats = ({
             else met = 2.5;
 
             const caloriesPerMinute = (met * 3.5 * 70) / 200;
-            acc += caloriesPerMinute * (workout.elapsed_time / 60);
+            acc += caloriesPerMinute * (workout.moving_time / 60);
           }
 
           return acc;
@@ -299,17 +279,10 @@ const Stats = ({
   const calcElevationGain = () => {
     let elevation;
 
-    if (selectedYear === 'all-time')
-      elevation = activities.reduce(
-        (acc, workout) => acc + workout.total_elevation_gain,
-        0
-      );
+    if (selectedYear === 'all-time') elevation = activities.reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
     else
       elevation = activities
-        .filter(
-          (workout) =>
-            workout.start_date.slice(0, 4) === selectedYear.toString()
-        )
+        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.total_elevation_gain, 0);
 
     setElevationGain(elevation);
@@ -324,14 +297,9 @@ const Stats = ({
   const calcDistance = () => {
     let distance;
 
-    if (selectedYear === 'all-time')
-      distance = activities.reduce((acc, workout) => acc + workout.distance, 0);
-    else
-      distance = activities
-        .filter(
-          (workout) =>
-            workout.start_date.slice(0, 4) === selectedYear.toString()
-        )
+    if (selectedYear === 'all-time') distance = activities.reduce((acc, workout) => acc + workout.distance, 0);
+    else distance = activities
+        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.distance, 0);
 
     setDistance(Math.round(distance));
@@ -344,10 +312,7 @@ const Stats = ({
       kudos = activities.reduce((acc, workout) => acc + workout.kudos_count, 0);
     else
       kudos = activities
-        .filter(
-          (workout) =>
-            workout.start_date.slice(0, 4) === selectedYear.toString()
-        )
+        .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
         .reduce((acc, workout) => acc + workout.kudos_count, 0);
 
     setKudos(kudos);
@@ -357,19 +322,12 @@ const Stats = ({
     let maxSpeedActivity;
 
     if (activities.length) {
-      if (selectedYear === 'all-time')
-        maxSpeedActivity = activities.sort(
-          (a, b) => b.max_speed - a.max_speed
-        )[0];
-      else
-        maxSpeedActivity = activities
-          .filter(
-            (workout) =>
-              workout.start_date.slice(0, 4) === selectedYear.toString()
-          )
-          .sort((a, b) => b.max_speed - a.max_speed)[0];
+      if (selectedYear === 'all-time') maxSpeedActivity = activities.sort((a, b) => b.maxSpeed - a.maxSpeed)[0];
+      else maxSpeedActivity = activities
+            .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+            .sort((a, b) => b.maxSpeed - a.maxSpeed)[0];
 
-      const maxSpeedInMetersPerSecond = maxSpeedActivity.max_speed;
+      const maxSpeedInMetersPerSecond = maxSpeedActivity.maxSpeed;
 
       setMaxSpeed(maxSpeedInMetersPerSecond);
       setMaxSpeedActivityId(maxSpeedActivity.id);
@@ -379,10 +337,8 @@ const Stats = ({
   const INITIAL_VIEW_STATE =
     lineLayer && lineLayer?.length
       ? {
-          longitude:
-            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[0],
-          latitude:
-            lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[1],
+          longitude: lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[0],
+          latitude: lineLayer[Math.round(lineLayer.length / 2)].sourcePosition[1],
           zoom: 10,
           pitch: 0,
           bearing: 0,
@@ -519,7 +475,7 @@ const Stats = ({
                   />
                 </DeckGL>
               ) : (
-                <p>Your longest activity had no gps data!</p>
+                <p className='no-gps-data'>Your longest activity had no gps data!</p>
               )}
             </div>
             {longestActivity?.map?.summary_polyline ? (
@@ -541,9 +497,9 @@ const Stats = ({
               {caloriesBurned.toLocaleString()}{' '}
               <span className='unit'>kcal</span>
             </p>
-            <p className='cell-subtitle'>{`That's ${Math.round(
-              Number(caloriesBurned) / 285
-            )} slices of pizza`}</p>
+            <p className='cell-subtitle'>{`That's ${
+              (Number(caloriesBurned) / 285).toFixed(1)
+            } slices of pizza`}</p>
           </Cell>
           <Cell className='cell stats-cell-6'>
             <h1 className='cell-heading'>Distance</h1>
@@ -557,7 +513,7 @@ const Stats = ({
               </span>
             </p>
             <p className='cell-subtitle'>{`That's about ${Math.round(
-              (distance * 63360) / 7
+              (distance * 39.37) / 7
             ).toLocaleString()} bananas`}</p>
           </Cell>
           <Cell className='cell stats-cell-7'>
@@ -596,9 +552,9 @@ const Stats = ({
                 </span>
               </p>
             ) : (
-              <p>No GPS data</p>
+              <p className='no-gps-data'>No GPS data</p>
             )}
-            {maxSpeed !== 0 ? (
+            {maxSpeed ? (
               <Link
                 target='#'
                 to={`https://www.strava.com/activities/${maxSpeedActivityId}`}
@@ -634,7 +590,7 @@ Stats.propTypes = {
       total_elevation_gain: PropTypes.number.isRequired,
       distance: PropTypes.number.isRequired,
       kudos_count: PropTypes.number.isRequired,
-      max_speed: PropTypes.number.isRequired,
+      max_speed: PropTypes.number,
     })
   ).isRequired,
   year: PropTypes.number.isRequired,

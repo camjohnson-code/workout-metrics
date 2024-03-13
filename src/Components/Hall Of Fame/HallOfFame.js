@@ -1,14 +1,14 @@
 import './HallOfFame.css';
+import { useState, useEffect } from 'react';
 import Sidebar from '../Sidebar/Sidebar';
 import NavBar from '../Nav Bar/NavBar';
 import LoadingModule from '../Loading Module/LoadingModule';
 import SettingsModule from '../Settings Module/SettingsModule';
-import { useState, useEffect } from 'react';
-import { fetchUserActivities } from '../../ApiCalls';
 import Card from '../Card/Card';
 import {
-  addFavoriteToHallOfFame,
-  removeFavoriteFromHallOfFame,
+  getFilteredActivitiesFromAPI,
+  postFavoriteToHallOfFame,
+  deleteFavoriteFromHallOfFame,
   getHallOfFameActivities,
 } from '../../ApiCalls';
 import PropTypes from 'prop-types';
@@ -28,6 +28,7 @@ const HallOfFame = ({
   settingsShown,
   setSettingsShown,
   setRefreshData,
+  refreshData,
 }) => {
   const [favorites, setFavorites] = useState([]);
   const [activities, setActivities] = useState([]);
@@ -37,10 +38,11 @@ const HallOfFame = ({
   const isValidForm = !keywords;
 
   useEffect(() => {
-    getHallOfFameActivities(athlete).then((favorites) =>
-      setFavorites(favorites)
+    getHallOfFameActivities(athlete).then((favorites) =>{
+      if (favorites) setFavorites(favorites)
+    }
     );
-  }, [athlete]);
+  }, [athlete, refreshData]);
 
   useEffect(() => {
     setActivities([]);
@@ -55,7 +57,7 @@ const HallOfFame = ({
       event.preventDefault();
       setHasSearched(true);
       const fetchData = async () => {
-        const activities = await fetchUserActivities(
+        const activities = await getFilteredActivitiesFromAPI(
           athlete,
           keywords,
           activityType
@@ -74,21 +76,21 @@ const HallOfFame = ({
     );
     if (isFavorite) {
       setFavorites(favorites.filter((favorite) => favorite.id !== activity.id));
+      setActivities(activities.filter((act) => act.id !== activity.id));
       try {
-        await removeFavoriteFromHallOfFame(activity.id);
+        await deleteFavoriteFromHallOfFame(activity.id);
       } catch (error) {
         console.error('Error removing favorite from Hall of Fame:', error);
       }
     } else {
       setFavorites([...favorites, activity]);
       try {
-        await addFavoriteToHallOfFame(activity);
+        await postFavoriteToHallOfFame(activity);
       } catch (error) {
         console.error('Error adding favorite to Hall of Fame:', error);
       }
     }
   };
-
   const cards = activities.map((activity) => {
     const isFavorite = favorites.some(
       (favorite) => favorite?.id === activity?.id

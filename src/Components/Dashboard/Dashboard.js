@@ -92,11 +92,11 @@ const Dashboard = ({
   ];
 
   const generateWeatherSubtitle = () => {
-    if (weather?.temp < 40) return 'Bundle up!';
-    if (weather?.temp >= 40 && weather?.temp < 60)
+    if (weather?.fTemp < 40) return 'Bundle up!';
+    if (weather?.fTemp >= 40 && weather?.fTemp < 60)
       return 'Slightly on the cooler side.';
-    if (weather?.temp >= 60 && weather?.temp < 80) return 'Perfect weather!';
-    if (weather?.temp >= 80) return "Stay cool. It's a hot one out there!";
+    if (weather?.fTemp >= 60 && weather?.fTemp < 80) return 'Perfect weather!';
+    if (weather?.fTemp >= 80) return "Stay cool. It's a hot one out there!";
   };
 
   return (
@@ -185,7 +185,7 @@ const Dashboard = ({
           <h1 className='cell-heading'>Today's high</h1>
           <CiTempHigh className='cell-icon weather' />
           {athlete?.city ? (
-            <p className='cell-main'>{Math.round(weather.temp)}°</p>
+            <p className='cell-main'>{selectedUnit === 'Imperial' ? Math.round(weather.fTemp) : Math.round(weather.cTemp)}°</p>
           ) : (
             <p>You don't have your location set in your Strava profile!</p>
           )}
@@ -302,15 +302,16 @@ Dashboard.propTypes = {
   streak: PropTypes.number.isRequired,
   achievements: PropTypes.number.isRequired,
   weather: PropTypes.shape({
-    temp: PropTypes.number.isRequired,
+    fTemp: PropTypes.number,
+    cTemp: PropTypes.number,
   }).isRequired,
   quote: PropTypes.shape({
     quote: PropTypes.string.isRequired,
   }),
   longestYearActivity: PropTypes.shape({
-    distance: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    start_latlng: PropTypes.array.isRequired,
+    distance: PropTypes.number,
+    id: PropTypes.number,
+    start_latlng: PropTypes.array,
   }).isRequired,
   effortUp: PropTypes.string.isRequired,
   lineLayer: PropTypes.arrayOf(

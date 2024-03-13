@@ -2,73 +2,76 @@ import { useState, useEffect } from 'react';
 import './LoadingPage.css';
 import { useNavigate } from 'react-router-dom';
 import {
-  getAthleteData,
-  getAthleteActivities,
-  addActivitiesToAPI,
-  getActivitiesFromAPI,
+  getAthleteFromStrava,
+  getAthleteActivitiesFromStrava,
+  postActivityToAPI,
+  getUserActivitiesFromAPI,
+  postAthleteToAPI,
+  deleteActivitiesFromAPI,
 } from '../../ApiCalls';
 import Lottie from 'lottie-react';
 import LoadingAnimation from '../../Animations/loading.json';
+import Cookies from 'js-cookie';
 
 const LoadingPage = ({
   setAthlete,
-  athlete,
-  setRecentActivity,
   setActivities,
-  getStreak,
-  getLongestYearActivity,
   isLoggedIn,
   login,
   isAuthorized,
 }) => {
+  const [numActivities, setNumActivities] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [addingToDb, setAddingToDb] = useState(false);
+  const [uploadCount, setUploadCount] = useState(0);
   const navigate = useNavigate();
-
-  const fetchData = async () => {
-    await getAthleteData().then((data) => {
-      setAthlete(data);
-    });
-    await getAthleteActivities().then(async (activities) => {
-      await addNewActivities(activities);
-      setActivities(activities);
-      getStreak(activities);
-      getLongestYearActivity(activities);
-      if (activities.length) setRecentActivity(activities[0]);
-      else setRecentActivity({
-        distance: 0,
-        moving_time: 0,
-        type: '',
-        id: 0,
-      });
-    });
-
-    login();
-    setLoading(false);
-    navigate('/dashboard');
-  };
 
   useEffect(() => {
     if (!isLoggedIn && isAuthorized) fetchData();
     else navigate('/dashboard');
   }, []);
+
+  const fetchData = async () => {
+    await getAthleteFromStrava().then(async (stravaAthlete) => {
+      await postAthleteToAPI(stravaAthlete);
+      await setAthlete(stravaAthlete);
+      await Cookies.set('userId', stravaAthlete.id, { expires: 60, path: '/' });
   
+      await getAthleteActivitiesFromStrava().then(async (activities) => {
+        const newActivities = await getNewActivities(activities, stravaAthlete);
+        if (newActivities.length) {
+          setNumActivities(newActivities.length);
+          setAddingToDb(true);
+          for (const activity of newActivities) {
+            await postActivityToAPI(activity);
+            setUploadCount((prevCount) => prevCount + 1);
+          }
+        }
+        setActivities(activities);
+      });
+  
+      login();
+      setLoading(false);
+      navigate('/dashboard');
+    });
+  };
 
-  const addNewActivities = async (activities) => {
+  const getNewActivities = async (activities, stravaAthlete) => {
     const updatedActivities = activities;
+    const oldActivities = await getUserActivitiesFromAPI(stravaAthlete.id); 
 
-    const oldActivitiesResponse = await getActivitiesFromAPI(athlete.id);
-    const oldActivities = oldActivitiesResponse.data;
+    const activitiesToDelete = oldActivities.filter(
+      (oldActivity) => !updatedActivities.some((updatedActivity) => updatedActivity.id === oldActivity.id)
+    );
+    await Promise.all(activitiesToDelete.map(activity => deleteActivitiesFromAPI(activity.id)));
 
     const newActivities = updatedActivities.filter(
-      (updatedActivity) =>
-        !oldActivities.some(
-          (oldActivity) => oldActivity.id === updatedActivity.id
-        )
+      (updatedActivity) => !oldActivities.some((oldActivity) => oldActivity.id === updatedActivity.id)
     );
 
-    if (newActivities.length) await addActivitiesToAPI(newActivities);
-  }
-
+    return newActivities;
+  };
+  
   return (
     <section className='loading-page'>
       {loading && (
@@ -77,6 +80,7 @@ const LoadingPage = ({
           style={{ width: 300, height: 300 }}
         />
       )}
+      {!addingToDb ? <p>Getting your activities from Strava</p> : <p>{`Saving your activities ${numActivities ? Math.round(uploadCount / numActivities * 100) : 0}%`}</p>}
     </section>
   );
 };

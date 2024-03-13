@@ -5,7 +5,6 @@ import SettingsModule from '../Settings Module/SettingsModule';
 import LoadingModule from '../Loading Module/LoadingModule';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import ManualForm from '../Manual Form/ManualForm';
 import FileUploader from '../File Uploader/FileUploader';
 import PropTypes from 'prop-types';
