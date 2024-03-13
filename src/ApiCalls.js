@@ -204,8 +204,7 @@ export const getFilteredActivitiesFromAPI = async (athlete, keywords, activityTy
   return filteredActivities;
 };
 
-export const postActivitiesToAPI = async (activities) => {
-  for (let activity of activities) {
+export const postActivityToAPI = async (activity) => {
     const newActivity = {
       userId: activity.athlete.id,
       name: activity.name,
@@ -227,11 +226,10 @@ export const postActivitiesToAPI = async (activities) => {
       body: JSON.stringify(newActivity),
     });
 
-    if (!response.ok) {
-      console.log('Response status:', response.status);
-    }
+    if (!response.ok) console.log('Response status:', response.status);
+
     const data = await response.json();
-  }
+    return data;
 };
 
 export const uploadFileToStrava = async (file, accessToken) => {
