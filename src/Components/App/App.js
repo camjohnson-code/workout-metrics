@@ -35,7 +35,6 @@ import '../../themes.css';
 
 const App = () => {
   const year = new Date().getFullYear();
-  const [shouldRedirect, setShouldRedirect] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!Cookies.get('isLoggedIn'));
   const [isAuthorized, setIsAuthorized] = useState(
     !!Cookies.get('isAuthorized')
@@ -73,7 +72,7 @@ const App = () => {
   ]);
   const [streak, setStreak] = useState(0);
   const [homeCoordinates, setHomeCoordinates] = useState([]);
-  const [quote, setQuote] = useState({ quote: '', author: '' });
+  const [quote, setQuote] = useState({ quote: 'As we run, we become.', author: 'Amby Burfoot' });
   const [weather, setWeather] = useState({ temp: 0 });
 
   useEffect(() => {
