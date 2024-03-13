@@ -96,10 +96,6 @@ const App = () => {
   }, [homeCoordinates]);
 
   useEffect(() => {
-    if (refreshData) refreshActivityData();
-  }, [refreshData]);
-
-  useEffect(() => {
     setAchievementsYTD(numAchievementsYTD);
 
     const effort = analyzeRelativeEffort(activities);
@@ -112,14 +108,18 @@ const App = () => {
       setRecentActivity(sortedActivities[0]);
     }
 
-    const longestActivity = getLongestYearActivity(activities);
-    setLongestYearActivity(longestActivity);
-    
-    if (longestYearActivity?.map) {
-      const polylines = getPolylines();
-      const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
-      setLineLayer(lineLayerCoordinates);
-    }
+    const handleLongestActivity = async () => {
+      const longestActivity = await getLongestYearActivity(activities);
+      setLongestYearActivity(longestActivity);
+
+      if (longestActivity?.map) {
+        const polylines = getPolylines();
+        const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
+        setLineLayer(lineLayerCoordinates);
+      }
+    };
+
+    handleLongestActivity();
 
     const streak = getStreak(activities);
     setStreak(streak);
@@ -132,7 +132,7 @@ const App = () => {
         type: '',
         id: 0,
       });
-  }, [activities]);
+  }, [activities, numAchievementsYTD]);
 
   const fetchAthleteFromDB = async (userId) => {
     try {
@@ -339,7 +339,7 @@ const App = () => {
       id: 0,
       start_latlng: [],
     };
-
+    console.log('allActivities: ', allActivities);
     const longestActivity = allActivities
       .filter(
         (activity) => activity?.start_date.slice(0, 4) === year.toString()
