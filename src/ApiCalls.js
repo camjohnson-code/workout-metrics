@@ -210,14 +210,16 @@ export const postActivityToAPI = async (activity) => {
       name: activity.name,
       distance: activity.distance,
       type: activity.type,
-      map: activity.map,
       start_date: activity.start_date,
       start_latlng: activity.start_latlng,
-      kilojoules: activity.kilojoules,
       time: activity.moving_time,
       id: activity.id,
       moving_time: activity.moving_time,
       achievement_count: activity.achievement_count,
+      kudos_count: activity.kudos_count,
+      map: activity.map,
+      maxSpeed: activity.max_speed,
+      kilojoules: activity.kilojoules,
       total_elevation_gain: activity.total_elevation_gain,
     };
 
