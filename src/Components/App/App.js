@@ -132,7 +132,7 @@ const App = () => {
         type: '',
         id: 0,
       });
-  }, [activities, numAchievementsYTD]);
+  }, [activities, achievementsYTD]);
 
   const fetchAthleteFromDB = async (userId) => {
     try {
