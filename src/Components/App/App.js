@@ -114,7 +114,7 @@ const App = () => {
 
     const longestActivity = getLongestYearActivity(activities);
     setLongestYearActivity(longestActivity);
-    console.log('longestYearActivity from App', longestYearActivity);
+    
     if (longestYearActivity?.map) {
       const polylines = getPolylines();
       const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
@@ -345,7 +345,7 @@ const App = () => {
         (activity) => activity?.start_date.slice(0, 4) === year.toString()
       )
       .sort((a, b) => b?.moving_time - a?.moving_time)[0];
-
+        console.log('longestActivity: ', longestActivity);
     return allActivities.length ? longestActivity : defaultActivity;
   };
 
