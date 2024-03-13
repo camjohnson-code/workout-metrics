@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { handleAuthorizationCallback } from '../../ApiCalls';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const RedirectPage = ({ isLoggedIn, setIsAuthorized }) => {
   const navigate = useNavigate();
@@ -12,8 +13,9 @@ const RedirectPage = ({ isLoggedIn, setIsAuthorized }) => {
 
   const fetchData = async () => {
     await handleAuthorizationCallback();
-    await setIsAuthorized(true);
-    await navigate('/loading');
+    Cookies.set('isAuthorized', true, { expires: 60, path: '/' });
+    setIsAuthorized(true);
+    navigate('/loading');
   };
 
   return <section className='redirect-page'></section>;

@@ -202,6 +202,7 @@ const Stats = ({
 
   const getLongestActivityPolylines = (longestActivity) => {
     const encryptedPolyline = longestActivity?.map?.summary_polyline;
+    console.log('encryptedPolyline:', encryptedPolyline);
     const decryptedPolyline = polyline.decode(encryptedPolyline);
     const flippedLngLat = decryptedPolyline.map(([lat, lng]) => [lng, lat]);
 
@@ -210,21 +211,23 @@ const Stats = ({
 
   const setLineLayerCoordinates = () => {
     if (activities.length) {
-      const coordinatesArray = getLongestActivityPolylines(
-        getLongestActivity()
-      );
+      const longestActivity = getLongestActivity();
 
-      const output = coordinatesArray.reduce((acc, coordinates, index) => {
-        if (coordinatesArray[index + 1]) {
-          acc.push({
-            sourcePosition: coordinates,
-            targetPosition: coordinatesArray[index + 1],
-          });
-        }
-        return acc;
-      }, []);
+      if (longestActivity?.map?.summary_polyline) {
+        const coordinatesArray = getLongestActivityPolylines(longestActivity);
 
-      setLineLayer(output);
+        const output = coordinatesArray.reduce((acc, coordinates, index) => {
+          if (coordinatesArray[index + 1]) {
+            acc.push({
+              sourcePosition: coordinates,
+              targetPosition: coordinatesArray[index + 1],
+            });
+          }
+          return acc;
+        }, []);
+
+        setLineLayer(output);
+      }
     }
   };
 
@@ -245,10 +248,10 @@ const Stats = ({
         if (workout.kilojoules) acc += workout.kilojoules / 4.184;
         else if (athlete.weight) {
           if (workout.type === 'Swim' || workout.type === 'Run')
-            acc += 7 * athlete.weight * (workout.elapsed_time / 3600);
+            acc += 7 * athlete.weight * (workout.moving_time / 3600);
           else if (workout.type === 'WeightTraining')
-            acc += 4.5 * athlete.weight * (workout.elapsed_time / 3600);
-          else acc += 3 * athlete.weight * (workout.elapsed_time / 3600);
+            acc += 4.5 * athlete.weight * (workout.moving_time / 3600);
+          else acc += 3 * athlete.weight * (workout.moving_time / 3600);
         } else {
           let met;
           if (workout.type === 'Swim') met = 10;
@@ -257,7 +260,7 @@ const Stats = ({
           else met = 2.5;
 
           const caloriesPerMinute = (met * 3.5 * 70) / 200;
-          acc += caloriesPerMinute * (workout.elapsed_time / 60);
+          acc += caloriesPerMinute * (workout.moving_time / 60);
         }
 
         return acc;
@@ -519,7 +522,7 @@ const Stats = ({
                   />
                 </DeckGL>
               ) : (
-                <p>Your longest activity had no gps data!</p>
+                <p className='no-gps-data'>Your longest activity had no gps data!</p>
               )}
             </div>
             {longestActivity?.map?.summary_polyline ? (
@@ -541,9 +544,9 @@ const Stats = ({
               {caloriesBurned.toLocaleString()}{' '}
               <span className='unit'>kcal</span>
             </p>
-            <p className='cell-subtitle'>{`That's ${Math.round(
-              Number(caloriesBurned) / 285
-            )} slices of pizza`}</p>
+            <p className='cell-subtitle'>{`That's ${
+              (Number(caloriesBurned) / 285).toFixed(1)
+            } slices of pizza`}</p>
           </Cell>
           <Cell className='cell stats-cell-6'>
             <h1 className='cell-heading'>Distance</h1>
@@ -557,7 +560,7 @@ const Stats = ({
               </span>
             </p>
             <p className='cell-subtitle'>{`That's about ${Math.round(
-              (distance * 63360) / 7
+              (distance * 39.37) / 7
             ).toLocaleString()} bananas`}</p>
           </Cell>
           <Cell className='cell stats-cell-7'>
@@ -596,9 +599,9 @@ const Stats = ({
                 </span>
               </p>
             ) : (
-              <p>No GPS data</p>
+              <p className='no-gps-data'>No GPS data</p>
             )}
-            {maxSpeed !== 0 ? (
+            {maxSpeed ? (
               <Link
                 target='#'
                 to={`https://www.strava.com/activities/${maxSpeedActivityId}`}
@@ -634,7 +637,7 @@ Stats.propTypes = {
       total_elevation_gain: PropTypes.number.isRequired,
       distance: PropTypes.number.isRequired,
       kudos_count: PropTypes.number.isRequired,
-      max_speed: PropTypes.number.isRequired,
+      max_speed: PropTypes.number,
     })
   ).isRequired,
   year: PropTypes.number.isRequired,

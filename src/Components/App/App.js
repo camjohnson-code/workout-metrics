@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import polyline from '@mapbox/polyline';
 import LandingPage from '../Landing Page/LandingPage';
 import RedirectPage from '../Redirect Page/RedirectPage';
@@ -15,140 +16,80 @@ import AddWorkout from '../Add Workout/AddWorkout';
 import NotFoundPage from '../Not Found Page/NotFoundPage';
 import {
   getWeather,
-  getQuote,
-  fetchQuote,
-  addQuoteToAPI,
-  getUserFromAPI,
+  getQuoteFromDB,
+  getQuoteFromAPI,
+  postQuoteToAPI,
+  getAthleteFromAPI,
   refreshAccessToken,
-  addAthleteToAPI,
-  getAthleteActivities,
-  addActivitiesToAPI,
-  getActivitiesFromAPI,
+  postActivitiesToAPI,
+  getUserActivitiesFromAPI,
+  updateAthleteInAPI,
+  deleteActivitiesFromAPI,
+  getAthleteActivitiesFromStrava,
+  deleteQuoteFromAPI,
+  getHallOfFameActivities,
+  deleteFavoriteFromHallOfFame,
 } from '../../ApiCalls';
 import NotLoggedInPage from '../Not Logged In Page/NotLoggedInPage';
 import '../../themes.css';
 
 const App = () => {
   const year = new Date().getFullYear();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!Cookies.get('isLoggedIn'));
+  const [isAuthorized, setIsAuthorized] = useState(
+    !!Cookies.get('isAuthorized')
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
   const [settingsShown, setSettingsShown] = useState(false);
   const [selectedUnit, setSelectedUnit] = useState('Imperial');
   const [selectedTheme, setSelectedTheme] = useState('Dark');
-  const [athlete, setAthlete] = useState(() => {
-    const savedAthlete = localStorage.getItem('athlete');
-    return savedAthlete
-      ? JSON.parse(savedAthlete)
-      : {
-          id: 0,
-          firstname: '',
-          lastname: '',
-          city: '',
-          state: '',
-          country: '',
-          profile: '',
-        };
+  const [athlete, setAthlete] = useState({
+    id: 0,
+    firstname: '',
+    lastname: '',
+    city: '',
+    state: '',
+    country: '',
+    profile: '',
   });
+  const [activities, setActivities] = useState([]);
+  const [achievementsYTD, setAchievementsYTD] = useState(0);
+  const [effortUp, setEffortUp] = useState('');
+  const [recentActivity, setRecentActivity] = useState({
+    distance: 0,
+    moving_time: 0,
+    type: '',
+    id: 0,
+  });
+  const [longestYearActivity, setLongestYearActivity] = useState({
+    distance: 0,
+    id: 0,
+    start_latlng: [],
+  });
+  const [lineLayer, setLineLayer] = useState([
+    { sourcePosition: [0, 0], targetPosition: [0, 0] },
+  ]);
+  const [streak, setStreak] = useState(0);
+  const [homeCoordinates, setHomeCoordinates] = useState([]);
+  const [quote, setQuote] = useState({ quote: '', author: '' });
+  const [weather, setWeather] = useState({ temp: 0 });
 
-  const [recentActivity, setRecentActivity] = useState(() => {
-    const savedRecentActivity = localStorage.getItem('recentActivity');
-    return savedRecentActivity
-      ? JSON.parse(savedRecentActivity)
-      : {
-          distance: 0,
-          moving_time: 0,
-          type: '',
-          id: 0,
-        };
-  });
-
-  const [activities, setActivities] = useState(() => {
-    const savedActivities = localStorage.getItem('activities');
-    return savedActivities ? JSON.parse(savedActivities) : [];
-  });
-
-  const [achievementsYTD, setAchievementsYTD] = useState(() => {
-    const savedAchievementsYTD = localStorage.getItem('achievementsYTD');
-    return savedAchievementsYTD ? JSON.parse(savedAchievementsYTD) : 0;
-  });
-
-  const [homeCoordinates, setHomeCoordinates] = useState(() => {
-    const savedHomeCoordinates = localStorage.getItem('homeCoordinates');
-    return savedHomeCoordinates ? JSON.parse(savedHomeCoordinates) : [];
-  });
-
-  const [longestYearActivity, setLongestYearActivity] = useState(() => {
-    const savedLongestYearActivity = localStorage.getItem(
-      'longestYearActivity'
-    );
-    return savedLongestYearActivity
-      ? JSON.parse(savedLongestYearActivity)
-      : {
-          distance: 0,
-          id: 0,
-          start_latlng: [],
-        };
-  });
-
-  const [streak, setStreak] = useState(() => {
-    const savedStreak = localStorage.getItem('streak');
-    return savedStreak ? JSON.parse(savedStreak) : 0;
-  });
-
-  const [weather, setWeather] = useState(() => {
-    const savedWeather = localStorage.getItem('weather');
-    return savedWeather ? JSON.parse(savedWeather) : { temp: 0 };
-  });
-  const [quote, setQuote] = useState(() => {
-    const savedQuote = localStorage.getItem('quote');
-    return savedQuote ? JSON.parse(savedQuote) : { quote: '', author: '' };
-  });
-
-  const [effortUp, setEffortUp] = useState(() => {
-    const savedEffortUp = localStorage.getItem('effortUp');
-    return savedEffortUp ? savedEffortUp : 'same';
-  });
-
-  const [lineLayer, setLineLayer] = useState(() => {
-    const savedLineLayer = localStorage.getItem('lineLayer');
-    return savedLineLayer
-      ? JSON.parse(savedLineLayer)
-      : [{ sourcePosition: [0, 0], targetPosition: [0, 0] }];
-  });
+  useEffect(() => {
+    fetchUser();
+    checkQuote();
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', selectedTheme);
   }, [selectedTheme]);
 
   useEffect(() => {
-    if (refreshData) refreshActivityData();
-  }, [refreshData]);
-
-  useEffect(() => {
-    localStorage.setItem('activities', JSON.stringify(activities));
-    setAchievementsYTD(numAchievementsYTD);
-    analyzeRelativeEffort(activities);
-    if (activities.length) {
-      const sortedActivities = activities.sort(
-        (a, b) => new Date(b.start_date) - new Date(a.start_date)
-      );
-      setRecentActivity(sortedActivities[0]);
+    if (athlete.city && athlete.state) {
+      fetchCoordinates().then((coordinates) => setHomeCoordinates(coordinates));
     }
-  }, [activities]);
-
-  useEffect(() => {
-    localStorage.setItem('recentActivity', JSON.stringify(recentActivity));
-  }, [recentActivity]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      'longestYearActivity',
-      JSON.stringify(longestYearActivity)
-    );
-    if (longestYearActivity?.map) getPolylines();
-  }, [longestYearActivity]);
+  }, [athlete]);
 
   useEffect(() => {
     if (homeCoordinates.length)
@@ -156,83 +97,121 @@ const App = () => {
   }, [homeCoordinates]);
 
   useEffect(() => {
-    localStorage.setItem('athlete', JSON.stringify(athlete));
-    fetchCoordinates();
-  }, [athlete]);
+    if (refreshData) refreshActivityData();
+  }, [refreshData]);
 
   useEffect(() => {
-    localStorage.setItem('achievementsYTD', JSON.stringify(achievementsYTD));
-  }, [achievementsYTD]);
+    setAchievementsYTD(numAchievementsYTD);
 
-  useEffect(() => {
-    localStorage.setItem('homeCoordinates', JSON.stringify(homeCoordinates));
-  }, [homeCoordinates]);
+    const effort = analyzeRelativeEffort(activities);
+    setEffortUp(effort);
 
-  useEffect(() => {
-    localStorage.setItem('streak', JSON.stringify(streak));
-  }, [streak]);
+    if (activities.length) {
+      const sortedActivities = activities.sort(
+        (a, b) => new Date(b.start_date) - new Date(a.start_date)
+      );
+      setRecentActivity(sortedActivities[0]);
+    }
 
-  useEffect(() => {
-    localStorage.setItem('weather', JSON.stringify(weather));
-  }, [weather]);
+    const longestActivity = getLongestYearActivity(activities);
+    setLongestYearActivity(longestActivity);
 
-  useEffect(() => {
-    localStorage.setItem('quote', JSON.stringify(quote));
-  }, [quote]);
+    if (longestYearActivity?.map) {
+      const polylines = getPolylines();
+      const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
+      setLineLayer(lineLayerCoordinates);
+    }
 
-  useEffect(() => {
-    localStorage.setItem('effortUp', effortUp);
-  }, [effortUp]);
+    const streak = getStreak(activities);
+    setStreak(streak);
 
-  useEffect(() => {
-    const persistedLoginState = localStorage.getItem('isLoggedIn');
-    setIsLoggedIn(persistedLoginState === 'true');
-    checkQuote();
-  }, []);
+    if (activities.length) setRecentActivity(activities[0]);
+    else
+      setRecentActivity({
+        distance: 0,
+        moving_time: 0,
+        type: '',
+        id: 0,
+      });
+  }, [activities]);
 
-  useEffect(() => {
-    localStorage.setItem('lineLayer', JSON.stringify(lineLayer));
-  }, [lineLayer]);
+  const fetchAthleteFromDB = async (userId) => {
+    try {
+      const response = await getAthleteFromAPI(userId);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching athlete data:', error);
+      return null;
+    }
+  };
 
   const login = () => {
     setIsLoggedIn(true);
-    localStorage.setItem('isLoggedIn', 'true');
+    Cookies.set('isLoggedIn', 'true', { expires: 60, path: '/' });
   };
 
   const logout = () => {
     setIsLoggedIn(false);
     setIsAuthorized(false);
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('isAuthorized');
+    Cookies.remove('isLoggedIn');
+    Cookies.remove('isAuthorized');
+    Cookies.remove('userId');
   };
 
-  const authenticate = () => {
-    setIsAuthorized(true);
-    localStorage.setItem('isAuthorized', 'true');
+  const fetchUser = async () => {
+    const userId = Cookies.get('userId');
+    const isLoggedIn = Cookies.get('isLoggedIn');
+    const isAuthorized = Cookies.get('isAuthorized');
+
+    if (isLoggedIn && isAuthorized && userId) {
+      const athleteData = await getAthleteFromAPI(userId);
+      const activitiesData = await getUserActivitiesFromAPI(userId);
+      if (athleteData) {
+        setAthlete(athleteData);
+        setActivities(activitiesData);
+        setIsLoggedIn(true);
+      } 
+    }
   };
 
   const refreshActivityData = async () => {
     setIsLoading(true);
+    const user = await getAthleteFromAPI(athlete.id);
+    const newAccessToken = await refreshAccessToken(user?.stravaRefreshToken);
 
-    const user = await getUserFromAPI(athlete.id);
+    athlete.stravaAccessToken = newAccessToken?.access_token;
+    athlete.tokenExpiration = newAccessToken?.expires_at;
+    await updateAthleteInAPI(athlete);
 
-    const newAccessToken = await refreshAccessToken(
-      user?.data?.stravaRefreshToken
+    const updatedActivities = await getAthleteActivitiesFromStrava(
+      athlete.stravaAccessToken
+    );
+    const oldActivities = await getUserActivitiesFromAPI(athlete.id);
+    const hallOfFameActivities = await getHallOfFameActivities(athlete);
+
+    const apiActivitiesToDelete = oldActivities.filter(
+      (oldActivity) =>
+        !updatedActivities.some(
+          (updatedActivity) => updatedActivity.id === oldActivity.id
+        )
+    );
+    await Promise.all(
+      apiActivitiesToDelete.map((activity) =>
+        deleteActivitiesFromAPI(activity.id)
+      )
     );
 
-    await addAthleteToAPI(
-      user?.data,
-      newAccessToken?.access_token,
-      user?.data?.stravaRefreshToken,
-      newAccessToken?.expires_at
+    const hallOfFameActivitiesToDelete = hallOfFameActivities.filter(
+      (hallOfFameActivity) =>
+        !updatedActivities.some(
+          (updatedActivity) => updatedActivity.id === hallOfFameActivity.id
+        )
     );
-
-    const updatedActivities = await getAthleteActivities(
-      newAccessToken?.access_token
+    await Promise.all(
+      hallOfFameActivitiesToDelete.map((activity) =>
+        deleteFavoriteFromHallOfFame(activity.id)
+      )
     );
-
-    const oldActivitiesResponse = await getActivitiesFromAPI(athlete.id);
-    const oldActivities = oldActivitiesResponse.data;
 
     const newActivities = updatedActivities.filter(
       (updatedActivity) =>
@@ -241,95 +220,10 @@ const App = () => {
         )
     );
 
-    await addActivitiesToAPI(newActivities);
+    await postActivitiesToAPI(newActivities);
     await setActivities(updatedActivities);
     setIsLoading(false);
     setRefreshData(false);
-  };
-
-  const numAchievementsYTD = activities
-    .filter(
-      (activity) => activity?.start_date_local?.slice(0, 4) === year.toString()
-    )
-    .reduce((acc, activity) => acc + activity?.achievement_count, 0);
-
-  const getPolylines = () => {
-    const encryptedPolyline = longestYearActivity?.map?.summary_polyline;
-    const decryptedPolyline = polyline.decode(encryptedPolyline);
-    const flippedLngLat = decryptedPolyline.map(([lat, lng]) => [lng, lat]);
-
-    setLineLayerCoordinates(flippedLngLat);
-  };
-
-  const setLineLayerCoordinates = (coordinatesArray) => {
-    const output = coordinatesArray.reduce((acc, coordinates, index) => {
-      if (coordinatesArray[index + 1]) {
-        acc.push({
-          sourcePosition: coordinates,
-          targetPosition: coordinatesArray[index + 1],
-        });
-      }
-      return acc;
-    }, []);
-
-    setLineLayer(output);
-  };
-
-  const analyzeRelativeEffort = (activities) => {
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    const twoWeeksAgo = new Date(oneWeekAgo);
-    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 7);
-
-    const filterActivities = (start, end) =>
-      activities.filter((activity) => {
-        const activityDate = new Date(activity.start_date);
-        return activityDate >= start && activityDate < end;
-      });
-
-    const reduceMovingTime = (filteredActivities) =>
-      filteredActivities.reduce(
-        (total, activity) => total + activity.moving_time,
-        0
-      );
-
-    const activitiesLastWeek = filterActivities(oneWeekAgo, new Date());
-    const activitiesWeekBefore = filterActivities(twoWeeksAgo, oneWeekAgo);
-
-    const movingTimeLastWeek = reduceMovingTime(activitiesLastWeek);
-    const movingTimeWeekBefore = reduceMovingTime(activitiesWeekBefore);
-
-    if (movingTimeLastWeek > movingTimeWeekBefore) setEffortUp('up');
-    else if (movingTimeLastWeek < movingTimeWeekBefore) setEffortUp('down');
-    else setEffortUp('same');
-  };
-
-  const checkQuote = async () => {
-    const quote = await getQuote();
-    const today = new Date().toISOString().split('T')[0];
-
-    if (quote?.date) {
-      const quoteDate = new Date(quote.date);
-
-      if (
-        !isNaN(quoteDate.getTime()) &&
-        quoteDate.toISOString().split('T')[0] === today
-      )
-        setQuote(quote);
-      else {
-        const newQuote = await fetchQuote(
-          'https://api.api-ninjas.com/v1/quotes?category=fitness'
-        );
-        await addQuoteToAPI(newQuote[0]);
-        setQuote(newQuote[0]);
-      }
-    } else {
-      const newQuote = await fetchQuote(
-        'https://api.api-ninjas.com/v1/quotes?category=fitness'
-      );
-      await addQuoteToAPI(newQuote[0]);
-      setQuote(newQuote[0]);
-    }
   };
 
   const getStreak = (data) => {
@@ -351,7 +245,82 @@ const App = () => {
       else if (+startDate < +today) break;
     }
 
-    setStreak(streak);
+    return streak;
+  };
+
+  const numAchievementsYTD = activities
+    .filter(
+      (activity) => activity?.start_date_local?.slice(0, 4) === year.toString()
+    )
+    .reduce((acc, activity) => acc + activity?.achievement_count, 0);
+
+  const getPolylines = () => {
+    const encryptedPolyline = longestYearActivity?.map?.summary_polyline;
+    const decryptedPolyline = polyline.decode(encryptedPolyline);
+    const flippedLngLat = decryptedPolyline.map(([lat, lng]) => [lng, lat]);
+
+    return flippedLngLat;
+  };
+
+  const generateLineLayerCoordinates = (coordinatesArray) => {
+    const output = coordinatesArray.reduce((acc, coordinates, index) => {
+      if (coordinatesArray[index + 1]) {
+        acc.push({
+          sourcePosition: coordinates,
+          targetPosition: coordinatesArray[index + 1],
+        });
+      }
+      return acc;
+    }, []);
+
+    return output;
+  };
+
+  const analyzeRelativeEffort = (activities) => {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const twoWeeksAgo = new Date(oneWeekAgo);
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 7);
+
+    const filterActivities = (start, end) =>
+      activities.filter((activity) => {
+        const activityDate = new Date(activity.start_date);
+        return activityDate >= start && activityDate < end;
+      });
+
+    const reduceMovingTime = (filteredActivities) =>
+      filteredActivities.reduce(
+        (total, activity) => total + activity.moving_time,
+        0
+      );
+
+    const activitiesLastWeek = filterActivities(oneWeekAgo, new Date());
+    const activitiesWeekBefore = filterActivities(twoWeeksAgo, oneWeekAgo);
+
+    const movingTimeLastWeek = reduceMovingTime(activitiesLastWeek);
+    const movingTimeWeekBefore = reduceMovingTime(activitiesWeekBefore);
+
+    if (movingTimeLastWeek > movingTimeWeekBefore) return 'up';
+    else if (movingTimeLastWeek < movingTimeWeekBefore) return 'down';
+    else return 'same';
+  };
+
+  const checkQuote = async () => {
+    const quote = await getQuoteFromDB();
+    const today = new Date().toISOString().split('T')[0];
+
+    if (quote?.date === today) setQuote(quote);
+    else {
+      const newQuote = await getQuoteFromAPI(
+        'https://api.api-ninjas.com/v1/quotes?category=fitness'
+      );
+      const date = new Date().toISOString().split('T')[0];
+
+      await deleteQuoteFromAPI(quote?._id);
+      await postQuoteToAPI({ date: date, ...newQuote[0] });
+      setQuote(newQuote[0]);
+    }
   };
 
   const fetchCoordinates = async () => {
@@ -360,7 +329,7 @@ const App = () => {
       `${athlete?.state}`
     );
 
-    setHomeCoordinates(coordinates);
+    return coordinates;
   };
 
   const getLongestYearActivity = async (allActivities) => {
@@ -369,15 +338,14 @@ const App = () => {
       id: 0,
       start_latlng: [],
     };
+
     const longestActivity = allActivities
       .filter(
-        (activity) => activity?.start_date_local.slice(0, 4) === year.toString()
+        (activity) => activity?.start_date.slice(0, 4) === year.toString()
       )
       .sort((a, b) => b?.moving_time - a?.moving_time)[0];
 
-    allActivities.length
-      ? setLongestYearActivity(longestActivity)
-      : setLongestYearActivity(defaultActivity);
+    return allActivities.length ? longestActivity : defaultActivity;
   };
 
   const formatDate = (dateString) => {
@@ -467,8 +435,8 @@ const App = () => {
               athlete={athlete}
               setAthlete={setAthlete}
               setRecentActivity={setRecentActivity}
+              setStreak={setStreak}
               setActivities={setActivities}
-              getStreak={getStreak}
               getLongestYearActivity={getLongestYearActivity}
               isLoggedIn={isLoggedIn}
               isAuthorized={isAuthorized}
@@ -593,6 +561,7 @@ const App = () => {
           element={
             isLoggedIn ? (
               <HallOfFame
+                refreshData={refreshData}
                 setRefreshData={setRefreshData}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}

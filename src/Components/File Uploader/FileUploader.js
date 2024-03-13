@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { BsUpload } from 'react-icons/bs';
-import { getUserFromAPI, uploadFile, addActivitiesToAPI } from '../../ApiCalls';
+import { getAthleteFromAPI, uploadFileToStrava, postActivitiesToAPI } from '../../ApiCalls';
 import PropTypes from 'prop-types';
 
 const FileUploader = ({
@@ -46,13 +46,13 @@ const FileUploader = ({
       formData.append('file', file);
       formData.append('data_type', extension);
 
-      const athleteInfo = await getUserFromAPI(athlete?.id);
+      const athleteInfo = await getAthleteFromAPI(athlete?.id);
       const accessToken = athleteInfo?.data?.stravaAccessToken;
 
-      const data = await uploadFile(file, accessToken);
+      const data = await uploadFileToStrava(file, accessToken);
 
       if (data && data.id) {
-        await addActivitiesToAPI([{ ...data }]);
+        await postActivitiesToAPI([{ ...data }]);
         await setActivities((prevActivities) => [
           { ...data },
           ...prevActivities,
