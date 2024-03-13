@@ -20,7 +20,7 @@ const LoadingPage = ({
   login,
   isAuthorized,
 }) => {
-  let numActivities;
+  const [numActivities, setNumActivities] = useState(0);
   const [loading, setLoading] = useState(true);
   const [addingToDb, setAddingToDb] = useState(false);
   const [uploadCount, setUploadCount] = useState(0);
@@ -40,7 +40,7 @@ const LoadingPage = ({
       await getAthleteActivitiesFromStrava().then(async (activities) => {
         const newActivities = await getNewActivities(activities, stravaAthlete);
         if (newActivities.length) {
-          numActivities = newActivities.length;
+          setNumActivities(newActivities.length);
           setAddingToDb(true);
           for (const activity of newActivities) {
             await postActivityToAPI(activity);
