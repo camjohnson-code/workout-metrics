@@ -339,13 +339,11 @@ const App = () => {
       id: 0,
       start_latlng: [],
     };
-    console.log('allActivities: ', allActivities);
+
     const longestActivity = allActivities
-      .filter(
-        (activity) => activity?.start_date.slice(0, 4) === year.toString()
-      )
+      .filter((activity) => activity?.start_date.slice(0, 4) === year.toString())
       .sort((a, b) => b?.moving_time - a?.moving_time)[0];
-        console.log('longestActivity: ', longestActivity);
+
     return allActivities.length ? longestActivity : defaultActivity;
   };
 
