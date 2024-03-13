@@ -1,6 +1,5 @@
 import './FAQSection.css';
 import React from 'react';
-import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Accordion, AccordionItem } from '@szhsin/react-accordion';
 import { Link } from 'react-router-dom';
@@ -13,11 +12,6 @@ const FAQSection = () => {
     triggerOnce: true,
     threshold: 0.5,
   });
-  const [openItem, setOpenItem] = useState(null);
-
-  const toggleItem = (item) => {
-    setOpenItem(openItem === item ? null : item);
-  };
 
   return (
     <section className='faq' id='faq' ref={ref}>
