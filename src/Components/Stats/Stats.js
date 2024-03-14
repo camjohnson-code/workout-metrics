@@ -371,6 +371,7 @@ const Stats = ({
         setSettingsShown={setSettingsShown}
         athlete={athlete}
         year={year}
+        logout={logout}
       ></Sidebar>
       <section className='stats-container'>
         <div className='stats-header'>

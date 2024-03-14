@@ -7,11 +7,12 @@ import { getAthleteFromAPI, uploadFileToStrava, postActivityToAPI } from '../../
 import PropTypes from 'prop-types';
 
 const FileUploader = ({
-  setActivities,
   setManualForm,
   manualForm,
   setSubmitted,
   athlete,
+  refreshActivityData,
+  setIsLoading,
 }) => {
   const [fileTypeError, setFileTypeError] = useState(false);
   const [uploadError, setUploadError] = useState(false);
@@ -36,7 +37,8 @@ const FileUploader = ({
     },
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (acceptedFiles?.length === 0) return;
 
     for (const file of acceptedFiles) {
@@ -47,26 +49,25 @@ const FileUploader = ({
       formData.append('data_type', extension);
 
       const athleteInfo = await getAthleteFromAPI(athlete?.id);
-      const accessToken = athleteInfo?.data?.stravaAccessToken;
+      const accessToken = athleteInfo?.stravaAccessToken;
 
+      setIsLoading(true);
       const data = await uploadFileToStrava(file, accessToken);
-
+      
       if (data && data.id) {
-        await postActivityToAPI([{ ...data }]);
-        await setActivities((prevActivities) => [
-          { ...data },
-          ...prevActivities,
-        ]);
-      } else {
+        await new Promise(resolve => setTimeout(resolve, (1000 * acceptedFiles.length)));
+        await refreshActivityData();
+  
+      }
+      else {
         setUploadError(true);
         if (data.error.includes('duplicate'))
           setUploadErrorMessage('This file has already been uploaded.');
         else
-          setUploadErrorMessage(
-            'There was an error uploading your file. Please try again.'
-          );
+          setUploadErrorMessage('There was an error uploading your file. Please try again.');
       }
     }
+    setSubmitted(true);
   };
 
   return (
@@ -103,9 +104,8 @@ const FileUploader = ({
         </p>
       </section>
       <button
-        onClick={() => {
-          handleSubmit();
-          setSubmitted(true);
+        onClick={(e) => {
+          handleSubmit(e);
         }}
         disabled={!acceptedFiles?.length || fileTypeError}
         className='submit-button'

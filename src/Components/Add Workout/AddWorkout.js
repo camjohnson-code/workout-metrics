@@ -22,6 +22,8 @@ const AddWorkout = ({
   setSettingsShown,
   isLoading,
   setRefreshData,
+  refreshActivityData,
+  setIsLoading,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [manualForm, setManualForm] = useState(false);
@@ -81,6 +83,8 @@ const AddWorkout = ({
         {!submitted &&
           (!manualForm ? (
             <FileUploader
+              setIsLoading={setIsLoading}
+              refreshActivityData={refreshActivityData}
               setActivities={setActivities}
               setSubmitted={setSubmitted}
               setManualForm={setManualForm}
