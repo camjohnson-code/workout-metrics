@@ -97,6 +97,10 @@ const App = () => {
   }, [selectedTheme]);
 
   useEffect(() => {
+    if (refreshData) refreshActivityData();
+  }, [refreshData]);
+
+  useEffect(() => {
     if (athlete.city && athlete.state) {
       fetchCoordinates().then((coordinates) => setHomeCoordinates(coordinates));
     }
@@ -601,7 +605,8 @@ const handleLongestActivity = async () => {
           element={
             isLoggedIn ? (
               <AddWorkout
-                setRefreshData={setRefreshData}
+                refreshActivityData={refreshActivityData}
+                setIsLoading={setIsLoading}
                 isLoading={isLoading}
                 selectedUnit={selectedUnit}
                 setSelectedUnit={setSelectedUnit}
