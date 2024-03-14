@@ -220,6 +220,7 @@ const Charts = ({
         setSettingsShown={setSettingsShown}
         athlete={athlete}
         year={year}
+        logout={logout}
       />
       <section className='charts-content'>
         <div className='stats-header'>
