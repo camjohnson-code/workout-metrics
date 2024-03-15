@@ -605,6 +605,7 @@ const handleLongestActivity = async () => {
           element={
             isLoggedIn ? (
               <AddWorkout
+                setRefreshData={setRefreshData}
                 refreshActivityData={refreshActivityData}
                 setIsLoading={setIsLoading}
                 isLoading={isLoading}
