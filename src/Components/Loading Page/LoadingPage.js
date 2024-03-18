@@ -47,7 +47,9 @@ const LoadingPage = ({
             setUploadCount((prevCount) => prevCount + 1);
           }
         }
-        setActivities(activities);
+        
+        const apiActivities = await getUserActivitiesFromAPI(stravaAthlete.id);
+        setActivities(apiActivities);
       });
   
       login();
