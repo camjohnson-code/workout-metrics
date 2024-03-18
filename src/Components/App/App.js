@@ -42,8 +42,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
   const [settingsShown, setSettingsShown] = useState(false);
-  const [selectedUnit, setSelectedUnit] = useState('Imperial');
-  const [selectedTheme, setSelectedTheme] = useState('Dark');
+  const [selectedUnit, setSelectedUnit] = useState(localStorage.getItem('unit') || 'Imperial');
+  const [selectedTheme, setSelectedTheme] = useState(localStorage.getItem('theme') || 'Dark');
   const [athlete, setAthlete] = useState({
     id: 0,
     firstname: '',
@@ -93,7 +93,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem('unit', selectedUnit);
+  }, [selectedUnit]);
+
+  useEffect(() => {
     document.documentElement.setAttribute('data-theme', selectedTheme);
+    localStorage.setItem('theme', selectedTheme);
   }, [selectedTheme]);
 
   useEffect(() => {
