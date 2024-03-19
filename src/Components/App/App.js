@@ -99,7 +99,7 @@ const App = () => {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', selectedTheme);
     localStorage.setItem('theme', selectedTheme);
-  }, [selectedTheme]);
+``  }, [selectedTheme]);
 
   useEffect(() => {
     if (refreshData) refreshActivityData();
@@ -273,7 +273,7 @@ const handleLongestActivity = async () => {
 
   const numAchievementsYTD = activities
     .filter(
-      (activity) => activity?.start_date_local?.slice(0, 4) === year.toString()
+      (activity) => activity?.start_date.slice(0, 4) === year.toString()
     )
     .reduce((acc, activity) => acc + activity?.achievement_count, 0);
 
