@@ -16,9 +16,8 @@ import AddWorkout from '../Add Workout/AddWorkout';
 import NotFoundPage from '../Not Found Page/NotFoundPage';
 import {
   getWeather,
-  getQuoteFromDB,
-  getQuoteFromAPI,
-  postQuoteToAPI,
+  getQuotesFromDB,
+  updateQuoteInDB,
   getAthleteFromAPI,
   refreshAccessToken,
   postActivityToAPI,
@@ -26,7 +25,6 @@ import {
   updateAthleteInAPI,
   deleteActivitiesFromAPI,
   getAthleteActivitiesFromStrava,
-  deleteQuoteFromAPI,
   getHallOfFameActivities,
   deleteFavoriteFromHallOfFame,
 } from '../../ApiCalls';
@@ -42,12 +40,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
   const [settingsShown, setSettingsShown] = useState(false);
-  const [selectedUnit, setSelectedUnit] = useState(
-    localStorage.getItem('unit') || 'Imperial'
-  );
-  const [selectedTheme, setSelectedTheme] = useState(
-    localStorage.getItem('theme') || 'Dark'
-  );
+  const [selectedUnit, setSelectedUnit] = useState(localStorage.getItem('unit') || 'Imperial');
+  const [selectedTheme, setSelectedTheme] = useState(localStorage.getItem('theme') || 'Dark');
   const [athlete, setAthlete] = useState({
     id: 0,
     firstname: '',
@@ -76,10 +70,7 @@ const App = () => {
   ]);
   const [streak, setStreak] = useState(0);
   const [homeCoordinates, setHomeCoordinates] = useState([]);
-  const [quote, setQuote] = useState({
-    quote: 'As we run, we become.',
-    author: 'Amby Burfoot',
-  });
+  const [quote, setQuote] = useState({ quote: 'As we run, we become.', author: 'Amby Burfoot' });
   const [weather, setWeather] = useState({ temp: 0 });
 
   useEffect(() => {
@@ -168,16 +159,6 @@ const App = () => {
       const lineLayerCoordinates = generateLineLayerCoordinates(polylines);
 
       setLineLayer(lineLayerCoordinates);
-    }
-  };
-
-  const fetchAthleteFromDB = async (userId) => {
-    try {
-      const response = await getAthleteFromAPI(userId);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching athlete data:', error);
-      return null;
     }
   };
 
@@ -343,19 +324,20 @@ const App = () => {
   };
 
   const checkQuote = async () => {
-    const quote = await getQuoteFromDB();
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().slice(0, 10);
+    const quotes = await getQuotesFromDB();
 
-    if (quote?.date === today) setQuote(quote);
+    const sortedQuotes = [...quotes].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (sortedQuotes[0].date === today) setQuote(sortedQuotes[0]);
+    else if (sortedQuotes.some((quote) => quote.date === today)) {
+      const foundQuote = sortedQuotes.find((quote) => quote.date === today);
+      setQuote(foundQuote);
+    }
     else {
-      const newQuote = await getQuoteFromAPI(
-        'https://api.api-ninjas.com/v1/quotes?category=fitness'
-      );
-      const date = new Date().toISOString().split('T')[0];
-
-      if (quote?._id) await deleteQuoteFromAPI(quote?._id);
-      await postQuoteToAPI({ date: date, ...newQuote[0] });
-      setQuote(newQuote[0]);
+      const updatedQuote = { ...sortedQuotes[0], date: today };
+      await updateQuoteInDB(updatedQuote);
+      setQuote(updatedQuote);
     }
   };
 
@@ -376,9 +358,7 @@ const App = () => {
     };
 
     const longestActivity = allActivities
-      .filter(
-        (activity) => activity?.start_date.slice(0, 4) === year.toString()
-      )
+      .filter((activity) => activity?.start_date.slice(0, 4) === year.toString())
       .sort((a, b) => b?.moving_time - a?.moving_time)[0];
 
     return allActivities.length ? longestActivity : defaultActivity;
