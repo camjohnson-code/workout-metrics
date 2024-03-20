@@ -1,6 +1,6 @@
 # WorkoutMetrics.fit
 
-[![App Demo](https://cdn.loom.com/sessions/thumbnails/4399934eda3e46ce822dead377eaa3ad-with-play.gif)](https://www.loom.com/share/4399934eda3e46ce822dead377eaa3ad?sid=28380009-10da-4f02-8978-c622c806b497)
+[![App Demo](https://img.youtube.com/vi/saz7a-xCGQs/maxresdefault.jpg)](https://youtu.be/saz7a-xCGQs?t=1)
 
 WorkoutMetrics.fit is an app that allows users to get a deeper look into their Strava data without needing to be a Strava Premium user. It gives users the ability to see their personal heatmaps, dive deep into their training data, save and favorite workouts to their hall of fame, and upload activities to their Strava account.
 
@@ -50,9 +50,9 @@ Unfortunately, Strava only allows for one callback domain. They also limit the n
 
 In the future, we'd like to improve the site by adding these features:
 
-- Currently, some of the data is stored in local storage. I'd like to migrate the storage of this data to Mongo DB.
-- Add a Charts component that allows users to dive deeper into their training data.
-- Add a share feature that gives users the ability to share an image to their socials. 
+- Add a share feature that gives users the ability to share an image to their socials.
+- Modify the loading/searching message on the Hall of Fame component to reflect if it's searching or loading.
+- Make the codebase more developer friendly and move some funcitons from App to a helper file.
 
 ## Acknowledgements
 
