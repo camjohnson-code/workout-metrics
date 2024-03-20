@@ -351,47 +351,23 @@ export const deleteFavoriteFromHallOfFame = async (activityId) => {
 };
 
 // Quote functions
-export const getQuoteFromDB = async () => {
+export const getQuotesFromDB = async () => {
   const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote');
   const data = await response.json();
 
-  return data[0];
+  return data;
 };
 
-export const getQuoteFromAPI = async (url) => {
-  return fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Api-Key': process.env.REACT_APP_QUOTE_API_KEY,
-    },
-  }).then((response) => response.json());
-};
-
-export const postQuoteToAPI = async (quote) => {
+export const updateQuoteInDB = async (quote) => {
   const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(quote),
   });
 
-  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-  else {
-    const data = await response.json();
-    return data;
-  }
-};
-
-export const deleteQuoteFromAPI = async (id) => {
-  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote/${id}`, {
-    method: 'DELETE',
-  });
-
-  if (!response.ok) {
-    throw new Error('Error deleting quote');
-  }
+  if (!response.ok) throw new Error('Error updating quote');
 }
 
 // Miscellaneous functions
