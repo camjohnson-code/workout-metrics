@@ -155,17 +155,31 @@ export const deleteUserFromAPI = async (id) => {
 }
 
 // Activities functions
-export const getAthleteActivitiesFromStrava = async (userAccessToken) => {
-  const accessToken =
-    userAccessToken || localStorage.getItem('stravaAccessToken');
+export const getAthleteActivitiesFromStrava = async (userAccessToken, maxRetries = 3) => {
+  const accessToken = userAccessToken || localStorage.getItem('stravaAccessToken');
   let page = 1;
   let activities = [];
 
   while (true) {
-    const requests = await fetch(
-      `https://www.strava.com/api/v3/athlete/activities?access_token=${accessToken}&per_page=200&page=${page}`
-    );
-    const data = await requests.json();
+    let retries = 0;
+    let success = false;
+    let data;
+
+    while (retries < maxRetries && !success) {
+      try {
+        const response = await fetch(`https://www.strava.com/api/v3/athlete/activities?access_token=${accessToken}&per_page=200&page=${page}`);
+        if (!response.ok) throw new Error(response.status);
+        data = await response.json();
+        success = true;
+      } catch (error) {
+        retries++;
+        console.error(`Attempt ${retries} failed. Retrying...`);
+      }
+    }
+
+    if (!success) {
+      throw new Error('Failed to fetch data after multiple attempts');
+    }
 
     activities = activities.concat(data);
 
