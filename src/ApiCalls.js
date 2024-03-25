@@ -87,7 +87,7 @@ export const getAthleteFromStrava = async () => {
 
   const data = await response.json();
 
-  return {...data, accessToken, refreshToken, tokenExpiration};
+  return { ...data, accessToken, refreshToken, tokenExpiration };
 };
 
 export const getAthleteFromAPI = async (id) => {
@@ -103,23 +103,24 @@ export const postAthleteToAPI = async (athlete) => {
   if (response.ok) updateAthleteInAPI(athlete);
   else {
     response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: athlete.id,
-        firstname: athlete.firstname,
-        lastname: athlete.lastname,
-        city: athlete.city,
-        state: athlete.state,
-        weight: athlete.weight || undefined,
-        profile: athlete.profile,
-        stravaAccessToken: athlete.accessToken,
-        stravaRefreshToken: athlete.refreshToken,
-        tokenExpiration: athlete.tokenExpiration,
-      }),
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: athlete.id,
+          firstname: athlete.firstname,
+          lastname: athlete.lastname,
+          city: athlete.city,
+          state: athlete.state,
+          weight: athlete.weight || undefined,
+          profile: athlete.profile,
+          stravaAccessToken: athlete.accessToken,
+          stravaRefreshToken: athlete.refreshToken,
+          tokenExpiration: athlete.tokenExpiration,
+        }),
+      }
+    );
   }
 
   const data = await response.json();
@@ -137,35 +138,51 @@ export const updateAthleteInAPI = async (athlete) => {
         stravaAccessToken: athlete.accessToken,
         tokenExpiration: parseInt(athlete.tokenExpiration),
       }),
-    });
+    }
+  );
 
   const data = await response.json();
 
   return data;
-}
+};
 
 export const deleteUserFromAPI = async (id) => {
   const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${id}`, {
-    method: 'DELETE',
-  });
+      method: 'DELETE',
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Error deleting user');
   }
-}
+};
 
 // Activities functions
-export const getAthleteActivitiesFromStrava = async (userAccessToken) => {
-  const accessToken =
-    userAccessToken || localStorage.getItem('stravaAccessToken');
+export const getAthleteActivitiesFromStrava = async (userAccessToken, maxRetries = 3) => {
+  const accessToken = userAccessToken || localStorage.getItem('stravaAccessToken');
   let page = 1;
   let activities = [];
 
   while (true) {
-    const requests = await fetch(
-      `https://www.strava.com/api/v3/athlete/activities?access_token=${accessToken}&per_page=200&page=${page}`
-    );
-    const data = await requests.json();
+    let retries = 0;
+    let success = false;
+    let data;
+
+    while (retries < maxRetries && !success) {
+      try {
+        const response = await fetch(`https://www.strava.com/api/v3/athlete/activities?access_token=${accessToken}&per_page=200&page=${page}`);
+        if (!response.ok) throw new Error(response.status);
+        data = await response.json();
+        success = true;
+      } catch (error) {
+        retries++;
+        console.error(`Attempt ${retries} failed. Retrying...`);
+      }
+    }
+
+    if (!success) {
+      throw new Error('Failed to fetch data after multiple attempts');
+    }
 
     activities = activities.concat(data);
 
@@ -205,36 +222,37 @@ export const getFilteredActivitiesFromAPI = async (athlete, keywords, activityTy
 };
 
 export const postActivityToAPI = async (activity) => {
-    const newActivity = {
-      userId: activity.athlete.id,
-      name: activity.name,
-      distance: activity.distance,
-      type: activity.type,
-      start_date: activity.start_date,
-      start_latlng: activity.start_latlng,
-      time: activity.moving_time,
-      id: activity.id,
-      moving_time: activity.moving_time,
-      achievement_count: activity.achievement_count,
-      kudos_count: activity.kudos_count,
-      map: activity.map,
-      maxSpeed: activity.max_speed,
-      kilojoules: activity.kilojoules,
-      total_elevation_gain: activity.total_elevation_gain,
-    };
+  const newActivity = {
+    userId: activity.athlete.id,
+    name: activity.name,
+    distance: activity.distance,
+    type: activity.type,
+    start_date: activity.start_date,
+    start_latlng: activity.start_latlng,
+    time: activity.moving_time,
+    id: activity.id,
+    moving_time: activity.moving_time,
+    achievement_count: activity.achievement_count,
+    kudos_count: activity.kudos_count,
+    map: activity.map,
+    maxSpeed: activity.max_speed,
+    kilojoules: activity.kilojoules,
+    total_elevation_gain: activity.total_elevation_gain,
+  };
 
-    const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
+  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newActivity),
-    });
+    }
+  );
 
-    if (!response.ok) console.log('Response status:', response.status);
+  if (!response.ok) console.log('Response status:', response.status);
 
-    const data = await response.json();
-    return data;
+  const data = await response.json();
+  return data;
 };
 
 export const uploadFileToStrava = async (file, accessToken) => {
@@ -279,23 +297,25 @@ export const postActivityToStrava = async (activityData, accessToken) => {
 
 export const deleteActivitiesFromAPI = async (id) => {
   const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/activities/${id}`, {
-    method: 'DELETE',
-  });
+      method: 'DELETE',
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Error deleting user activities');
   }
-}
+};
 
 export const deleteUserActivitiesFromAPI = async (userId) => {
   const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/users/${userId}/activities`, {
-    method: 'DELETE',
-  });
+      method: 'DELETE',
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Error deleting user activities');
   }
-}
+};
 
 // Hall of Fame functions
 export const getHallOfFameActivities = async (athlete) => {
@@ -319,12 +339,13 @@ export const getHallOfFameActivities = async (athlete) => {
 export const postFavoriteToHallOfFame = async (favorite) => {
   try {
     const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/hallOfFame', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(favorite),
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(favorite),
+      }
+    );
 
     if (!response.ok) {
       throw new Error('Error adding favorite to Hall of Fame');
@@ -360,15 +381,19 @@ export const getQuotesFromDB = async () => {
 
 export const updateQuoteInDB = async (quote) => {
   const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(quote),
-  });
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(quote),
+    }
+  );
 
-  if (!response.ok) throw new Error('Error updating quote');
-}
+  if (!response.ok) throw new Error(`Error updating or creating quote: ${response.status}`);
+  
+  const data = await response.json();
+  return data;
+};
 
 // Miscellaneous functions
 export const getWeather = async (coordinates) => {

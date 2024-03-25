@@ -359,19 +359,21 @@ const Stats = ({
     let maxSpeedActivity;
 
     if (activities.length) {
-      if (selectedYear === 'all-time')
-        maxSpeedActivity = activities.sort(
-          (a, b) => b.maxSpeed - a.maxSpeed
-        )[0];
-      else
-        maxSpeedActivity = activities
-          .filter(
-            (workout) =>
-              workout.start_date.slice(0, 4) === selectedYear.toString()
-          )
-          .sort((a, b) => b.maxSpeed - a.maxSpeed)[0];
+      if (selectedYear === 'all-time'){
+        if (activities[0].maxSpeed) maxSpeedActivity = activities.sort((a, b) => b.maxSpeed - a.maxSpeed)[0];
+        else maxSpeedActivity = activities.sort((a, b) => b.max_speed - a.max_speed)[0];
+      }
+      else{
+        if (activities[0].maxSpeed) maxSpeedActivity = activities
+            .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+            .sort((a, b) => b.maxSpeed - a.maxSpeed)[0];
+        else maxSpeedActivity = activities
+            .filter((workout) => workout.start_date.slice(0, 4) === selectedYear.toString())
+            .sort((a, b) => b.max_speed - a.max_speed)[0];
+      }
+       
 
-      const maxSpeedInMetersPerSecond = maxSpeedActivity.maxSpeed;
+      const maxSpeedInMetersPerSecond = maxSpeedActivity.maxSpeed || maxSpeedActivity.max_speed;
 
       setMaxSpeed(maxSpeedInMetersPerSecond);
       setMaxSpeedActivityId(maxSpeedActivity.id);
