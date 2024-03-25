@@ -70,7 +70,10 @@ const App = () => {
   ]);
   const [streak, setStreak] = useState(0);
   const [homeCoordinates, setHomeCoordinates] = useState([]);
-  const [quote, setQuote] = useState({ quote: 'As we run, we become.', author: 'Amby Burfoot' });
+  const [quote, setQuote] = useState({
+    quote: 'As we run, we become.',
+    author: 'Amby Burfoot',
+  });
   const [weather, setWeather] = useState({ temp: 0 });
 
   useEffect(() => {
@@ -201,9 +204,9 @@ const App = () => {
     await updateAthleteInAPI(athlete);
 
     const updatedActivities = await getAthleteActivitiesFromStrava(
-      athlete.stravaAccessToken
+      athlete?.stravaAccessToken
     );
-    const oldActivities = await getUserActivitiesFromAPI(athlete.id);
+    const oldActivities = await getUserActivitiesFromAPI(athlete?.id);
     const hallOfFameActivities = await getHallOfFameActivities(athlete);
 
     const apiActivitiesToDelete = oldActivities.filter(
@@ -326,18 +329,19 @@ const App = () => {
   const checkQuote = async () => {
     const today = new Date().toISOString().slice(0, 10);
     const quotes = await getQuotesFromDB();
+    const usedQuotes = quotes.filter((quote) => quote.hasBeenUsed);
+    const unusedQuotes = quotes.filter((quote) => !quote.hasBeenUsed);
+    const todaysQuote = usedQuotes.find(
+      (quote) => quote.date === today && quote.hasBeenUsed
+    );
 
-    const sortedQuotes = [...quotes].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    if (sortedQuotes[0].date === today) setQuote(sortedQuotes[0]);
-    else if (sortedQuotes.some((quote) => quote.date === today)) {
-      const foundQuote = sortedQuotes.find((quote) => quote.date === today);
-      setQuote(foundQuote);
-    }
+    if (todaysQuote) setQuote(todaysQuote);
     else {
-      const updatedQuote = { ...sortedQuotes[0], date: today };
-      await updateQuoteInDB(updatedQuote);
-      setQuote(updatedQuote);
+      const newQuote = unusedQuotes[0];
+      newQuote.date = today;
+      newQuote.hasBeenUsed = true;
+      await updateQuoteInDB(newQuote);
+      setQuote(newQuote);
     }
   };
 
