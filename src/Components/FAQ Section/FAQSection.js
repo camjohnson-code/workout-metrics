@@ -119,7 +119,7 @@ const FAQSection = () => {
               Sure! You can{' '}
               <Link
                 className='faq-link'
-                to='https://www.loom.com/share/4399934eda3e46ce822dead377eaa3ad?sid=28380009-10da-4f02-8978-c622c806b497'
+                to='https://youtu.be/saz7a-xCGQs'
               >
                 watch a demo
               </Link>{' '}
