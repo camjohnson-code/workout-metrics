@@ -18,30 +18,6 @@ WorkoutMetrics.fit is an app that allows users to get a deeper look into their S
 
 Testing this repo will require some environment variables. If you'd like to run these tests, reach out to me and we can find a solution. 
 
-In order to run the Cypress tests for this repo, follow these instructions: 
-
-### Clone the repository:
-
-`git clone git@github.com:camjohnson-code/workout-metrics.git`
-
-### Navigate to the project directory:
-
-`cd workout-metrics`
-
-### Checkout to the testing branch:
-
-`git checkout feature/cypress-testing`
-
-### Install dependencies:
-
-`npm install`
-
-### Usage
-
-Start Cypress:
-
-`npm run cy`
-
 ## Installation
 
 Unfortunately, Strava only allows for one callback domain. They also limit the number of apps I can make to one. Because of that, I'm unable to make a second app for development. I also cannot change the callback uri to run locally. Due to these factors, I can't make a branch that allows you to run this app locally. If you'd like a demo from a user perspective, you can watch the demo video above. For a further look into it, feel free to reach out to me and we can do a deep dive together.
