@@ -5,9 +5,17 @@
   align-items: center;
   height: 100vh;
   width: 100%;
+  color: white;
+}
+
+.not-logged-in-jpg {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
     url('../../Images/pexels-rfstudio-3621185.jpg') center/cover;
-  color: white;
+}
+
+.not-logged-in-webp {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('../../Images/pexels-rfstudio-3621185.webp') center/cover;
 }
 
 .must-sign-in-link {
