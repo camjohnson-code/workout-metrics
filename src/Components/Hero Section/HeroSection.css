@@ -5,6 +5,14 @@
 
 .hero-section {
   height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+.jpg-bkg {
   background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0.4) 80%,
@@ -13,11 +21,17 @@
       center/cover,
     linear-gradient(to top, #171a26, rgba(255, 255, 255, 0) 20%) center/cover,
     url('../../Images/viktor-bystrov-Gi0OMNguFaw-unsplash.jpg') center/cover;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  text-align: center;
-  position: relative;
+}
+
+.webp-bkg {
+  background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.4) 80%,
+        rgba(0, 0, 0, 0) 100%
+      )
+      center/cover,
+    linear-gradient(to top, #171a26, rgba(255, 255, 255, 0) 20%) center/cover,
+    url('../../Images/viktor-bystrov-Gi0OMNguFaw-unsplash.webp') center/cover;
 }
 
 .title {
