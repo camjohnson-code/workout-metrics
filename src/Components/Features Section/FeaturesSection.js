@@ -3,7 +3,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-const FeaturesSection = () => {
+const FeaturesSection = ({ canUseWebP }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.5,
@@ -14,15 +14,19 @@ const FeaturesSection = () => {
       <section ref={ref} className='features-images'>
         <motion.img
           className='img-1'
-          src={require('../../Images/charts.png')}
+          src={canUseWebP ? require('../../Images/charts.webp') : require('../../Images/charts.png')}
           initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -200 }}
-          transition={{ duration: 1, ease: [0.17, 0.59, 0.24, 0.99], delay: 0.2 }}
+          transition={{
+            duration: 1,
+            ease: [0.17, 0.59, 0.24, 0.99],
+            delay: 0.2,
+          }}
           alt='Data chart preview'
         />
         <motion.img
           className='img-2'
-          src={require('../../Images/hall-of-fame.png')}
+          src={canUseWebP ? require('../../Images/hall-of-fame.webp') : require('../../Images/hall-of-fame.png')}
           initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -200 }}
           transition={{
@@ -34,7 +38,7 @@ const FeaturesSection = () => {
         />
         <motion.img
           className='img-3'
-          src={require('../../Images/heatmap.png')}
+          src={canUseWebP ? require('../../Images/heatmap.webp') : require('../../Images/heatmap.png')}
           initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -200 }}
           transition={{
@@ -107,7 +111,8 @@ const FeaturesSection = () => {
           >
             <FaCheckCircle className='check' />
             <p>
-              <span className='bold-text'>Hall of Fame</span> - Favorite activities you're proud of
+              <span className='bold-text'>Hall of Fame</span> - Favorite
+              activities you're proud of
             </p>
           </motion.li>
         </ul>

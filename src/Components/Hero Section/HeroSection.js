@@ -3,9 +3,12 @@ import { FaChevronDown } from 'react-icons/fa6';
 import { Link } from 'react-scroll';
 import { redirectToStravaAuthorization } from '../../ApiCalls';
 
-const HeroSection = () => {
+const HeroSection = ({ canUseWebP }) => {
   return (
-    <section className='hero-section' id='home'>
+    <section
+      className={`hero-section ${canUseWebP ? 'webp-bkg' : 'jpg-bkg'}`}
+      id='home'
+    >
       <h1 className='title'>WorkoutMetrics.fit</h1>
       <p className='subtitle'>Empower your training with insightful metrics.</p>
       <button
