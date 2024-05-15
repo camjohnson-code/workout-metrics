@@ -380,7 +380,7 @@ export const getQuotesFromDB = async () => {
 };
 
 export const updateQuoteInDB = async (quote) => {
-  const response = await fetch('https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote', {
+  const response = await fetch(`https://mysterious-springs-27042-d1832f763316.herokuapp.com/api/v1/quote/${quote._id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
