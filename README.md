@@ -24,11 +24,11 @@ Unfortunately, Strava only allows for one callback domain. They also limit the n
 
 ## Future Improvements
 
-In the future, we'd like to improve the site by adding these features:
+In the future, I'd like to improve the site by adding these features:
 
 - Add a share feature that gives users the ability to share an image to their socials.
 - Modify the loading/searching message on the Hall of Fame component to reflect if it's searching or loading.
-- Make the codebase more developer friendly and move some funcitons from App to a helper file.
+- Make the codebase more developer friendly and move some functions from App to a helper file.
 
 ## Acknowledgements
 
